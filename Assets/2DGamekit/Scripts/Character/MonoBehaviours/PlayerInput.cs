@@ -68,7 +68,7 @@ namespace Gamekit2D
         /// <param name="fixedUpdateHappened"></param>
         protected override void GetInputs(bool fixedUpdateHappened)
         {
-            Debug.Log(fixedUpdateHappened);
+            //Debug.Log(fixedUpdateHappened);
             Pause.Get(fixedUpdateHappened, inputType);
             Interact.Get(fixedUpdateHappened, inputType);
             MeleeAttack.Get(fixedUpdateHappened, inputType);

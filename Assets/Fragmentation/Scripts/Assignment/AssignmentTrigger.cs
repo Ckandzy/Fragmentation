@@ -4,7 +4,7 @@ using UnityEngine;
 using Gamekit2D;
 using UnityEngine.Playables;
 
-public class AssignmentTrigger : MonoBehaviour
+public class AssignmentTrigger : MonoBehaviour, IPlot
 {
     public int assID;
     protected Assignment assignment;
@@ -18,20 +18,16 @@ public class AssignmentTrigger : MonoBehaviour
     bool m_CanExecuteButtons = false;
     protected DialogueManager dialogueManager;
 
-    //[Header("Timeline")]
-    //[Tooltip("This is the gameobject which will trigger the director to play.  For example, the player.")]
-    //public GameObject triggeringGameObject;
-    //public PlayableDirector director;
+    public bool HasDone { get; set; }
 
-    //public enum TriggerType
-    //{
-    //    Once, Everytime,
-    //}
-    //public TriggerType triggerType;
-    //protected bool m_AlreadyTriggered;
+    private void Awake()
+    {
+        HasDone = false;
+    }
 
     private void Start()
     {
+
         dialogueManager = FindObjectOfType<DialogueManager>();
         for (int i = 0; i < AssignManager.Instance.assList.Count; i++)
         {
@@ -42,10 +38,10 @@ public class AssignmentTrigger : MonoBehaviour
         {
             TriggerAssign();
         }
-        else
-        {
-            Debug.LogError("Assignment not exit");
-        }
+        //else
+        //{
+        //    Debug.LogError("Assignment not exit");
+        //}
     }
 
     private void FixedUpdate()
@@ -63,6 +59,7 @@ public class AssignmentTrigger : MonoBehaviour
                 {
                     isFirstExecute = true;
                     m_CanExecuteButtons = false;
+                    HasDone = true;
                 }
             }
         }
@@ -83,5 +80,15 @@ public class AssignmentTrigger : MonoBehaviour
     {
         //dialogueManager.StartDialogue(assignment.dialogue);
         //PlayerInput.Instance.GainControl();
+    }
+
+    public IEnumerator DoPlot()
+    {
+        TriggerAssign();
+        while (!HasDone)
+        {
+            yield return null;
+        }
+        yield break;
     }
 }
