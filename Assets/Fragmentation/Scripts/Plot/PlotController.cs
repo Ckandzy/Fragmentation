@@ -37,9 +37,24 @@ public class PlotController : MonoBehaviour
     private IEnumerator Start()
     {
         PlotQueue = new Queue<MonoBehaviour>(PlotList);
-        //PlayerInput.Instance.ReleaseControl(true);
+        PlayerInput.Instance.ReleaseControl(true);
+        PlayerInput.Instance.Interact.GainControl();
         yield return new WaitForSeconds(2f);
-        yield return StartCoroutine((PlotQueue.Dequeue() as IPlot).DoPlot());
-        yield return StartCoroutine((PlotQueue.Dequeue() as IPlot).DoPlot());
+        IPlot plot = null;
+        if (PlotQueue.Count > 0)
+            plot = PlotQueue.Dequeue() as IPlot;
+        while (plot != null)
+        {
+            yield return StartCoroutine(plot.DoPlot());
+            if (PlotQueue.Count > 0)
+                plot = PlotQueue.Dequeue() as IPlot;
+            else
+            {
+                plot = null;
+                break;
+            }
+        }
+        PlayerInput.Instance.GainControl();
+        yield break;
     }
 }

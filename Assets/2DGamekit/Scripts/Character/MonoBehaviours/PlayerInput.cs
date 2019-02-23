@@ -76,6 +76,7 @@ namespace Gamekit2D
             Jump.Get(fixedUpdateHappened, inputType);
             Horizontal.Get(inputType);
             Vertical.Get(inputType);
+
             Attack.Get(fixedUpdateHappened, inputType);
             Weapon1.Get(fixedUpdateHappened, inputType);
             Weapon2.Get(fixedUpdateHappened, inputType);
@@ -101,6 +102,14 @@ namespace Gamekit2D
             GainControl(Jump);
             GainControl(Horizontal);
             GainControl(Vertical);
+
+            GainControl(Attack);
+            GainControl(Weapon1);
+            GainControl(Weapon2);
+            GainControl(Weapon3);
+            GainControl(Weapon4);
+            GainControl(Tab);
+            GainControl(Exit);
         }
 
         public override void ReleaseControl(bool resetValues = true)
@@ -114,6 +123,14 @@ namespace Gamekit2D
             ReleaseControl(Jump, resetValues);
             ReleaseControl(Horizontal, resetValues);
             ReleaseControl(Vertical, resetValues);
+
+            ReleaseControl(Attack, resetValues);
+            ReleaseControl(Weapon1, resetValues);
+            ReleaseControl(Weapon2, resetValues);
+            ReleaseControl(Weapon3, resetValues);
+            ReleaseControl(Weapon4, resetValues);
+            ReleaseControl(Tab, resetValues);
+            ReleaseControl(Exit, resetValues);
         }
 
         public void DisableMeleeAttacking()

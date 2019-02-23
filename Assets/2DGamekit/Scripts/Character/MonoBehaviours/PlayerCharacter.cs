@@ -20,13 +20,7 @@ namespace Gamekit2D
 
         public SpriteRenderer spriteRenderer;
         public Damageable damageable;
-        /// <summary>
-        /// 近战攻击类
-        /// </summary>
-        public Damager meleeDamager;
-        public Transform facingLeftBulletSpawnPoint;
-        public Transform facingRightBulletSpawnPoint;
-        public BulletPool bulletPool;
+  
         public Transform cameraFollowTarget;
 
         public float maxSpeed = 10f;
@@ -154,8 +148,6 @@ namespace Gamekit2D
             m_Box = GetComponent<BoxCollider2D>();
             m_Transform = transform;
             m_InventoryController = GetComponent<InventoryController>();
-
-            m_CurrentBulletSpawnPoint = spriteOriginallyFacesLeft ? facingLeftBulletSpawnPoint : facingRightBulletSpawnPoint;
         }
 
         void Start()
@@ -164,7 +156,7 @@ namespace Gamekit2D
             m_TanHurtJumpAngle = Mathf.Tan(Mathf.Deg2Rad * hurtJumpAngle);
             m_FlickeringWait = new WaitForSeconds(flickeringDuration);
 
-            meleeDamager.DisableDamage();
+            //meleeDamager.DisableDamage();
 
             m_ShotSpawnGap = 1f / shotsPerSecond;
             m_NextShotTime = Time.time;
@@ -245,7 +237,7 @@ namespace Gamekit2D
             m_CharacterController2D.Move(m_MoveVector * Time.deltaTime);
             m_Animator.SetFloat(m_HashHorizontalSpeedPara, m_MoveVector.x);
             m_Animator.SetFloat(m_HashVerticalSpeedPara, m_MoveVector.y);
-            UpdateBulletSpawnPointPositions();
+            //UpdateBulletSpawnPointPositions();
             UpdateCameraFollowTargetPosition();
         }
 
@@ -269,26 +261,8 @@ namespace Gamekit2D
             yield return new WaitForEndOfFrame();
             m_InPause = false;
         }
-
-        /// <summary>
-        /// 更新子弹生成位置
-        /// </summary>
-        protected void UpdateBulletSpawnPointPositions()
-        {
-            if (rightBulletSpawnPointAnimated)
-            {
-                Vector2 leftPosition = facingRightBulletSpawnPoint.localPosition;
-                leftPosition.x *= -1f;
-                facingLeftBulletSpawnPoint.localPosition = leftPosition;
-            }
-            else
-            {
-                Vector2 rightPosition = facingLeftBulletSpawnPoint.localPosition;
-                rightPosition.x *= -1f;
-                facingRightBulletSpawnPoint.localPosition = rightPosition;
-            }
-        }
-
+       
+        
         protected void UpdateCameraFollowTargetPosition()
         {
             float newLocalPosX;
@@ -344,42 +318,6 @@ namespace Gamekit2D
             }
 
             spriteRenderer.enabled = true;
-        }
-
-        protected IEnumerator Shoot()
-        {
-            while (PlayerInput.Instance.RangedAttack.Held)
-            {
-                if (Time.time >= m_NextShotTime)
-                {
-                    SpawnBullet();
-                    m_NextShotTime = Time.time + m_ShotSpawnGap;
-                }
-                yield return null;
-            }
-        }
-
-        protected void SpawnBullet()
-        {
-            //we check if there is a wall between the player and the bullet spawn position, if there is, we don't spawn a bullet
-            //otherwise, the player can "shoot throught wall" because the arm extend to the other side of the wall
-            //如果子弹产生点和角色间被阻挡则不生成子弹
-            Vector2 testPosition = transform.position;
-            testPosition.y = m_CurrentBulletSpawnPoint.position.y;
-            Vector2 direction = (Vector2)m_CurrentBulletSpawnPoint.position - testPosition;
-            float distance = direction.magnitude;
-            direction.Normalize();
-
-            RaycastHit2D[] results = new RaycastHit2D[12];
-            if (Physics2D.Raycast(testPosition, direction, m_CharacterController2D.ContactFilter, results, distance) > 0)
-                return;
-
-            BulletObject bullet = bulletPool.Pop(m_CurrentBulletSpawnPoint.position);
-            bool facingLeft = m_CurrentBulletSpawnPoint == facingLeftBulletSpawnPoint;
-            bullet.rigidbody2D.velocity = new Vector2(facingLeft ? -bulletSpeed : bulletSpeed, 0f);
-            bullet.spriteRenderer.flipX = facingLeft ^ bullet.bullet.spriteOriginallyFacesLeft;
-
-            rangedAttackAudioPlayer.PlayRandomSound();
         }
 
         #region Public functions - called mostly by StateMachineBehaviours in the character's Animator Controller but also by Events.
@@ -457,42 +395,23 @@ namespace Gamekit2D
             {
                 //spriteRenderer.flipX = !spriteOriginallyFacesLeft;
                 transform.localScale = new Vector3(-1, 1, 1);
-                m_CurrentBulletSpawnPoint = facingLeftBulletSpawnPoint;
             }
             else if (faceRight)
             {
                 //spriteRenderer.flipX = spriteOriginallyFacesLeft;
                 transform.localScale = new Vector3(1, 1, 1);
-                m_CurrentBulletSpawnPoint = facingRightBulletSpawnPoint;
             }
         }
 
-        //public void UpdateFacing(bool faceLeft)
-        //{
-        //    if (faceLeft)
-        //    {
-        //        spriteRenderer.flipX = !spriteOriginallyFacesLeft;
-        //        m_CurrentBulletSpawnPoint = facingLeftBulletSpawnPoint;
-        //    }
-        //    else
-        //    {
-        //        spriteRenderer.flipX = spriteOriginallyFacesLeft;
-        //        m_CurrentBulletSpawnPoint = facingRightBulletSpawnPoint;
-        //    }
-        //}
         public void UpdateFacing(bool faceLeft)
         {
             if (faceLeft)
             {
-                //spriteRenderer.flipX = !spriteOriginallyFacesLeft;
                 transform.localScale = new Vector3(-1, 1, 1);
-                m_CurrentBulletSpawnPoint = facingLeftBulletSpawnPoint;
             }
             else
             {
-                //spriteRenderer.flipX = spriteOriginallyFacesLeft;
                 transform.localScale = new Vector3(1, 1, 1);
-                m_CurrentBulletSpawnPoint = facingRightBulletSpawnPoint;
             }
         }
 
@@ -773,55 +692,6 @@ namespace Gamekit2D
             damageable.DisableInvulnerability();
         }
 
-        #region 攻击
-        public bool CheckForHoldingGun()
-        {
-            bool holdingGun = false;
-
-            if (PlayerInput.Instance.RangedAttack.Held)
-            {
-                holdingGun = true;
-                m_Animator.SetBool(m_HashHoldingGunPara, true);
-                m_HoldingGunTimeRemaining = holdingGunTimeoutDuration;
-            }
-            else
-            {
-                m_HoldingGunTimeRemaining -= Time.deltaTime;
-
-                if (m_HoldingGunTimeRemaining <= 0f)
-                {
-                    m_Animator.SetBool(m_HashHoldingGunPara, false);
-                }
-            }
-
-            return holdingGun;
-        }
-
-        public void CheckAndFireGun()
-        {
-            if (PlayerInput.Instance.RangedAttack.Held && m_Animator.GetBool(m_HashHoldingGunPara))
-            {
-                if (m_ShootingCoroutine == null)
-                    m_ShootingCoroutine = StartCoroutine(Shoot());
-                //if (InventoryController.Gun != null && m_ShootingCoroutine == null)
-                //    m_ShootingCoroutine = StartCoroutine(InventoryController.Gun.Shoot());
-            }
-
-            if ((PlayerInput.Instance.RangedAttack.Up || !m_Animator.GetBool(m_HashHoldingGunPara)) && m_ShootingCoroutine != null)
-            {
-                StopCoroutine(m_ShootingCoroutine);
-                m_ShootingCoroutine = null;
-                //StopCoroutine(InventoryController.Gun.Shoot());
-                //m_ShootingCoroutine = null;
-            }
-        }
-
-        public void ForceNotHoldingGun()
-        {
-            m_Animator.SetBool(m_HashHoldingGunPara, false);
-        }
-        #endregion
-
         public void EnableInvulnerability()
         {
             damageable.EnableInvulnerability();
@@ -909,7 +779,7 @@ namespace Gamekit2D
         {
             return PlayerInput.Instance.RangedAttack.Down;
         }
-
+        /*
         public void MeleeAttack()
         {
             m_Animator.SetTrigger(m_HashMeleeAttackPara);
@@ -922,7 +792,7 @@ namespace Gamekit2D
 
         public void EnableMeleeAttack()
         {
-            meleeDamager.EnableDamage();
+            //meleeDamager.EnableDamage();
             meleeDamager.disableDamageAfterHit = true;
             meleeAttackAudioPlayer.PlayRandomSound();
         }
@@ -931,7 +801,7 @@ namespace Gamekit2D
         {
             meleeDamager.DisableDamage();
         }
-
+        */
         public void TeleportToColliderBottom()
         {
             if (m_Capsule != null)
