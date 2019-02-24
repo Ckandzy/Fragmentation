@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Gamekit2D;
 using UnityEngine;
 
+[System.Serializable]
 public abstract class IBuff
 {
     public IBuff(float _buffNum, float percnetage = 0)

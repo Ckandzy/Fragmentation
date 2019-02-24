@@ -48,10 +48,10 @@ public class RangeWeaponBullet : TakeDamager {
 
     public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.GetComponent<DamageAble>())
+        if (collision.transform.GetComponent<TakeDamageable>())
         {
             Debug.Log(collision.transform);
-            collision.transform.GetComponent<DamageAble>().WasDamage(takeDamageNum, Buff);
+            collision.transform.GetComponent<TakeDamageable>().TakeDamage(this, Buff);
             Destroy(gameObject);
         }
     }

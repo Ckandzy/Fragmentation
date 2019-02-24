@@ -11,7 +11,7 @@ public class PistolGun : RangedWeapon
         sprite = Resources.Load<Sprite>("GunSprite/PistolGun");
         this.Frequency = 4;
         mustWaitTime = 1 / 4.00f;
-        OffsetPoint = new Vector2(0.36f, 0.22f);
+        OffsetPoint = new Vector2(0.9f, -0.04f);
     }
 
     /// <summary>
