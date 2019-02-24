@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStatus : MonoBehaviour {
+public class Status : MonoBehaviour {
+    public float MaxHP = 100;
     public float HP = 100;
     public float DamageInfluences = 1; // 百分比
 

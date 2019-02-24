@@ -5,14 +5,14 @@ using UnityEngine;
 /// <summary>
 /// 减伤 -- 降低25%的伤害
 /// </summary>
-public class DamageReductionBuff : IBuff<PlayerStatus>
+public class DamageReductionBuff : IBuff<Status>
 {
     public DamageReductionBuff(float _buffNum, float _percnetage = 0) : base(_buffNum, _percnetage) { }
     public DamageReductionBuff(int lv):base(lv) { } // 使用lv来控制BuffNum 和 buffpercentage
     public DamageReductionBuff() { buffID = 1; }
     public override void BuffOnEnter(GameObject t)
     {
-        TClass = t.GetComponent<PlayerStatus>();
+        TClass = t.GetComponent<Status>();
         buffPercentage = -0.25f;
         TClass.DamageInfluences += buffPercentage;
     }
