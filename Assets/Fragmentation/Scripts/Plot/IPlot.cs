@@ -6,5 +6,5 @@ public interface IPlot
 {
     bool HasDone { get; set; }
 
-    void DoPlot();
+    IEnumerator DoPlot();
 }

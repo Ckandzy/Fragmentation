@@ -24,6 +24,10 @@ public class PlotController : MonoBehaviour
         }
         set { s_Instance = value; }
     }
+
+    [SerializeField]
+    public List<MonoBehaviour> PlotList;
+    protected Queue<MonoBehaviour> PlotQueue;
     static void Create()
     {
         GameObject plotController = new GameObject("PlotController");
@@ -32,7 +36,25 @@ public class PlotController : MonoBehaviour
 
     private IEnumerator Start()
     {
+        PlotQueue = new Queue<MonoBehaviour>(PlotList);
         PlayerInput.Instance.ReleaseControl(true);
-        yield return new WaitForSeconds(5f);
+        PlayerInput.Instance.Interact.GainControl();
+        yield return new WaitForSeconds(2f);
+        IPlot plot = null;
+        if (PlotQueue.Count > 0)
+            plot = PlotQueue.Dequeue() as IPlot;
+        while (plot != null)
+        {
+            yield return StartCoroutine(plot.DoPlot());
+            if (PlotQueue.Count > 0)
+                plot = PlotQueue.Dequeue() as IPlot;
+            else
+            {
+                plot = null;
+                break;
+            }
+        }
+        PlayerInput.Instance.GainControl();
+        yield break;
     }
 }
