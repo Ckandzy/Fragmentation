@@ -357,7 +357,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -888973317
+  m_SortingLayerID: 1303143071
   m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4e268455018a10844a05ac179e7bb754, type: 3}
@@ -437,8 +437,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1552779437
-  m_SortingLayer: 0
+  m_SortingLayerID: -624047809
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 04ecb9859bc3dbb40abc9f37866e10dc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1342,8 +1342,8 @@ MonoBehaviour:
   groundAcceleration: 100
   groundDeceleration: 100
   pushingSpeedProportion: 0
-  airborneAccelProportion: 0
-  airborneDecelProportion: 0
+  airborneAccelProportion: 1
+  airborneDecelProportion: 1
   gravity: 50
   jumpSpeed: 20
   jumpAbortSpeedReduction: 100

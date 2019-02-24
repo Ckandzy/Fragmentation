@@ -609,9 +609,8 @@ namespace Gamekit2D
         public void AirborneHorizontalMovement()
         {
             float desiredSpeed = PlayerInput.Instance.Horizontal.Value * maxSpeed;
-
             float acceleration;
-
+           
             if (PlayerInput.Instance.Horizontal.ReceivingInput)
                 acceleration = groundAcceleration * airborneAccelProportion;
             else

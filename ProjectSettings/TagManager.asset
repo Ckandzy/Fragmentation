@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Fragment
+  - CanTakeWeapon
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,9 @@ TagManager:
   - Usable
   - Interactable
   - IgnorePlayer
-  - Player
+  - 
+  - 
+  - 
   - Cameras
   - LitSprites
   - Destructable
@@ -29,8 +33,6 @@ TagManager:
   - Corpse
   - PickupTrigger
   - PickupCollider
-  - 
-  - 
   - 
   - 
   - 
@@ -57,6 +59,12 @@ TagManager:
   - name: Player
     uniqueID: 1212410841
     locked: 0
+  - name: TakeWeapon
+    uniqueID: 1303143071
+    locked: 0
+  - name: Hand
+    uniqueID: 3670919487
+    locked: 0
   - name: Front
-    uniqueID: 3405993979
+    uniqueID: 700816261
     locked: 0
