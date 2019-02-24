@@ -21,9 +21,7 @@ TagManager:
   - Usable
   - Interactable
   - IgnorePlayer
-  - 
-  - 
-  - 
+  - Player
   - Cameras
   - LitSprites
   - Destructable
@@ -33,6 +31,8 @@ TagManager:
   - Corpse
   - PickupTrigger
   - PickupCollider
+  - 
+  - 
   - 
   - 
   - 
