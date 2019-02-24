@@ -14,79 +14,79 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: VerticalSpeed
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: TimeOut
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Crouching
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Grounded
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 1
-    m_Controller: {fileID: 9100000}
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   - m_Name: Hurt
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Pushing
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Dead
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: MeleeAttack
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: HoldingGun
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Respawn
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: ForcedRespawn
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: RangeAttack
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9e2a3a9e45dd0419bd2799583617f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114603677955419652
+--- !u!114 &114593462906636050
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 788fe546ad9bdbb45a6cc099f9f20e00, type: 3}
+  m_Script: {fileID: 11500000, guid: afc391d5ee15b2a45b225b08651ca072, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114607712533185184
@@ -286,6 +286,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7a5b709a955824eaae2d0252461158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114846462543180730
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc7a5b709a955824eaae2d0252461158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114916930971799184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -296,6 +308,30 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c79d64d5ae98484ea01c53d9040abae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114945938679072310
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e954cd7d4a1c24a97a14490bf3cfd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114948017773002674
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a2898dc8836c34f97acd633161da17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!206 &206042427994162874
@@ -1226,8 +1262,7 @@ AnimatorState:
   - {fileID: 1101698752791484348}
   - {fileID: 1101726228197109358}
   m_StateMachineBehaviours:
-  - {fileID: 114024972754348392}
-  - {fileID: 114000333207943934}
+  - {fileID: 114948017773002674}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1255,8 +1290,6 @@ AnimatorState:
   m_Transitions:
   - {fileID: 1101302099849886278}
   m_StateMachineBehaviours:
-  - {fileID: 114404308737091176}
-  - {fileID: 114916930971799184}
   - {fileID: 114631075981759674}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -1366,9 +1399,8 @@ AnimatorState:
   m_Transitions:
   - {fileID: 1101369177601072568}
   m_StateMachineBehaviours:
-  - {fileID: 114603677955419652}
   - {fileID: 114607712533185184}
-  - {fileID: 114080550731515266}
+  - {fileID: 114593462906636050}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1423,7 +1455,6 @@ AnimatorState:
   m_Transitions:
   - {fileID: 1101845172399416436}
   m_StateMachineBehaviours:
-  - {fileID: 114203101543904044}
   - {fileID: 114635770383569336}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -1480,9 +1511,9 @@ AnimatorState:
   - {fileID: 1101056514367319210}
   - {fileID: 1101396577057382806}
   m_StateMachineBehaviours:
-  - {fileID: 114805033892616692}
-  - {fileID: 114623333641570748}
   - {fileID: 114439949979410170}
+  - {fileID: 114945938679072310}
+  - {fileID: 114846462543180730}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1

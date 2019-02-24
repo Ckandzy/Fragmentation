@@ -149,7 +149,7 @@ namespace Gamekit2D
                 raycastStart = m_Rigidbody2D.position + m_Capsule.offset;
                 //Debug.Log(raycastStart);
                 raycastDistance = m_Capsule.size.x * 0.5f + groundedRaycastDistance * 2f;
-
+ 
                 if (bottom)
                 {
                     raycastDirection = Vector2.down;

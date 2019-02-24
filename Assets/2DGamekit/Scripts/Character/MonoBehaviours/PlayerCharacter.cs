@@ -437,7 +437,6 @@ namespace Gamekit2D
         {
             bool wasGrounded = m_Animator.GetBool(m_HashGroundedPara);
             bool grounded = m_CharacterController2D.IsGrounded;
-
             if (grounded)
             {
                 FindCurrentSurface();

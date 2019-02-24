@@ -156,7 +156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6337330975547262466}
   - component: {fileID: 6337330975547262477}
-  m_Layer: 15
+  m_Layer: 13
   m_Name: Hands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +213,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -624047809
-  m_SortingLayer: 7
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 04ecb9859bc3dbb40abc9f37866e10dc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -236,7 +236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6337330975758769429}
   - component: {fileID: 6337330975758769428}
-  m_Layer: 14
+  m_Layer: 13
   m_Name: TakeWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -293,7 +293,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1303143071
-  m_SortingLayer: 6
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4e268455018a10844a05ac179e7bb754, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -682,7 +682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6337330976421460720}
   - component: {fileID: 6337330976421460723}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: railgunstand1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -760,7 +760,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6337330976440809578}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BulletPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1109,9 +1109,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6337330976892148349}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22.42, y: -1.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children:
   - {fileID: 6337330975547262466}
   - {fileID: 6337330976965029076}
