@@ -5,18 +5,19 @@ using Gamekit2D;
 using UnityEngine.Events;
 using System;
 
+[RequireComponent(typeof(Status))]
 public class TakeDamager : MonoBehaviour {
-    public List<IBuff> DamagerBuffs = new List<IBuff>();
-    public float DamageNum = 1;
-    public int[] BuffIds;
     [Serializable]
-    public class DamagableEvent : UnityEvent<TakeDamager, TakeDamageable>
-    { }
-
-
+    public class DamagableEvent : UnityEvent<TakeDamager, TakeDamageable>{ }
+   
     [Serializable]
-    public class NonDamagableEvent : UnityEvent<TakeDamager>
-    { }
+    public class NonDamagableEvent : UnityEvent<TakeDamager>{ }
+    [Serializable]
+    public class OnHitMissingEvent : UnityEvent { }
+
+    Status status;
+    public List<IBuff> TakeAttackBuffs { get { return status.AttackCarryingBuffs; } }
+    public float CurrentDamagNum { get { return status.AttackDamageNum * status.TakeDamageInfluences; } }
 
     //call that from inside the onDamageableHIt or OnNonDamageableHit to get what was hit.
     public Collider2D LastHit { get { return m_LastHit; } }
@@ -43,7 +44,7 @@ public class TakeDamager : MonoBehaviour {
     public LayerMask hittableLayers;
     public DamagableEvent OnDamageableHit;
     public NonDamagableEvent OnNonDamageableHit;
-
+    public OnHitMissingEvent OnHitMissing;
     //Sprite初始翻转状态
     protected bool m_SpriteOriginallyFlipped;
     protected bool m_CanDamage = true;
@@ -64,10 +65,7 @@ public class TakeDamager : MonoBehaviour {
 
         m_DamagerTransform = transform;
 
-        foreach(int buffid in BuffIds)
-        {
-            DamagerBuffs.Add(BuffFactory.GetBuff(buffid));
-        }
+        status = GetComponent<Status>();
     }
 
 
@@ -111,11 +109,17 @@ public class TakeDamager : MonoBehaviour {
         {
             m_LastHit = m_AttackOverlapResults[i];
             TakeDamageable damageable = m_LastHit.GetComponent<TakeDamageable>();
+            // hit is Missing?
+            if (damageable && !damageable.isHit(damageable.DodgeRate))
+            {
+                OnHitMissing.Invoke();
+                return;
+            }
 
             if (damageable)
             {
                 OnDamageableHit.Invoke(this, damageable);
-                damageable.TakeDamage(this, DamagerBuffs, ignoreInvincibility);
+                damageable.TakeDamage(this, TakeAttackBuffs, ignoreInvincibility);
                 if (disableDamageAfterHit)
                     DisableDamage();
             }

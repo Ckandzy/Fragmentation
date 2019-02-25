@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Gamekit2D;
 
-public class SlowDown : IBuff<PlayerCharacter>
+// 负面buff
+
+public class SlowDown : NegativeBuff<PlayerCharacter>
 {
     public SlowDown() : base() { buffID = 2; }
     public SlowDown(float _buffNum, float percnetage = 0) : base( _buffNum, percnetage) { }

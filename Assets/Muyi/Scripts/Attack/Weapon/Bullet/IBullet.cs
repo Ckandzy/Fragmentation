@@ -7,20 +7,17 @@ public class IBullet : MonoBehaviour {
     public float Speed;
     public Vector2 DirVec;
     public bool NotInVisibleDestroy = false;
+    public APoolBullet bulletPoolObject;
 
-    bool inVisible = true;
-
-    float timer = 0;
+    public float timer = 0;
     private void Update()
     {
         // 间隔时间
         timer += Time.deltaTime;
         // 毁灭
-        if (!inVisible) Destroy();
-        if (timer > LiveTime) Destroy();
+        if (!IsVisible() || timer >= LiveTime) StartCoroutine(DestroyDelay(0));
         // 移动
-        transform.position += (Vector3)DirVec * Speed * Time.deltaTime;
-        Speed += Time.deltaTime * 30;
+        transform.position += (Vector3)DirVec * (Speed + 30 * timer * Time.deltaTime * 30) * Time.deltaTime;
     }
 
     protected void LookAt(Transform enemy)
@@ -30,27 +27,33 @@ public class IBullet : MonoBehaviour {
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    public void Set(float livetime, float speed, Vector2 dir, IBuff buff = null)
+    public void Set(float livetime, float speed, Vector2 dir, List<IBuff> buff = null)
     {
         LiveTime = livetime;
         Speed = speed;
         DirVec = dir;
         GetComponent<SpriteRenderer>().flipX = (dir.x == -1);
+        timer = 0;
     }
 
-    public void Destroy()
+    public bool IsVisible()
     {
-        Destroy(gameObject);
+        Vector3 pos = Camera.main.WorldToViewportPoint(this.transform.position);
+        if (pos.x < 0 || pos.x > 1 || pos.y < 0 || pos.y > 1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
-    public void OnBecameVisible()
-    {
-        inVisible = true;
-    }
 
-    public void OnBecameInvisible()
+    protected IEnumerator DestroyDelay(float time)
     {
-        inVisible = false;
+        yield return new WaitForSeconds(time);
+        bulletPoolObject.ReturnToPool();
     }
 }
 

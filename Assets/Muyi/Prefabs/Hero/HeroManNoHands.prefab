@@ -469,7 +469,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6337330976022556790}
-  - component: {fileID: 6337330976022556791}
+  - component: {fileID: 1207845389}
   m_Layer: 13
   m_Name: MeleeAttackDamager
   m_TagString: Untagged
@@ -491,7 +491,7 @@ Transform:
   m_Father: {fileID: 6337330976892148322}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6337330976022556791
+--- !u!114 &1207845389
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -500,15 +500,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6337330976022556788}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1506f7b67235554cb42519c257da979, type: 3}
+  m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  offset: {x: 0.8902664, y: -0.07738423}
-  size: {x: 0.78053284, y: 2.5163188}
+  DamageNum: 1
+  BuffIds: 
+  offset: {x: 0.93424034, y: 1.3085959}
+  size: {x: 0.91130066, y: 2.7372823}
   offsetBasedOnSpriteFacing: 1
   spriteRenderer: {fileID: 0}
-  canHitTriggers: 1
+  canHitTriggers: 0
   disableDamageAfterHit: 0
   forceRespawn: 0
   ignoreInvincibility: 0
@@ -518,13 +519,13 @@ MonoBehaviour:
   OnDamageableHit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Gamekit2D.Damager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   OnNonDamageableHit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Gamekit2D.Damager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &6337330976189077374
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,6 +1094,7 @@ GameObject:
   - component: {fileID: 6337330976892148350}
   - component: {fileID: 6337330976892148348}
   - component: {fileID: 6337330976892148351}
+  - component: {fileID: 8155389732495629337}
   m_Layer: 13
   m_Name: HeroManNoHands
   m_TagString: Player
@@ -1256,6 +1258,7 @@ MonoBehaviour:
   BulletPoint: {fileID: 6337330976440809578}
   MeleeAttackDamager: {fileID: 6337330976022556788}
   CurrentIndex: 0
+  BulletsPool: {fileID: 0}
 --- !u!114 &6337330976892148344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1270,7 +1273,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 100
   HP: 100
-  DamageInfluences: 1
+  TakeDamageInfluences: 1
+  HurtInfluences: 1
+  AttackDamageNum: 0
+  OnStatusBuffAdd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: AddBuff
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAttackCarryingBuffAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &6337330976892148345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1404,7 +1430,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  status: {fileID: 0}
+  DamageNum: 1
+  BuffIds: 
   offset: {x: 0.019607544, y: 1.3840295}
   size: {x: 0.58135223, y: 2.7512615}
   offsetBasedOnSpriteFacing: 1
@@ -1487,6 +1514,20 @@ MonoBehaviour:
   dataSettings:
     dataTag: 145c57fc-5083-451c-b9d8-39b8d008f442
     persistenceType: 3
+--- !u!114 &8155389732495629337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6337330976892148349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e5ec5c81b96dd34f991f27975d3493c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  initialPoolCount: 10
 --- !u!1 &6337330976898639122
 GameObject:
   m_ObjectHideFlags: 0

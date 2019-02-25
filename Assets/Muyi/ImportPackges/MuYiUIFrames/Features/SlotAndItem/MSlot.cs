@@ -7,7 +7,6 @@ namespace MuyiFrame
 {
     public class MSlot : MonoBehaviour, IDropHandler
     {
-
         public bool isEmpty = true;
         public Transform ItemChild;
         public int ItemID;
@@ -15,6 +14,7 @@ namespace MuyiFrame
         {
 
         }
+        public System.Action OnExcange; 
 
         /// <summary>
         /// Empty the slot
@@ -70,7 +70,6 @@ namespace MuyiFrame
             }
             else
             {
-                Debug.Log("检测到进");
                 // 交换 
                 // ItemID, itemChild, ItemNum
                 // 1 保存pointerDrag的当前格子三个信息
@@ -104,6 +103,8 @@ namespace MuyiFrame
                 _item.nowSlot = this;
                 _item.nowSlot.GetComponent<MSlot>().isEmpty = false;
             }
+
+            OnExcange();
         }
 
         public void Exchange(MItem _item)

@@ -10,6 +10,7 @@ public static class BuffFactory
         {
             case 1: return new DamageReductionBuff();
             case 2: return new SlowDown();
+
         }
         throw new System.Exception("no this buff, but try get it");
     }
@@ -17,8 +18,14 @@ public static class BuffFactory
 
 public enum BuffType
 {
-    DamageReduction = 1,
-    SlowDown = 2
+    DamageReduction = 1, // 减伤
+    SlowDown = 2 // 减速
+}
+
+public enum BuffEffectType
+{
+    Negative, // 负面
+    Gain, // 增益
 }
 
 

@@ -37,7 +37,6 @@ public abstract class IBuff
     public bool Over = false;
     public abstract string Des();
     public abstract void BuffOnEnter(GameObject obj);
-    public abstract void BuffUpdate();
     public abstract void BuffOver();
     public abstract void FlushTime(float _time);
     public virtual void FlushBuff(float _num, float _percentage = 0)
@@ -45,7 +44,15 @@ public abstract class IBuff
         buffNum = _num;
         buffPercentage = _percentage;
     }
+
+    public virtual void BuffUpdate()
+    {
+        nowTime += Time.deltaTime;
+        if (nowTime >= liveTime) BuffOver();
+    }
+
     public abstract BuffType getBuffType();
+    public abstract BuffEffectType getBuffEffectType();
 }
 
 public abstract class IBuff<T> : IBuff
@@ -63,6 +70,58 @@ public abstract class IBuff<T> : IBuff
     //public IBuff(float _buffNum, float percnetage = 0) : base(_buffNum, percnetage) { }
 }
 
+public abstract class GainBuff<T> : IBuff<T>
+{
+    public GainBuff(int lv) { this.LV = lv; } // 使用lv来控制BuffNum 和 buffpercentage
+
+    public GainBuff(float _buffNum, float percnetage = 0)
+    {
+        buffNum = _buffNum;
+        buffPercentage = percnetage;
+    }
+    public GainBuff() : base() { }
+    public override BuffEffectType getBuffEffectType()
+    {
+        return BuffEffectType.Gain;
+    }
+}
+
+public abstract class NegativeBuff<T> : IBuff<T>
+{
+    public NegativeBuff(int lv) { this.LV = lv; } // 使用lv来控制BuffNum 和 buffpercentage
+
+    public NegativeBuff(float _buffNum, float percnetage = 0)
+    {
+        buffNum = _buffNum;
+        buffPercentage = percnetage;
+    }
+    public NegativeBuff() : base() { }
+
+    public override BuffEffectType getBuffEffectType()
+    {
+        return BuffEffectType.Negative;
+    }
+}
+
+
+public abstract class AttackTakeBuff<T> : IBuff<T>
+{
+    public IBuff TakeBuff;
+
+    public AttackTakeBuff(int lv) { this.LV = lv; } // 使用lv来控制BuffNum 和 buffpercentage
+
+    public AttackTakeBuff(float _buffNum, float percnetage = 0)
+    {
+        buffNum = _buffNum;
+        buffPercentage = percnetage;
+    }
+    public AttackTakeBuff() : base() { }
+
+    public override BuffEffectType getBuffEffectType()
+    {
+        return BuffEffectType.Gain;
+    }
+}
 /*
 // 定身
 // 建议人物和敌人的控制函数继承Controller函数，Controller函数中有速度，等基础类型，及函数

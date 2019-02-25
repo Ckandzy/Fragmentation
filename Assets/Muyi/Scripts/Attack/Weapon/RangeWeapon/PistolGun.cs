@@ -31,11 +31,25 @@ public class PistolGun : RangedWeapon
             bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
             foreach (IBuff buff in _buff)
             {
-                if(buff  != null) bullet1.GetComponent<TakeDamager>().DamagerBuffs.Add(buff);
+                if(buff  != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
             }
-            
         }
        
+    }
+
+    public override void Attack(GameObject _bullet, Transform _transform, Vector2 vec, List<IBuff> _buff = null)
+    {
+        if (nowWaitTime >= mustWaitTime)
+        {
+            nowWaitTime = 0;
+            GameObject bullet1 = _bullet;
+            bullet1.transform.position = _transform.position;
+            bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+            foreach (IBuff buff in _buff)
+            {
+                if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+            }
+        }
     }
 }
 
@@ -49,14 +63,29 @@ public class SniperGun : RangedWeapon
         bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
         foreach (IBuff buff in _buff)
         {
-            if (buff != null) bullet1.GetComponent<TakeDamager>().DamagerBuffs.Add(buff);
+            if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+        }
+    }
+
+    public override void Attack(GameObject _bullet, Transform _transform, Vector2 vec, List<IBuff> _buff = null)
+    {
+        if (nowWaitTime >= mustWaitTime)
+        {
+            nowWaitTime = 0;
+            GameObject bullet1 = _bullet;
+            bullet1.transform.position = _transform.position;
+            bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+            foreach (IBuff buff in _buff)
+            {
+                if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+            }
         }
     }
 
     public override void Init()
     {
         sprite = Resources.Load<Sprite>("GunSprite/Gun1");
-        bullet = Resources.Load<GameObject>("Bullet/PistolGunBullet");
+        bullet = Resources.Load<GameObject>("Bullet/FortBullet");//PistolGunBullet");
         this.Frequency = 4;
         mustWaitTime = 1 / 4.00f;
         OffsetPoint = new Vector2(1.76f, 0.19f);

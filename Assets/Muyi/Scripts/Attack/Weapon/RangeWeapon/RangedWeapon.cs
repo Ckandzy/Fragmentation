@@ -18,6 +18,8 @@ public abstract class RangedWeapon : IWeapon
         nowWaitTime += Time.deltaTime;
     }
 
+    public abstract void Attack(GameObject _bullet, Transform transform, Vector2 vec, List<IBuff> _buff = null);
+
     public override WeaponType getWeaponType()
     {
         return WeaponType.RangeType;

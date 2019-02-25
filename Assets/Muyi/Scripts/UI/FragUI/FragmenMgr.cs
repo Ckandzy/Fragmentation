@@ -20,8 +20,15 @@ public class FragmenMgr : MonoBehaviour {
     // item的gameobject
     public GameObject ItemPrefab;
     public Text InfoText;
-    // 当前碎片的信息
-    Dictionary<FragmentType, int> FragDic;
+    // 当前碎片携带的信息
+    public List<int> EquipBuffIds = new List<int>();
+
+    private void Start()
+    {
+        foreach (MSlot mSlot in EquipSlot) mSlot.OnExcange = FlushEquipFragmentBuffIds;
+        ExtraSlot.OnExcange = FlushEquipFragmentBuffIds;
+    }
+
     // 添加碎片
     public void AddFragmentItem(FragmentType type, int itemid, Sprite _sprite)
     {
@@ -42,32 +49,27 @@ public class FragmenMgr : MonoBehaviour {
         // 更新信息
        // FragDic = GetEquipFragAttr();
     }
-
-    /// <summary>
-    /// 返回已经装备的碎片的所有Id和type
-    /// </summary>
-    /// <returns></returns>
-    public Dictionary<FragmentType, int> GetEquipFragAttr()
-    {
-        Dictionary<FragmentType, int> dic = new Dictionary<FragmentType, int>();
-        IFragment frag;
-        foreach (FragmentSlot slot in EquipSlot)
-        {
-            if (slot.ItemChild != null)
-            {
-                frag = slot.ItemChild.GetComponent<FragmentItem>().ItemFragment;
-                dic.Add(frag.GetFragType(), frag.ID);
-            }
-            
-        }
-        return dic;
-    }
     
+    /// <summary>
+    /// using event bind in onClick slot
+    /// </summary>
+    /// <param name="_item"></param>
     public void ShowInfo(FragmentItem _item)
     {
         if (_item == null) InfoText.text = "当前格子无碎片";
         else InfoText.text = _item.Des();
     }
+
+    public void FlushEquipFragmentBuffIds()
+    {
+        EquipBuffIds = new List<int>();
+        foreach(FragmentSlot slot in EquipSlot)
+        {
+            IFragment frag = slot.ItemChild.GetComponent<IFragment>();
+            if (frag != null)
+            {
+                EquipBuffIds.AddListInt(frag.GetBuffIDs());
+            }
+        }
+    }
 }
-
-

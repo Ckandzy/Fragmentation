@@ -32,6 +32,8 @@ public class TakeDamageable : MonoBehaviour
 
     Status Status;
 
+    public float DodgeRate { get { return Status.DodgeRate; } }
+
     [Tooltip("当收到伤害时无敌")]
     public bool invulnerableAfterDamage = true;
     [Tooltip("无敌效果持续时间")]
@@ -136,7 +138,6 @@ public class TakeDamageable : MonoBehaviour
             {
                 if (buff != null)
                 {
-
                     if (!Status.ContainsStatusBuff(buff))
                     {
                         Status.AddStatusBuff(buff);
@@ -154,7 +155,7 @@ public class TakeDamageable : MonoBehaviour
                 }
             }
 
-            Status.HP -= damager.DamageNum * Status.HurtInfluences;
+            Status.HP -= damager.CurrentDamagNum * Status.HurtInfluences;
 
             OnHealthSet.Invoke(this);
         }
@@ -170,6 +171,11 @@ public class TakeDamageable : MonoBehaviour
             EnableInvulnerability();
             if (disableOnDeath) gameObject.SetActive(false);
         }
+    }
+
+    public bool isHit(float rate)
+    { 
+        return UnityEngine.Random.Range(1, 10) / 10.0f > rate;
     }
 }
 

@@ -247,7 +247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &11045680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4018,6 +4018,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cameras
       objectReference: {fileID: 0}
+    - target: {fileID: 1433494367451472, guid: bb0018ce3a8caa643b44f8487c34bd25, type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
+      objectReference: {fileID: 0}
     - target: {fileID: 4438040559237264, guid: bb0018ce3a8caa643b44f8487c34bd25, type: 3}
       propertyPath: m_LocalPosition.x
       value: 25.891506
@@ -4073,6 +4077,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ZDamping
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1241663342956346, guid: bb0018ce3a8caa643b44f8487c34bd25, type: 3}
+      propertyPath: m_TagString
+      value: MainCamera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb0018ce3a8caa643b44f8487c34bd25, type: 3}
@@ -6815,7 +6823,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1510357618
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -12585,6 +12593,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efac40369f166de45a693e2a27ef14eb, type: 3}
+--- !u!114 &2071258547 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114074717571071072, guid: efac40369f166de45a693e2a27ef14eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2071258546}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a91b7dfac851b3c49960614768ec3fc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2082119629
 GameObject:
   m_ObjectHideFlags: 0
@@ -12880,6 +12900,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HeroManNoHands
       objectReference: {fileID: 0}
+    - target: {fileID: 6337330976022556788, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6337330976892148350, guid: b455892d9b566634289b0208ca3de906,
         type: 3}
       propertyPath: hurtAudioPlayer
@@ -13010,10 +13035,35 @@ PrefabInstance:
       propertyPath: OnStatusBuffAdd.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    - target: {fileID: 6337330976022556788, guid: b455892d9b566634289b0208ca3de906,
+    - target: {fileID: 6337330976892148346, guid: b455892d9b566634289b0208ca3de906,
         type: 3}
-      propertyPath: m_IsActive
+      propertyPath: OnFragAdd.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148346, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnFragAdd.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148346, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnFragAdd.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148346, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnFragAdd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2071258547}
+    - target: {fileID: 6337330976892148346, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnFragAdd.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddFragmentItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148346, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnFragAdd.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6337330976022556791, guid: b455892d9b566634289b0208ca3de906, type: 3}

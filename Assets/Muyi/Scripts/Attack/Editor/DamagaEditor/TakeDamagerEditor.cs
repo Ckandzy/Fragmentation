@@ -26,8 +26,8 @@ public class TakeDamagerEditor : Editor
     void OnEnable()
     {
         //RequiresConstantRepaint();
-        m_DamageBuffIDs = serializedObject.FindProperty("BuffIds");
-        m_DamageNum = serializedObject.FindProperty("DamageNum");
+       // m_DamageBuffIDs = serializedObject.FindProperty("BuffIds");
+        //m_DamageNum = serializedObject.FindProperty("DamageNum");
         m_OffsetProp = serializedObject.FindProperty("offset");
         m_SizeProp = serializedObject.FindProperty("size");
         m_OffsetBasedOnSpriteFacingProp = serializedObject.FindProperty("offsetBasedOnSpriteFacing");
@@ -44,8 +44,8 @@ public class TakeDamagerEditor : Editor
     {
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(m_DamageNum);
-        EditorGUILayout.PropertyField(m_DamageBuffIDs, true);
+        //EditorGUILayout.PropertyField(m_DamageNum);
+        //EditorGUILayout.PropertyField(m_DamageBuffIDs, true);
         EditorGUILayout.PropertyField(m_OffsetProp);
         EditorGUILayout.PropertyField(m_SizeProp);
         EditorGUILayout.PropertyField(m_OffsetBasedOnSpriteFacingProp);

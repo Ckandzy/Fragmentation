@@ -8,27 +8,31 @@ public class Status : MonoBehaviour {
 
     public float MaxHP = 100;
     public float HP = 100;
-    public float TakeDamageInfluences = 1; // influences of DamageNum 
+
     public float HurtInfluences = 1;// influences of hurt such as Damage reduction 20%
-    public float AttackDamageNum; // 攻击力
+
+    public float AttackDamageNum = 1; // 攻击力
+    public float TakeDamageInfluences = 1; // influences of DamageNum 
+
+    public float Precision = 1; // 精准度
+    public float DodgeRate = 0; // 闪避率
 
     public BuffEvent OnStatusBuffAdd;
     public BuffEvent OnAttackCarryingBuffAdd;
 
     // 当前身上的状态buff -- 如受到减速
-    protected List<IBuff> StatusBuffs = new List<IBuff>();
+    public List<IBuff> StatusBuffs = new List<IBuff>();
+
     // 当前身上影响攻击的buff -- 如攻击携带减速效果
-    protected List<IBuff> AttackCarryingBuffs = new List<IBuff>();
+    public List<IBuff> AttackCarryingBuffs = new List<IBuff>();
+    
+    public bool isStoic = false;
 
     TakeDamager takeDamager;
-    private void Start()
+
+    private void Awake()
     {
-        if (takeDamager = GetComponent<TakeDamager>())
-        {
-            takeDamager.DamageNum = AttackDamageNum * TakeDamageInfluences;
-            foreach (IBuff buff in AttackCarryingBuffs)
-                takeDamager.DamagerBuffs.Add(buff);
-        }
+        takeDamager = GetComponent<TakeDamager>();
     }
 
     private void Update()
@@ -42,16 +46,54 @@ public class Status : MonoBehaviour {
                 StatusBuffs.Remove(StatusBuffs[i]);
             }
         }
+
+        foreach(IBuff buff in AttackCarryingBuffs)
+        {
+            buff.BuffUpdate();
+            if (buff.Over)
+            {
+                StateUIMgr.Instance.RemoveBuff(buff);
+                AttackCarryingBuffs.Remove(buff);
+            }
+        }
+
+        // stoic 霸体  移除所有负面状态
+        if (isStoic)
+        {
+
+        }
+    }
+
+    public void BuffOver()
+    {
+
     }
 
     #region Attack Carrying buffs
 
-    public void AddAttackCarryingBuff(IBuff buff)
+    public void RemoveAttackCarryingBuff(IBuff _buff)
     {
-        AttackCarryingBuffs.Add(buff);
+       foreach(IBuff buff in AttackCarryingBuffs)
+        {
+            if(buff.getBuffType() == _buff.getBuffType())
+            {
+                AttackCarryingBuffs.Remove(buff);
+            }
+        }
+    }
+
+    public void AddAttackCarryingBuff(IBuff _buff)
+    {
+        foreach (IBuff buff in AttackCarryingBuffs)
+        {
+            if (buff.getBuffType() == _buff.getBuffType())
+            {
+                return;
+            }
+        }
+        AttackCarryingBuffs.Add(_buff);
         //StateUIMgr.Instance.AddBuff(buff);
-        takeDamager.DamagerBuffs.Add(buff);
-        OnAttackCarryingBuffAdd.Invoke(buff);
+        OnAttackCarryingBuffAdd.Invoke(_buff);
     }
 
     public bool ContainsAttackCarryingBuff(IBuff buff)
@@ -101,6 +143,8 @@ public class Status : MonoBehaviour {
         return null;
     }
     #endregion
+
+
 }
 
 
