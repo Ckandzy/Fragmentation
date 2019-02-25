@@ -185,7 +185,7 @@ public class MissileGolem : MonoBehaviour
         }
     }
 
-    void PlayerDied(Damager d, Damageable da)
+    void PlayerDied(TakeDamager d, TakeDamageable da)
     {
         BackgroundMusicPlayer.Instance.PushClip(playerDeathClip);
     }

@@ -6,37 +6,43 @@ public class Status : MonoBehaviour {
     public float MaxHP = 100;
     public float HP = 100;
     public float DamageInfluences = 1; // 百分比
+    protected float m_AttackDamageNum; // 攻击力
 
+    public float AttackDamageNum
+    {
+        get { return m_AttackDamageNum * DamageInfluences; }
+    }
     // 当前身上的buff
-    protected List<IBuff> getBuffs = new List<IBuff>();
+    protected List<IBuff> StatusBuffs = new List<IBuff>();
 
     private void Update()
     {
-        for (int i = 0; i < getBuffs.Count; i++)
+        for (int i = 0; i < StatusBuffs.Count; i++)
         {
-            getBuffs[i].BuffUpdate();
-            if (getBuffs[i].Over)
+            StatusBuffs[i].BuffUpdate();
+            if (StatusBuffs[i].Over)
             {
-                StateUIMgr.Instance.RemoveBuff(getBuffs[i]);
-                getBuffs.Remove(getBuffs[i]);
+                StateUIMgr.Instance.RemoveBuff(StatusBuffs[i]);
+                StatusBuffs.Remove(StatusBuffs[i]);
             }
         }
     }
 
+    #region status buffs
     public void AddBuff(IBuff buff)
     {
-        getBuffs.Add(buff);
+        StatusBuffs.Add(buff);
         StateUIMgr.Instance.AddBuff(buff);
     }
 
     public bool ContainsBuff(IBuff buff)
     {
-        return getBuffs.Contains(buff);
+        return StatusBuffs.Contains(buff);
     }
 
     public IBuff FindBuff(IBuff buff)
     {
-        foreach (IBuff b in getBuffs)
+        foreach (IBuff b in StatusBuffs)
         {
             if (b.buffID == buff.buffID)
             {
@@ -47,6 +53,7 @@ public class Status : MonoBehaviour {
         }
         return null;
     }
+    #endregion
 }
 
 

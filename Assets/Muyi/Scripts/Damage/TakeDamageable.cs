@@ -5,6 +5,7 @@ using Gamekit2D;
 using UnityEngine.Events;
 using System;
 
+
 [RequireComponent(typeof(Status))]
 public class TakeDamageable : MonoBehaviour
 {
@@ -19,14 +20,14 @@ public class TakeDamageable : MonoBehaviour
     /// 伤害事件
     /// </summary>
     [Serializable]
-    public class DamageEvent : UnityEvent<TakeDamager, TakeDamageable, IBuff>
+    public class DamageEvent : UnityEvent<TakeDamager, TakeDamageable>
     { }
 
     /// <summary>
     /// 治愈事件
     /// </summary>
     [Serializable]
-    public class HealEvent : UnityEvent<int, TakeDamageable, IBuff>
+    public class HealEvent : UnityEvent<int, TakeDamageable>
     { }
 
     Status Status;
@@ -54,6 +55,12 @@ public class TakeDamageable : MonoBehaviour
     {
         get { return Status.HP; }
     }
+
+    private void Start()
+    {
+        Status = GetComponent<Status>();
+    }
+
 
     void OnEnable()
     {
@@ -114,10 +121,10 @@ public class TakeDamageable : MonoBehaviour
     /// </summary>
     /// <param name="damager"></param>
     /// <param name="ignoreInvincible"></param>
-    public void TakeDamage(TakeDamager damager, IBuff buff = null, bool ignoreInvincible = false)
+    public void TakeDamage(TakeDamager damager, List<IBuff> buffs = null, bool ignoreInvincible = false)
     {
         // 无敌，或忽略伤害
-        if ((m_Invulnerable && !ignoreInvincible) || Status.HP <= 0)
+        if ((m_Invulnerable && !ignoreInvincible) || CurrentHealth <= 0)
             return;
 
         //we can reach that point if the damager was one that was ignoring invincible state.
@@ -125,74 +132,44 @@ public class TakeDamageable : MonoBehaviour
         if (!m_Invulnerable)
         {
             // 如果身上带有buff， 则刷新buff时间持续时间和效果
-            if (!Status.ContainsBuff(buff))
+            foreach (IBuff buff in buffs)
             {
-                Status.AddBuff(buff);
-                buff.BuffOnEnter(gameObject);
-            }
-            else
-            {
-                IBuff b = Status.FindBuff(buff);
-                if (b != null)
+                if (buff != null)
                 {
-                    b.FlushBuff(buff.buffNum, buff.buffPercentage);
-                    b.FlushTime(buff.liveTime);
+
+                    if (!Status.ContainsBuff(buff))
+                    {
+                        Status.AddBuff(buff);
+                        buff.BuffOnEnter(gameObject);
+                    }
+                    else
+                    {
+                        IBuff b = Status.FindBuff(buff);
+                        if (b != null)
+                        {
+                            b.FlushBuff(buff.buffNum, buff.buffPercentage);
+                            b.FlushTime(buff.liveTime);
+                        }
+                    }
                 }
             }
 
-            Status.HP -= damager.damage * Status.DamageInfluences;
+            Status.HP -= damager.DamageNum * Status.DamageInfluences;
+
             OnHealthSet.Invoke(this);
         }
 
         m_DamageDirection = transform.position + (Vector3)centreOffset - damager.transform.position;
 
-        OnTakeDamage.Invoke(damager, this, buff);
+        OnTakeDamage.Invoke(damager, this);
 
         if (Status.HP <= 0)
         {
-            OnDie.Invoke(damager, this, buff);
-            m_ResetHealthOnSceneReload = true;
+            OnDie.Invoke(damager, this);
+            //m_ResetHealthOnSceneReload = true;
             EnableInvulnerability();
             if (disableOnDeath) gameObject.SetActive(false);
         }
-    }
-
-    /// <summary>
-    /// 增加生命
-    /// </summary>
-    /// <param name="amount"></param>
-    public void GainHealth(int amount, IBuff buff = null)
-    {
-        Status.HP += amount;
-
-        if (Status.HP > Status.MaxHP)
-            Status.HP = Status.MaxHP;
-
-        OnHealthSet.Invoke(this);
-
-        OnGainHealth.Invoke(amount, this, buff);
-    }
-
-    /// <summary>
-    /// 设置生命
-    /// </summary>
-    /// <param name="amount"></param>
-    public void SetHealth(int amount)
-    {
-        Status.HP = amount;
-
-        OnHealthSet.Invoke(this);
-    }
-
-    public DataSettings GetDataSettings()
-    {
-        return dataSettings;
-    }
-
-    public void SetDataSettings(string dataTag, DataSettings.PersistenceType persistenceType)
-    {
-        dataSettings.dataTag = dataTag;
-        dataSettings.persistenceType = persistenceType;
     }
 }
 

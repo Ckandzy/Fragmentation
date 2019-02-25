@@ -6,21 +6,21 @@ using UnityEngine.Events;
 using System;
 
 public class TakeDamager : MonoBehaviour {
-    public IBuff Buff;
-
+    public List<IBuff> DamagerBuffs = new List<IBuff>();
+    public float DamageNum = 1;
+    public int[] BuffIds;
     [Serializable]
-    public class DamagableEvent : UnityEvent<TakeDamager, TakeDamageable, IBuff>
+    public class DamagableEvent : UnityEvent<TakeDamager, TakeDamageable>
     { }
 
 
     [Serializable]
-    public class NonDamagableEvent : UnityEvent<TakeDamager, IBuff>
+    public class NonDamagableEvent : UnityEvent<TakeDamager>
     { }
 
     //call that from inside the onDamageableHIt or OnNonDamageableHit to get what was hit.
     public Collider2D LastHit { get { return m_LastHit; } }
 
-    public float damage = 1;
     [Tooltip("攻击范围指示框的偏移量")]
     public Vector2 offset = new Vector2(1.5f, 1f);
     [Tooltip("攻击范围指示框的大小")]
@@ -63,7 +63,14 @@ public class TakeDamager : MonoBehaviour {
             m_SpriteOriginallyFlipped = spriteRenderer.flipX;
 
         m_DamagerTransform = transform;
+
+        foreach(int buffid in BuffIds)
+        {
+            DamagerBuffs.Add(BuffFactory.GetBuff(buffid));
+        }
     }
+
+
 
     /// <summary>
     /// 开启攻击
@@ -107,14 +114,14 @@ public class TakeDamager : MonoBehaviour {
 
             if (damageable)
             {
-                OnDamageableHit.Invoke(this, damageable, Buff);
-                damageable.TakeDamage(this, Buff, ignoreInvincibility);
+                OnDamageableHit.Invoke(this, damageable);
+                damageable.TakeDamage(this, DamagerBuffs, ignoreInvincibility);
                 if (disableDamageAfterHit)
                     DisableDamage();
             }
             else
             {
-                OnNonDamageableHit.Invoke(this, Buff);
+                OnNonDamageableHit.Invoke(this);
             }
         }
     }

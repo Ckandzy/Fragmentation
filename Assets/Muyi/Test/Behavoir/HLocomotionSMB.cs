@@ -16,7 +16,7 @@ public class HLocomotionSMB : SceneLinkedSMB<PlayerCharacter>
         m_MonoBehaviour.GroundedHorizontalMovement(true);
         m_MonoBehaviour.GroundedVerticalMovement();
         m_MonoBehaviour.CheckForGrounded();
-      
+
         if (m_MonoBehaviour.CheckForJumpInput())
             m_MonoBehaviour.SetVerticalMovement(m_MonoBehaviour.jumpSpeed);
     }

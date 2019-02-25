@@ -15,7 +15,7 @@ public class Fort : MonoBehaviour {
             nowWaitTime = 0;
             GameObject bullet1 = Instantiate(bullet);
             bullet1.transform.position = transform.position;
-            bullet1.GetComponent<RangeWeaponBullet>().Set(3, 10, Vector2.right, BuffFactory.GetBuff(2));
+            bullet1.GetComponent<RangeWeaponBullet>().Set(3, 10, Vector2.right, new List<IBuff> { BuffFactory.GetBuff(2) });
         }
 
         nowWaitTime += Time.deltaTime;

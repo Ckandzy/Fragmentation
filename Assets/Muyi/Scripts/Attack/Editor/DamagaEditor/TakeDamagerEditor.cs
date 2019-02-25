@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
+
 [CustomEditor(typeof(TakeDamager))]
 public class TakeDamagerEditor : Editor
 {
     static BoxBoundsHandle s_BoxBoundsHandle = new BoxBoundsHandle();
     static Color s_EnabledColor = Color.green + Color.grey;
 
-    SerializedProperty m_DamageProp;
+    SerializedProperty m_DamageBuffIDs;
+    SerializedProperty m_DamageNum;
     SerializedProperty m_OffsetProp;
     SerializedProperty m_SizeProp;
     SerializedProperty m_OffsetBasedOnSpriteFacingProp;
@@ -24,7 +26,8 @@ public class TakeDamagerEditor : Editor
     void OnEnable()
     {
         //RequiresConstantRepaint();
-        m_DamageProp = serializedObject.FindProperty("damage");
+        m_DamageBuffIDs = serializedObject.FindProperty("BuffIds");
+        m_DamageNum = serializedObject.FindProperty("DamageNum");
         m_OffsetProp = serializedObject.FindProperty("offset");
         m_SizeProp = serializedObject.FindProperty("size");
         m_OffsetBasedOnSpriteFacingProp = serializedObject.FindProperty("offsetBasedOnSpriteFacing");
@@ -41,7 +44,8 @@ public class TakeDamagerEditor : Editor
     {
         serializedObject.Update();
 
-        EditorGUILayout.PropertyField(m_DamageProp);
+        EditorGUILayout.PropertyField(m_DamageNum);
+        EditorGUILayout.PropertyField(m_DamageBuffIDs, true);
         EditorGUILayout.PropertyField(m_OffsetProp);
         EditorGUILayout.PropertyField(m_SizeProp);
         EditorGUILayout.PropertyField(m_OffsetBasedOnSpriteFacingProp);

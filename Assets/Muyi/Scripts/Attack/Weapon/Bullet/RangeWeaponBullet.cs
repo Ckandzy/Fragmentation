@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangeWeaponBullet : TakeDamager {
+public class RangeWeaponBullet : MonoBehaviour {
     public float LiveTime;
     public float Speed;
     public Vector2 DirVec;
@@ -22,11 +22,11 @@ public class RangeWeaponBullet : TakeDamager {
         Speed += Time.deltaTime * 30;
     }
 
-    public void Set(float livetime, float speed, Vector2 dir, IBuff buff = null)
+    // 改为预设体中设置
+    public void Set(float livetime, float speed, Vector2 dir, List<IBuff> buff = null)
     {
         LiveTime = livetime;
         Speed = speed;
-        Buff = buff;
         DirVec = dir;
         GetComponent<SpriteRenderer>().flipX = (dir.x == -1);
     }
@@ -45,18 +45,11 @@ public class RangeWeaponBullet : TakeDamager {
     {
         inVisible = false;
     }
-
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnHit(TakeDamager takeDamagerBase, TakeDamageable damageable)
     {
-        if (collision.transform.GetComponent<TakeDamageable>())
-        {
-            Debug.Log(collision.transform);
-            collision.transform.GetComponent<TakeDamageable>().TakeDamage(this, Buff);
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 
-    public int takeDamageNum = 50;
 }
 
 

@@ -7,16 +7,15 @@ namespace Gamekit2D
     public class Damageable : MonoBehaviour, IDataPersister
     {
         [Serializable]
-        public class HealthEvent : UnityEvent<Damageable>
-        { }
+        public class HealthEvent : UnityEvent<Damageable> { }
 
         [Serializable]
-        public class DamageEvent : UnityEvent<Damager, Damageable>
-        { }
+        public class DamageEvent : UnityEvent<Damager, Damageable>{ }
+        
 
         [Serializable]
-        public class HealEvent : UnityEvent<int, Damageable>
-        { }
+        public class HealEvent : UnityEvent<int, Damageable> { }
+       
 
         public int startingHealth = 5;
         [Tooltip("当收到伤害时无敌")]

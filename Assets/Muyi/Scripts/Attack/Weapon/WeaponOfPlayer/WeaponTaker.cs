@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Gamekit2D;
 using System.Collections;
-
+using System.Collections.Generic;
 /// <summary>
 /// 合并到PlayerStatus中
 /// </summary>
@@ -65,7 +65,7 @@ public class WeaponTaker : MonoBehaviour
     public void WeaponAttackEnter()
     {
         if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
-            CurrentTakeWeapons[CurrentIndex].Attack(BulletPoint, new Vector2(transform.localScale.x, 0), new IBuff[] { });
+            CurrentTakeWeapons[CurrentIndex].Attack(BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { });
         else if (CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.MeleeType)
         {
             MeleeAttackDamager.SetActive(true);
