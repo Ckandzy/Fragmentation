@@ -14,13 +14,13 @@ public class DamageReductionBuff : IBuff<Status>
     {
         TClass = t.GetComponent<Status>();
         buffPercentage = -0.25f;
-        TClass.DamageInfluences += buffPercentage;
+        TClass.HurtInfluences += buffPercentage;
     }
 
     public override void BuffOver()
     {
         Over = true;
-        TClass.DamageInfluences -= buffPercentage;
+        TClass.HurtInfluences -= buffPercentage;
     }
 
     public override void BuffUpdate()
@@ -41,9 +41,9 @@ public class DamageReductionBuff : IBuff<Status>
 
     public override void FlushBuff(float _num, float _percentage = 0)
     {
-        TClass.DamageInfluences -= buffPercentage;
+        TClass.HurtInfluences -= buffPercentage;
         base.FlushBuff(_num, _percentage);
-        TClass.DamageInfluences += buffPercentage;
+        TClass.HurtInfluences += buffPercentage;
         
     }
 

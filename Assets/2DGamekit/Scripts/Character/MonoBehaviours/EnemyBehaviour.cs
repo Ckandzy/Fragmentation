@@ -534,7 +534,7 @@ namespace Gamekit2D
             return velocity;
         }
 
-        public void Die(Damager damager, Damageable damageable)
+        public void Die(TakeDamager damager, TakeDamageable damageable)
         {
             //Vector2 throwVector = new Vector2(0, 2.0f);
             //Vector2 damagerToThis = damager.transform.position - transform.position;

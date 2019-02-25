@@ -137,14 +137,14 @@ public class TakeDamageable : MonoBehaviour
                 if (buff != null)
                 {
 
-                    if (!Status.ContainsBuff(buff))
+                    if (!Status.ContainsStatusBuff(buff))
                     {
-                        Status.AddBuff(buff);
+                        Status.AddStatusBuff(buff);
                         buff.BuffOnEnter(gameObject);
                     }
                     else
                     {
-                        IBuff b = Status.FindBuff(buff);
+                        IBuff b = Status.FindStatusBuff(buff);
                         if (b != null)
                         {
                             b.FlushBuff(buff.buffNum, buff.buffPercentage);
@@ -154,7 +154,7 @@ public class TakeDamageable : MonoBehaviour
                 }
             }
 
-            Status.HP -= damager.DamageNum * Status.DamageInfluences;
+            Status.HP -= damager.DamageNum * Status.HurtInfluences;
 
             OnHealthSet.Invoke(this);
         }

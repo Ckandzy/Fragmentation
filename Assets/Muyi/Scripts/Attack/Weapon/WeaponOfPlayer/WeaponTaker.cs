@@ -61,7 +61,7 @@ public class WeaponTaker : MonoBehaviour
             m_Animator.SetTrigger(m_HashMeleeAttackPara);
         }
     }
-    // 释放子弹，调整碰撞框
+    // 远程释放子弹，近战调整碰撞框
     public void WeaponAttackEnter()
     {
         if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
@@ -121,8 +121,8 @@ public class WeaponTaker : MonoBehaviour
             case WeaponType.MeleeType:
                 Hands.transform.localEulerAngles = new Vector3(0, 0, -80f);
                 CurrentTakeWeaponSprite.transform.localEulerAngles = new Vector3(0, 0, 90f);
-                MeleeAttackDamager.GetComponent<Damager>().offset = ((MeleeWeapon)CurrentTakeWeapons[index]).offset;
-                MeleeAttackDamager.GetComponent<Damager>().size = ((MeleeWeapon)CurrentTakeWeapons[index]).size;
+                MeleeAttackDamager.GetComponent<TakeDamager>().offset = ((MeleeWeapon)CurrentTakeWeapons[index]).offset;
+                MeleeAttackDamager.GetComponent<TakeDamager>().size = ((MeleeWeapon)CurrentTakeWeapons[index]).size;
                 break;
             case WeaponType.RangeType:
                 Hands.transform.localEulerAngles = new Vector3(0, 0, -45f);

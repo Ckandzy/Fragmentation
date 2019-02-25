@@ -5740,6 +5740,47 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 3
   m_ColliderType: 1
+--- !u!1 &1207845388 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6337330976022556788, guid: b455892d9b566634289b0208ca3de906,
+    type: 3}
+  m_PrefabInstance: {fileID: 6337330976952850069}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1207845389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1207845388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageNum: 1
+  BuffIds: 
+  offset: {x: 0.93424034, y: 1.3085959}
+  size: {x: 0.91130066, y: 2.7372823}
+  offsetBasedOnSpriteFacing: 1
+  spriteRenderer: {fileID: 0}
+  canHitTriggers: 0
+  disableDamageAfterHit: 0
+  forceRespawn: 0
+  ignoreInvincibility: 0
+  hittableLayers:
+    serializedVersion: 2
+    m_Bits: 512
+  OnDamageableHit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnNonDamageableHit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &1213427260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5862,11 +5903,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4016350311743774, guid: 29e1b4dce1d5d664a98820ee30842f83, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 35.6
+      value: 25.42
       objectReference: {fileID: 0}
     - target: {fileID: 4016350311743774, guid: 29e1b4dce1d5d664a98820ee30842f83, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.29
+      value: -1.67
       objectReference: {fileID: 0}
     - target: {fileID: 4016350311743774, guid: 29e1b4dce1d5d664a98820ee30842f83, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6931,7 +6972,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 100
   HP: 100
-  DamageInfluences: 1
+  TakeDamageInfluences: 1
+  HurtInfluences: 1
+  AttackDamageNum: 0
+  OnStatusBuffAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAttackCarryingBuffAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!1 &1537838323
 GameObject:
   m_ObjectHideFlags: 0
@@ -11641,7 +11694,18 @@ MonoBehaviour:
       PublicKeyToken=null
   OnDie:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1902386695}
+        m_MethodName: Die
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamageable+DamageEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnGainHealth:
@@ -11666,7 +11730,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 10
   HP: 1
-  DamageInfluences: 1
+  TakeDamageInfluences: 1
+  HurtInfluences: 1
+  AttackDamageNum: 0
+  OnStatusBuffAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAttackCarryingBuffAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &1902386694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902386691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DamageNum: 1
+  BuffIds: 
+  offset: {x: 1.5, y: 1}
+  size: {x: 2.5, y: 1}
+  offsetBasedOnSpriteFacing: 1
+  spriteRenderer: {fileID: 0}
+  canHitTriggers: 0
+  disableDamageAfterHit: 0
+  forceRespawn: 0
+  ignoreInvincibility: 0
+  hittableLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  OnDamageableHit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnNonDamageableHit:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+--- !u!114 &1902386695 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114719609329687142, guid: 9a2f32836e0e10248b425c273622a735,
+    type: 3}
+  m_PrefabInstance: {fileID: 1983591286}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902386691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83dfa83e29f454446b6abdda921f4bfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1920540076
 GameObject:
   m_ObjectHideFlags: 0
@@ -11955,7 +12078,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1919611099958742, guid: 9a2f32836e0e10248b425c273622a735, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4714846280123948, guid: 9a2f32836e0e10248b425c273622a735, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11994,7 +12117,8 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114412267516478162, guid: 9a2f32836e0e10248b425c273622a735, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9a2f32836e0e10248b425c273622a735, type: 3}
 --- !u!1 &2033939093
 GameObject:
@@ -12856,5 +12980,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 243686457154912612, guid: 74cb2eead3628fa47a369c51a45d99a1,
         type: 2}
-    m_RemovedComponents: []
+    - target: {fileID: 6337330976892148344, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnStatusBuffAdd.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148344, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnStatusBuffAdd.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148344, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnStatusBuffAdd.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148344, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnStatusBuffAdd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2116268595}
+    - target: {fileID: 6337330976892148344, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnStatusBuffAdd.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddBuff
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976892148344, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: OnStatusBuffAdd.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6337330976022556788, guid: b455892d9b566634289b0208ca3de906,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6337330976022556791, guid: b455892d9b566634289b0208ca3de906, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b455892d9b566634289b0208ca3de906, type: 3}
