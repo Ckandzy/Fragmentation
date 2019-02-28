@@ -6,6 +6,7 @@ public abstract class RangedWeapon : IWeapon
 {
     public int AttackRange; // 攻击范围
     public int Frequency; // 攻击频率
+    public float AttackNum = 1; // 攻击数值
     public Vector2 OffsetPoint; // 发射点的位置 
     public GameObject bullet;
     public float bulletLiveTime = 2;
@@ -28,8 +29,11 @@ public abstract class RangedWeapon : IWeapon
 
 public abstract class MeleeWeapon : IWeapon
 {
+    public int Frequency; // 攻击频率
+    public float AttackNum = 1; // 攻击数值
     public Vector2 offset;
     public Vector2 size;
+    public Vector2 HitPoint;
     public override void Update()
     {
         //nowWaitTime += Time.deltaTime;

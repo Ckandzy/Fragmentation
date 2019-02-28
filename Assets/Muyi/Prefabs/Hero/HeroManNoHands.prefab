@@ -503,10 +503,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DamageNum: 1
-  BuffIds: 
-  offset: {x: 0.93424034, y: 1.3085959}
-  size: {x: 0.91130066, y: 2.7372823}
+  status: {fileID: 6337330976892148344}
+  offset: {x: 0.96330357, y: 1.3478584}
+  size: {x: 1.4266071, y: 2.8088684}
   offsetBasedOnSpriteFacing: 1
   spriteRenderer: {fileID: 0}
   canHitTriggers: 0
@@ -525,6 +524,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnHitMissing:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+OnHitMissingEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
 --- !u!1 &6337330976189077374
 GameObject:
@@ -1092,7 +1096,6 @@ GameObject:
   - component: {fileID: 6337330976892148344}
   - component: {fileID: 6337330976892148345}
   - component: {fileID: 6337330976892148350}
-  - component: {fileID: 6337330976892148348}
   - component: {fileID: 6337330976892148351}
   - component: {fileID: 8155389732495629337}
   m_Layer: 13
@@ -1259,6 +1262,23 @@ MonoBehaviour:
   MeleeAttackDamager: {fileID: 6337330976022556788}
   CurrentIndex: 0
   BulletsPool: {fileID: 0}
+  PoolGameobj: {fileID: 0}
+  OnFragAdd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: AddFragmentItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: WeaponTaker+FragEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
 --- !u!114 &6337330976892148344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1273,9 +1293,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHP: 100
   HP: 100
-  TakeDamageInfluences: 1
+  TakeDamagers:
+  - {fileID: 1207845389}
+  TakeDamageables: []
   HurtInfluences: 1
-  AttackDamageNum: 0
+  AttackDamageNum: 1
+  TakeDamageInfluences: 1
+  Precision: 1
+  DodgeRate: 0
   OnStatusBuffAdd:
     m_PersistentCalls:
       m_Calls:
@@ -1297,6 +1322,23 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  OnStatusBuffRemove:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: RemoveBuff
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  isStoic: 0
 --- !u!114 &6337330976892148345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1418,52 +1460,6 @@ MonoBehaviour:
   spriteOriginallyFacesLeft: 0
   m_CharacterController2D: {fileID: 0}
   m_CurrentBulletSpawnPoint: {fileID: 0}
---- !u!114 &6337330976892148348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6337330976892148349}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DamageNum: 1
-  BuffIds: 
-  offset: {x: 0.019607544, y: 1.3840295}
-  size: {x: 0.58135223, y: 2.7512615}
-  offsetBasedOnSpriteFacing: 1
-  spriteRenderer: {fileID: 0}
-  canHitTriggers: 0
-  disableDamageAfterHit: 0
-  forceRespawn: 0
-  ignoreInvincibility: 0
-  hittableLayers:
-    serializedVersion: 2
-    m_Bits: 512
-  OnDamageableHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6337330976892148350}
-        m_MethodName: OnHurt
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  OnNonDamageableHit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
 --- !u!114 &6337330976892148351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1476,6 +1472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85ea7a666795a6c44a15cd4a2838c79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  status: {fileID: 0}
   invulnerableAfterDamage: 1
   invulnerabilityDuration: 3
   disableOnDeath: 0
@@ -1511,9 +1508,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: TakeDamageable+HealEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  dataSettings:
-    dataTag: 145c57fc-5083-451c-b9d8-39b8d008f442
-    persistenceType: 3
+  AttackPoint: {x: 0, y: 0}
 --- !u!114 &8155389732495629337
 MonoBehaviour:
   m_ObjectHideFlags: 0

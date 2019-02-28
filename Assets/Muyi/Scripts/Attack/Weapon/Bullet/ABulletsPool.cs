@@ -6,7 +6,7 @@ using Gamekit2D;
 public class ABulletsPool : ObjectPool<ABulletsPool, APoolBullet>
 {
     static protected Dictionary<GameObject, ABulletsPool> s_PoolInstances = new Dictionary<GameObject, ABulletsPool>();
-
+    Transform parent;
     private void Awake()
     {
         //This allow to make Pool manually added in the scene still automatically findable & usable
@@ -19,14 +19,39 @@ public class ABulletsPool : ObjectPool<ABulletsPool, APoolBullet>
         
     }
 
-    public void Restart(Transform _parent)
+    public override APoolBullet Pop()
     {
+        for (int i = 0; i < pool.Count; i++)
+        {
+            if (pool[i].inPool)
+            {
+                pool[i].inPool = false;
+                pool[i].WakeUp();
+                return pool[i];
+            }
+        }
+
+        APoolBullet newPoolObject = CreateNewPoolObject(parent);
+        pool.Add(newPoolObject);
+        newPoolObject.inPool = false;
+        newPoolObject.WakeUp();
+        return newPoolObject;
+    }
+
+    public GameObject[] Restart(Transform _parent, int poollength)
+    {
+        parent = _parent;
         DestroyAll(_parent);
+        GameObject[] objs = new GameObject[poollength];
+        this.initialPoolCount = poollength;
         for (int i = 0; i < initialPoolCount; i++)
         {
             APoolBullet newPoolObject = CreateNewPoolObject(_parent);
             pool.Add(newPoolObject);
+            objs[i] = newPoolObject.instance;
+            objs[i].GetComponent<TakeDamager>().OnDamageableHit.AddListener(newPoolObject.ToPool);
         }
+        return objs;
     }
 
     protected void DestroyAll(Transform _parent)
@@ -45,11 +70,11 @@ public class ABulletsPool : ObjectPool<ABulletsPool, APoolBullet>
 
     private new APoolBullet CreateNewPoolObject() { return null; }
 
-    public APoolBullet CreateNewPoolObject(Transform parent)
+    public APoolBullet CreateNewPoolObject(Transform _parent)
     {
         APoolBullet newPoolObject = new APoolBullet();
         newPoolObject.instance = Instantiate(prefab);
-        newPoolObject.instance.transform.SetParent(parent);
+        newPoolObject.instance.transform.SetParent(_parent);
         newPoolObject.inPool = true;
         newPoolObject.SetReferences(this as ABulletsPool);
         newPoolObject.Sleep();
@@ -98,5 +123,10 @@ public class APoolBullet : PoolObject<ABulletsPool, APoolBullet>
     public override void Sleep()
     {
         instance.SetActive(false);
+    }
+
+    public void ToPool(TakeDamager damager, TakeDamageable damageable)
+    {
+        base.ReturnToPool();
     }
 }

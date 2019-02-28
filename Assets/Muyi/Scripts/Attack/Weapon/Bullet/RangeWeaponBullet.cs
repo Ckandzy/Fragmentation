@@ -6,9 +6,11 @@ public class RangeWeaponBullet : IBullet {
  
     public void OnHit(TakeDamager takeDamagerBase, TakeDamageable damageable)
     {
-        if(GetComponent<Animator>())
-            GetComponent<Animator>().SetTrigger("OnHit");
-        StartCoroutine(DestroyDelay(0));
+        //GameObject vfx = Instantiate(Resources.Load<GameObject>("VFX/Blowout/PistolBulletHit"));
+        //vfx.transform.position = transform.position;
+        //vfx.GetComponent<Animation>().Play();
+        //Destroy(this.gameObject);
+        gameObject.SetActive(false);
     }
 }
 

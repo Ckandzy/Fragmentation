@@ -32,7 +32,8 @@ public class IBullet : MonoBehaviour {
         LiveTime = livetime;
         Speed = speed;
         DirVec = dir;
-        GetComponent<SpriteRenderer>().flipX = (dir.x == -1);
+        //GetComponent<SpriteRenderer>().flipX = (dir.x == -1);
+        transform.localScale = new Vector2(dir.x, transform.localScale.y);
         timer = 0;
     }
 

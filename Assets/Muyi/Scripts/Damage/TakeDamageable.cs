@@ -5,7 +5,6 @@ using Gamekit2D;
 using UnityEngine.Events;
 using System;
 
-
 [RequireComponent(typeof(Status))]
 public class TakeDamageable : MonoBehaviour
 {
@@ -30,9 +29,10 @@ public class TakeDamageable : MonoBehaviour
     public class HealEvent : UnityEvent<int, TakeDamageable>
     { }
 
-    Status Status;
+    public class OnMissingAttackEvent : UnityEvent { }
 
-    public float DodgeRate { get { return Status.DodgeRate; } }
+    public Status status; //  如果有需求 可以改为像TakeDamager一样，注册到某一个Status中
+    public float DodgeRate { get { return status.DodgeRate; } }
 
     [Tooltip("当收到伤害时无敌")]
     public bool invulnerableAfterDamage = true;
@@ -45,9 +45,8 @@ public class TakeDamageable : MonoBehaviour
     public DamageEvent OnTakeDamage;
     public DamageEvent OnDie;
     public HealEvent OnGainHealth;
-    [HideInInspector]
-    public DataSettings dataSettings;
-
+    public OnMissingAttackEvent OnMissingAttack;
+    public Vector2 AttackPoint;
     protected bool m_Invulnerable;
     protected float m_InulnerabilityTimer;
     protected Vector2 m_DamageDirection;
@@ -55,12 +54,12 @@ public class TakeDamageable : MonoBehaviour
 
     public float CurrentHealth
     {
-        get { return Status.HP; }
+        get { return status.HP; }
     }
 
-    private void Start()
+    private void Awake()
     {
-        Status = GetComponent<Status>();
+        if (status == null) { status = GetComponent<Status>(); }
     }
 
 
@@ -125,6 +124,7 @@ public class TakeDamageable : MonoBehaviour
     /// <param name="ignoreInvincible"></param>
     public void TakeDamage(TakeDamager damager, List<IBuff> buffs = null, bool ignoreInvincible = false)
     {
+        AttackPoint = damager.hitPoint;//damager.AttackPoints[0].point;
         // 无敌，或忽略伤害
         if ((m_Invulnerable && !ignoreInvincible) || CurrentHealth <= 0)
             return;
@@ -133,30 +133,34 @@ public class TakeDamageable : MonoBehaviour
         //We still want the callback that we were hit, but not the damage to be removed from health.
         if (!m_Invulnerable)
         {
-            // 如果身上带有buff， 则刷新buff时间持续时间和效果
+            // 如果身上带有buff， 则刷新buff时间持续时间和效果 -- 需求变为可以有相同 buff 
             foreach (IBuff buff in buffs)
             {
+                if(buff != null)
+                {
+                    status.AddStatusBuff(buff);
+                    buff.BuffOnEnter(gameObject);
+                }
+                /* 需求变为可以有相同 buff 
                 if (buff != null)
                 {
-                    if (!Status.ContainsStatusBuff(buff))
+                    if (!status.ContainsStatusBuff(buff.getBuffType()))
                     {
-                        Status.AddStatusBuff(buff);
+                        status.AddStatusBuff(buff);
                         buff.BuffOnEnter(gameObject);
                     }
                     else
                     {
-                        IBuff b = Status.FindStatusBuff(buff);
-                        if (b != null)
-                        {
-                            b.FlushBuff(buff.buffNum, buff.buffPercentage);
-                            b.FlushTime(buff.liveTime);
-                        }
+                        IBuff b = status.FindStatusBuff(buff.getBuffType());
+                        if (b != null && buff.LV > b.LV) b.FlushLV(b.LV);
                     }
-                }
+                }*/
             }
+            // 秒杀
+            if (damager.IsSpike()) status.HP -= float.MaxValue;
+            else status.HP -= damager.CurrentDamagNum * status.HurtInfluences;
 
-            Status.HP -= damager.CurrentDamagNum * Status.HurtInfluences;
-
+            //Debug.Log( status.HP);
             OnHealthSet.Invoke(this);
         }
 
@@ -164,7 +168,7 @@ public class TakeDamageable : MonoBehaviour
 
         OnTakeDamage.Invoke(damager, this);
 
-        if (Status.HP <= 0)
+        if (status.HP <= 0)
         {
             OnDie.Invoke(damager, this);
             //m_ResetHealthOnSceneReload = true;
@@ -174,8 +178,8 @@ public class TakeDamageable : MonoBehaviour
     }
 
     public bool isHit(float rate)
-    { 
-        return UnityEngine.Random.Range(1, 10) / 10.0f > rate;
+    {
+        return UnityEngine.Random.Range(1, 11) / 10.0f > rate;
     }
 }
 

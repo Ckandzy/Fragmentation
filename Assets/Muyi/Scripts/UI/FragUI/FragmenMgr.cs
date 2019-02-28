@@ -21,12 +21,22 @@ public class FragmenMgr : MonoBehaviour {
     public GameObject ItemPrefab;
     public Text InfoText;
     // 当前碎片携带的信息
-    public List<int> EquipBuffIds = new List<int>();
+    //public List<int> EquipBuffIds = new List<int>();
+
+    private Status m_PlayerStatus;
+
+    private void Awake()
+    {
+        m_PlayerStatus = GameObject.FindGameObjectWithTag("Player").GetComponent<Status>();
+    }
 
     private void Start()
     {
-        foreach (MSlot mSlot in EquipSlot) mSlot.OnExcange = FlushEquipFragmentBuffIds;
-        ExtraSlot.OnExcange = FlushEquipFragmentBuffIds;
+        foreach (MSlot mSlot in EquipSlot)
+        {
+            mSlot.OnItemAdd.AddListener(this.AddFragment);
+            mSlot.OnItemRemove.AddListener(this.RemoveFragment);
+        }
     }
 
     // 添加碎片
@@ -46,8 +56,6 @@ public class FragmenMgr : MonoBehaviour {
         {
             ExtraSlot.AddFragmentItem(type, itemid, ItemPrefab, _sprite);
         }
-        // 更新信息
-       // FragDic = GetEquipFragAttr();
     }
     
     /// <summary>
@@ -60,16 +68,21 @@ public class FragmenMgr : MonoBehaviour {
         else InfoText.text = _item.Des();
     }
 
-    public void FlushEquipFragmentBuffIds()
+    #region event of equipslot add or remove fragmentations
+    public void RemoveFragment(MSlot slot, MItem item)
     {
-        EquipBuffIds = new List<int>();
-        foreach(FragmentSlot slot in EquipSlot)
+        foreach (int id in ((FragmentItem)item).ItemFragment.BuffIds)
         {
-            IFragment frag = slot.ItemChild.GetComponent<IFragment>();
-            if (frag != null)
-            {
-                EquipBuffIds.AddListInt(frag.GetBuffIDs());
-            }
+            m_PlayerStatus.RemoveStatuBuff(BuffFactory.GetBuff(id));
         }
     }
+
+    public void AddFragment(MSlot slot, MItem item)
+    {
+        foreach (int id in ((FragmentItem)item).ItemFragment.BuffIds)
+        {
+            m_PlayerStatus.AddStatusBuff(BuffFactory.GetBuff(id, 2, true));
+        }
+    }
+    #endregion
 }

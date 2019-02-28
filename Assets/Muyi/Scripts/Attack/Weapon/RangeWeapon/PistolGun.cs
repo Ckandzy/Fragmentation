@@ -12,6 +12,7 @@ public class PistolGun : RangedWeapon
         this.Frequency = 4;
         mustWaitTime = 1 / 4.00f;
         OffsetPoint = new Vector2(0.364f, 0.218f);
+        AttackNum = 10;
     }
 
     /// <summary>
@@ -28,7 +29,7 @@ public class PistolGun : RangedWeapon
             nowWaitTime = 0;
             GameObject bullet1 = MonoBehaviour.Instantiate(bullet);
             bullet1.transform.position = _transform.position;
-            bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+            bullet1.GetComponent<IBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
             foreach (IBuff buff in _buff)
             {
                 if(buff  != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
@@ -104,6 +105,8 @@ public class Sword : MeleeWeapon
         sprite = Resources.Load<Sprite>("GunSprite/Gun3");
         offset = new Vector2(0.93f, 1.3f);
         size = new Vector2(0.91f, 2.73f);
+        AttackNum = 1;
+        HitPoint = new Vector2(1.32f, 0.01f);
     }
 }
 

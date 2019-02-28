@@ -20,7 +20,7 @@ namespace Gamekit2D
 
         public SpriteRenderer spriteRenderer;
         public TakeDamageable damageable;
-  
+        public int CanJumpCount = 1;
         public Transform cameraFollowTarget;
 
         public float maxSpeed = 10f;

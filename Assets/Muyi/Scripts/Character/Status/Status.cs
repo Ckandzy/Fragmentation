@@ -6,12 +6,16 @@ public class Status : MonoBehaviour {
     [System.Serializable]
     public class BuffEvent : UnityEvent<IBuff> { }
 
-    public float MaxHP = 100;
+    public float MaxHP = 100; // 最大生命值
     public float HP = 100;
 
-    public float HurtInfluences = 1;// influences of hurt such as Damage reduction 20%
+    // all TakeDamagers such bullet, and melee take, you can add to this list
+    public List<TakeDamager> TakeDamagers;
+    public List<TakeDamageable> TakeDamageables;
 
-    public float AttackDamageNum = 1; // 攻击力
+    public float HurtInfluences = 1;// influences of hurt such as Damage reduction 20%
+    public float SpikeRate = 0; // Spike：秒杀
+    public float AttackDamageNum = 1; // Attack num
     public float TakeDamageInfluences = 1; // influences of DamageNum 
 
     public float Precision = 1; // 精准度
@@ -19,41 +23,40 @@ public class Status : MonoBehaviour {
 
     public BuffEvent OnStatusBuffAdd;
     public BuffEvent OnAttackCarryingBuffAdd;
+    public BuffEvent OnStatusBuffRemove;
 
     // 当前身上的状态buff -- 如受到减速
-    public List<IBuff> StatusBuffs = new List<IBuff>();
+    protected List<IBuff> m_StatusBuffs = new List<IBuff>();
 
-    // 当前身上影响攻击的buff -- 如攻击携带减速效果
-    public List<IBuff> AttackCarryingBuffs = new List<IBuff>();
+    // 当前身上影响攻击的buff -- 如攻击携带减速效果 -- 只能提供影响攻击的状态buff获取或失去这些buff
+    protected List<IBuff> m_AttackCarryingBuffs = new List<IBuff>();
+
+    public List<IBuff> StatusBuffs { get { return m_StatusBuffs; } }
+    public List<IBuff> AttackCarryingBuffs { get { return m_AttackCarryingBuffs; } }
+
     
     public bool isStoic = false;
 
-    TakeDamager takeDamager;
-
     private void Awake()
     {
-        takeDamager = GetComponent<TakeDamager>();
+        
+    }
+
+    private void Start()
+    {
+        foreach (TakeDamager damager in TakeDamagers) { damager.status = this; }
+        foreach (TakeDamageable damageable in TakeDamageables) { damageable.status = this; }
     }
 
     private void Update()
     {
-        for (int i = 0; i < StatusBuffs.Count; i++)
+        for (int i = 0; i < m_StatusBuffs.Count; i++)
         {
-            StatusBuffs[i].BuffUpdate();
-            if (StatusBuffs[i].Over)
+            m_StatusBuffs[i].BuffUpdate();
+            if (m_StatusBuffs[i].Over)
             {
-                StateUIMgr.Instance.RemoveBuff(StatusBuffs[i]);
-                StatusBuffs.Remove(StatusBuffs[i]);
-            }
-        }
-
-        foreach(IBuff buff in AttackCarryingBuffs)
-        {
-            buff.BuffUpdate();
-            if (buff.Over)
-            {
-                StateUIMgr.Instance.RemoveBuff(buff);
-                AttackCarryingBuffs.Remove(buff);
+                StateUIMgr.Instance.RemoveBuff(m_StatusBuffs[i]);
+                RemoveStatuBuff(m_StatusBuffs[i]);
             }
         }
 
@@ -63,84 +66,120 @@ public class Status : MonoBehaviour {
 
         }
     }
-
-    public void BuffOver()
+    #region bind or unbind TakeDamager or TakeDamagable in Statu 
+    public void RegisteredTakeDamger(TakeDamager takeDamager)
     {
-
+        if (!TakeDamagers.Contains(takeDamager))
+        {
+            TakeDamagers.Add(takeDamager);
+            takeDamager.status = this;
+        }
     }
+
+    public void unRegisteredTakeDamger(TakeDamager takeDamager)
+    {
+        if (TakeDamagers.Contains(takeDamager))
+        {
+            TakeDamagers.Remove(takeDamager);
+            takeDamager.status = null;
+        }
+    }
+
+    public void TakeDamagerFlush()
+    {
+        for(int i = 0;i < TakeDamagers.Count; i++)//foreach (TakeDamager damager in TakeDamagers)
+        {
+            TakeDamager damager = TakeDamagers[i];
+            if (damager == null || damager.gameObject == null)
+            {
+                unRegisteredTakeDamger(damager);
+            }
+        }
+    }
+
+    public void RegisteredTakeDamagable(TakeDamageable takeDamageable)
+    {
+        if (TakeDamageables.Contains(takeDamageable))
+        {
+            takeDamageable.status = this;
+            TakeDamageables.Add(takeDamageable);
+        }
+    }
+
+    public void unRegisteredTakeDamagable(TakeDamageable takeDamageable)
+    {
+        if (TakeDamageables.Contains(takeDamageable))
+        {
+            takeDamageable.status = null;
+            TakeDamageables.Remove(takeDamageable);
+        }
+    }
+
+    
+    #endregion
 
     #region Attack Carrying buffs
 
+    public List<IBuff> getAttackBuffs()
+    {
+        return this.m_AttackCarryingBuffs;
+    }
+
     public void RemoveAttackCarryingBuff(IBuff _buff)
     {
-       foreach(IBuff buff in AttackCarryingBuffs)
+        foreach(IBuff buff in m_AttackCarryingBuffs)
         {
-            if(buff.getBuffType() == _buff.getBuffType())
+            if(buff == _buff)
             {
-                AttackCarryingBuffs.Remove(buff);
+                buff.BuffOver();
+                m_AttackCarryingBuffs.Remove(buff);
             }
         }
     }
 
     public void AddAttackCarryingBuff(IBuff _buff)
     {
-        foreach (IBuff buff in AttackCarryingBuffs)
+        if (AttackCarryingBuffs.Contains(_buff))
         {
-            if (buff.getBuffType() == _buff.getBuffType())
-            {
-                return;
-            }
+            m_AttackCarryingBuffs.Add(_buff);
+            _buff.BuffOnEnter(gameObject);
+            OnAttackCarryingBuffAdd.Invoke(_buff);
         }
-        AttackCarryingBuffs.Add(_buff);
-        //StateUIMgr.Instance.AddBuff(buff);
-        OnAttackCarryingBuffAdd.Invoke(_buff);
+        
     }
 
     public bool ContainsAttackCarryingBuff(IBuff buff)
     {
-        return AttackCarryingBuffs.Contains(buff);
-    }
-
-    public IBuff FindAttackCarryingBuff(IBuff buff)
-    {
-        foreach (IBuff b in AttackCarryingBuffs)
-        {
-            if (b.buffID == buff.buffID)
-            {
-                //b.FlushBuff(buff.buffNum, buff.buffPercentage);
-                //b.FlushTime(buff.liveTime);
-                return b;
-            }
-        }
-        return null;
+        return m_AttackCarryingBuffs.Contains(buff);
     }
     #endregion
 
     #region Status Buff
-    public void AddStatusBuff(IBuff buff)
+    //  current if player has type of this buff of his status buffs, add false 
+    public void AddStatusBuff(IBuff _buff)
     {
-        StatusBuffs.Add(buff);
-        //StateUIMgr.Instance.AddBuff(buff);
-        OnStatusBuffAdd.Invoke(buff);
-    }
-
-    public bool ContainsStatusBuff(IBuff buff)
-    {
-        return StatusBuffs.Contains(buff);
-    }
-
-    public IBuff FindStatusBuff(IBuff buff)
-    {
-        foreach (IBuff b in StatusBuffs)
+        if (!StatusBuffs.Contains(_buff))
         {
-            if (b.buffID == buff.buffID)
-            {
-                //b.FlushBuff(buff.buffNum, buff.buffPercentage);
-                //b.FlushTime(buff.liveTime);
-                return b;
-            }
+            m_StatusBuffs.Add(_buff);
+            _buff.BuffOnEnter(gameObject);
+            OnStatusBuffAdd.Invoke(_buff);
         }
-        return null;
+           
+    }
+
+    public void RemoveStatuBuff(IBuff _buff)
+    {
+        if (m_StatusBuffs.Contains(_buff))
+        {
+            _buff.BuffOver();
+            m_StatusBuffs.Remove(_buff);
+            OnStatusBuffRemove.Invoke(_buff);
+        }
+    }
+
+    public bool ContainsStatusBuff(IBuff _buff)
+    {
+        return m_StatusBuffs.Contains(_buff);
     }
     #endregion
 

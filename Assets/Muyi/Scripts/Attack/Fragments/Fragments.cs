@@ -6,6 +6,7 @@ public class Fragments : MonoBehaviour {
     public FragmentType type;
     public int fragmentID;
     public Sprite sprite;
+    public int Lv = 1;
     private void Start()
     {
         sprite = GetComponent<SpriteRenderer>().sprite;
@@ -38,7 +39,7 @@ public class ShockFrag : IGuardFrag
     public ShockFrag()
     {
         ID = 2;
-        BuffIds.Add((int)BuffType.DamageReduction);
+        BuffIds.Add((int)BuffType.AttackMakeBlowout);
         BuffIds.Add((int)BuffType.SlowDown);
     }
 

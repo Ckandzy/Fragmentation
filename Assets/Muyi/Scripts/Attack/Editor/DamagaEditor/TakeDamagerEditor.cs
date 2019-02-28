@@ -9,7 +9,11 @@ public class TakeDamagerEditor : Editor
 {
     static BoxBoundsHandle s_BoxBoundsHandle = new BoxBoundsHandle();
     static Color s_EnabledColor = Color.green + Color.grey;
-
+    
+    SerializedProperty m_HitPointProp;
+    SerializedProperty m_RefreshDamageTimeProp;
+    SerializedProperty m_OnHitMissingProp;
+    SerializedProperty m_StatusProp;
     SerializedProperty m_DamageBuffIDs;
     SerializedProperty m_DamageNum;
     SerializedProperty m_OffsetProp;
@@ -26,8 +30,11 @@ public class TakeDamagerEditor : Editor
     void OnEnable()
     {
         //RequiresConstantRepaint();
-       // m_DamageBuffIDs = serializedObject.FindProperty("BuffIds");
-        //m_DamageNum = serializedObject.FindProperty("DamageNum");
+        // m_DamageBuffIDs = serializedObject.FindProperty("BuffIds");
+        // m_DamageNum = serializedObject.FindProperty("status");
+        m_RefreshDamageTimeProp = serializedObject.FindProperty("RefreshDamageTime");
+        m_HitPointProp = serializedObject.FindProperty("hitPoint");
+        m_StatusProp = serializedObject.FindProperty("status");
         m_OffsetProp = serializedObject.FindProperty("offset");
         m_SizeProp = serializedObject.FindProperty("size");
         m_OffsetBasedOnSpriteFacingProp = serializedObject.FindProperty("offsetBasedOnSpriteFacing");
@@ -38,6 +45,7 @@ public class TakeDamagerEditor : Editor
         m_HittableLayersProp = serializedObject.FindProperty("hittableLayers");
         m_OnDamageableHitProp = serializedObject.FindProperty("OnDamageableHit");
         m_OnNonDamageableHitProp = serializedObject.FindProperty("OnNonDamageableHit");
+        m_OnHitMissingProp = serializedObject.FindProperty("OnHitMissing");
     }
 
     public override void OnInspectorGUI()
@@ -46,6 +54,9 @@ public class TakeDamagerEditor : Editor
 
         //EditorGUILayout.PropertyField(m_DamageNum);
         //EditorGUILayout.PropertyField(m_DamageBuffIDs, true);
+        EditorGUILayout.PropertyField(m_HitPointProp);
+        EditorGUILayout.PropertyField(m_RefreshDamageTimeProp);
+        EditorGUILayout.PropertyField(m_StatusProp);
         EditorGUILayout.PropertyField(m_OffsetProp);
         EditorGUILayout.PropertyField(m_SizeProp);
         EditorGUILayout.PropertyField(m_OffsetBasedOnSpriteFacingProp);
@@ -57,14 +68,14 @@ public class TakeDamagerEditor : Editor
         EditorGUILayout.PropertyField(m_HittableLayersProp);
         EditorGUILayout.PropertyField(m_OnDamageableHitProp);
         EditorGUILayout.PropertyField(m_OnNonDamageableHitProp);
-
+        EditorGUILayout.PropertyField(m_OnHitMissingProp);
         serializedObject.ApplyModifiedProperties();
     }
 
     void OnSceneGUI()
     {
         TakeDamager damager = (TakeDamager)target;
-
+        
         if (!damager.enabled)
             return;
 
@@ -91,5 +102,9 @@ public class TakeDamagerEditor : Editor
                 damager.offset = s_BoxBoundsHandle.center;
             }
         }
+        // 画点
+        //Handles.DotHandleCap(0, damager.hitPoint+ new Vector2(10, 0), Quaternion.identity, 2, EventType.DragUpdated);
+        //Handles.DotHandleCap(0, damager.hitPoint + new Vector2(0, 5), Quaternion.identity, 2, EventType.DragUpdated);
+        //Debug.Log("drow nice");
     }
 }

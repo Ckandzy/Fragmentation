@@ -7,6 +7,7 @@ using UnityEngine.Events;
 /// 合并到PlayerStatus中
 /// </summary>
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(Status))]
 public class WeaponTaker : MonoBehaviour
 {
     [System.Serializable]
@@ -18,7 +19,7 @@ public class WeaponTaker : MonoBehaviour
     public Transform BulletPoint; // 子弹发射点
     public GameObject MeleeAttackDamager; // 近战武器范围框
 
-    public int CurrentIndex;
+    public int CurrentIndex = 0;
     public IWeapon[] CurrentTakeWeapons = new IWeapon[4]; // 当前携带的武器
     public ABulletsPool BulletsPool;
     // 子弹池父类
@@ -32,12 +33,14 @@ public class WeaponTaker : MonoBehaviour
     protected readonly int m_HashMeleeAttackPara = Animator.StringToHash("MeleeAttack");
 
     private Animator m_Animator;
+    private Status m_Status;
     private void Awake()
     {
         PoolGameobj = new GameObject("PoolGameobj");
         m_Animator = GetComponent<Animator>();
         SceneLinkedSMB<WeaponTaker>.Initialise(GetComponent<Animator>(), this);
         BulletsPool = GetComponent<ABulletsPool>();
+        m_Status = GetComponent<Status>();
     }
 
     private void Start()
@@ -73,12 +76,15 @@ public class WeaponTaker : MonoBehaviour
             m_Animator.SetTrigger(m_HashMeleeAttackPara);
         }
     }
+
+   
     // 远程释放子弹，近战调整碰撞框
     public void WeaponAttackEnter()
     {
         if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
         {
             GameObject bullet = BulletsPool.Pop().transform.gameObject;
+            m_Status.RegisteredTakeDamger(bullet.GetComponent<TakeDamager>());
             ((RangedWeapon)CurrentTakeWeapons[CurrentIndex]).Attack(bullet, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { });
         }
         else if (CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.MeleeType)
@@ -123,6 +129,7 @@ public class WeaponTaker : MonoBehaviour
             {
                 CurrentIndex = index;
                 CurrentTakeWeaponSprite.GetComponent<SpriteRenderer>().sprite = CurrentTakeWeapons[index].sprite;
+                Debug.Log("enter");
             }
             AdjustCurrentWeapon(CurrentTakeWeapons[index].getWeaponType(), index);
         }
@@ -138,15 +145,19 @@ public class WeaponTaker : MonoBehaviour
                 CurrentTakeWeaponSprite.transform.localEulerAngles = new Vector3(0, 0, 90f);
                 MeleeAttackDamager.GetComponent<TakeDamager>().offset = ((MeleeWeapon)CurrentTakeWeapons[index]).offset;
                 MeleeAttackDamager.GetComponent<TakeDamager>().size = ((MeleeWeapon)CurrentTakeWeapons[index]).size;
+                MeleeAttackDamager.GetComponent<TakeDamager>().hitPoint = ((MeleeWeapon)CurrentTakeWeapons[index]).HitPoint;
                 break;
             case WeaponType.RangeType:
                 Hands.transform.localEulerAngles = new Vector3(0, 0, -45f);
                 CurrentTakeWeaponSprite.transform.localEulerAngles = new Vector3(0, 0, 0f);
-                if (CurrentTakeWeapons[index].getWeaponType() == WeaponType.RangeType)
-                    BulletPoint.localPosition = ((RangedWeapon)CurrentTakeWeapons[index]).OffsetPoint;
-                Debug.Log(BulletsPool);
-                BulletsPool.prefab = ((RangedWeapon)CurrentTakeWeapons[index]).bullet;
-                BulletsPool.Restart(PoolGameobj.transform);
+                //if (CurrentTakeWeapons[index].getWeaponType() == WeaponType.RangeType)
+                BulletPoint.localPosition = ((RangedWeapon)CurrentTakeWeapons[index]).OffsetPoint;
+                // resert bullet pool
+                GameObject bullet = ((RangedWeapon)CurrentTakeWeapons[index]).bullet;
+                BulletsPool.prefab = bullet;
+                GameObject[] bullets = BulletsPool.Restart(PoolGameobj.transform, 5);
+                foreach (GameObject obj in bullets) {m_Status.RegisteredTakeDamger(obj.GetComponent<TakeDamager>()); }
+                m_Status.TakeDamagerFlush();
                 break;
         }
     }
