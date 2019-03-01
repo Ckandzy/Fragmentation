@@ -19,8 +19,8 @@ namespace Gamekit2D
         }
 
         public SpriteRenderer spriteRenderer;
-        public Damageable damageable;
-  
+        public TakeDamageable damageable;
+        public int CanJumpCount = 1;
         public Transform cameraFollowTarget;
 
         public float maxSpeed = 10f;
@@ -212,24 +212,7 @@ namespace Gamekit2D
 
         void Update()
         {
-            if (PlayerInput.Instance.Pause.Down)
-            {
-                if (!m_InPause)
-                {
-                    if (ScreenFader.IsFading)
-                        return;
-
-                    PlayerInput.Instance.ReleaseControl(false);
-                    PlayerInput.Instance.Pause.GainControl();
-                    m_InPause = true;
-                    Time.timeScale = 0;
-                    UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("UIMenus", UnityEngine.SceneManagement.LoadSceneMode.Additive);
-                }
-                else
-                {
-                    Unpause();
-                }
-            }
+            
         }
 
         void FixedUpdate()
@@ -712,7 +695,7 @@ namespace Gamekit2D
             return new Vector2(damageDirection.x, y).normalized;
         }
 
-        public void OnHurt(Damager damager, Damageable damageable)
+        public void OnHurt(TakeDamager damager, TakeDamageable damageable)
         {
             //if the player don't have control, we shouldn't be able to be hurt as this wouldn't be fair
             if (!PlayerInput.Instance.HaveControl)
@@ -728,22 +711,23 @@ namespace Gamekit2D
                 m_Animator.SetTrigger(m_HashForcedRespawnPara);
 
             m_Animator.SetBool(m_HashGroundedPara, false);
-            hurtAudioPlayer.PlayRandomSound();
+            //hurtAudioPlayer.PlayRandomSound();
 
             //if the health is < 0, mean die callback will take care of respawn
             if(damager.forceRespawn && damageable.CurrentHealth > 0)
             {
-                StartCoroutine(DieRespawnCoroutine(false, true));
+                //StartCoroutine(DieRespawnCoroutine(false, true));
             }
         }
-
+        /*
         public void OnDie()
         {
             m_Animator.SetTrigger(m_HashDeadPara);
 
             StartCoroutine(DieRespawnCoroutine(true, false));
         }
-
+        */
+        /*
         IEnumerator DieRespawnCoroutine(bool resetHealth, bool useCheckPoint)
         {
             PlayerInput.Instance.ReleaseControl(true);
@@ -756,7 +740,7 @@ namespace Gamekit2D
             yield return StartCoroutine(ScreenFader.FadeSceneIn());
             PlayerInput.Instance.GainControl();
         }
-
+        */
         public void StartFlickering()
         {
             m_FlickerCoroutine = StartCoroutine(Flicker());
@@ -821,7 +805,7 @@ namespace Gamekit2D
             footstepPosition.z -= 1;
             VFXController.Instance.Trigger("DustPuff", footstepPosition, 0, false, null, m_CurrentSurface);
         }
-
+        /*
         public void Respawn(bool resetHealth, bool useCheckpoint)
         {
             if (resetHealth)
@@ -847,7 +831,7 @@ namespace Gamekit2D
                 GameObjectTeleporter.Teleport(gameObject, m_StartingPosition);
             }
         }
-
+        */
         public void SetChekpoint(Checkpoint checkpoint)
         {
             m_LastCheckpoint = checkpoint;

@@ -20,8 +20,25 @@ public class FragmenMgr : MonoBehaviour {
     // item的gameobject
     public GameObject ItemPrefab;
     public Text InfoText;
-    // 当前碎片的信息
-    Dictionary<FragmentType, int> FragDic;
+    // 当前碎片携带的信息
+    //public List<int> EquipBuffIds = new List<int>();
+
+    private Status m_PlayerStatus;
+
+    private void Awake()
+    {
+        m_PlayerStatus = GameObject.FindGameObjectWithTag("Player").GetComponent<Status>();
+    }
+
+    private void Start()
+    {
+        foreach (MSlot mSlot in EquipSlot)
+        {
+            mSlot.OnItemAdd.AddListener(this.AddFragment);
+            mSlot.OnItemRemove.AddListener(this.RemoveFragment);
+        }
+    }
+
     // 添加碎片
     public void AddFragmentItem(FragmentType type, int itemid, Sprite _sprite)
     {
@@ -39,35 +56,33 @@ public class FragmenMgr : MonoBehaviour {
         {
             ExtraSlot.AddFragmentItem(type, itemid, ItemPrefab, _sprite);
         }
-        // 更新信息
-       // FragDic = GetEquipFragAttr();
-    }
-
-    /// <summary>
-    /// 返回已经装备的碎片的所有Id和type
-    /// </summary>
-    /// <returns></returns>
-    public Dictionary<FragmentType, int> GetEquipFragAttr()
-    {
-        Dictionary<FragmentType, int> dic = new Dictionary<FragmentType, int>();
-        IFragment frag;
-        foreach (FragmentSlot slot in EquipSlot)
-        {
-            if (slot.ItemChild != null)
-            {
-                frag = slot.ItemChild.GetComponent<FragmentItem>().ItemFragment;
-                dic.Add(frag.GetFragType(), frag.ID);
-            }
-            
-        }
-        return dic;
     }
     
+    /// <summary>
+    /// using event bind in onClick slot
+    /// </summary>
+    /// <param name="_item"></param>
     public void ShowInfo(FragmentItem _item)
     {
         if (_item == null) InfoText.text = "当前格子无碎片";
         else InfoText.text = _item.Des();
     }
+
+    #region event of equipslot add or remove fragmentations
+    public void RemoveFragment(MSlot slot, MItem item)
+    {
+        foreach (int id in ((FragmentItem)item).ItemFragment.BuffIds)
+        {
+            m_PlayerStatus.RemoveStatuBuff(BuffFactory.GetBuff(id));
+        }
+    }
+
+    public void AddFragment(MSlot slot, MItem item)
+    {
+        foreach (int id in ((FragmentItem)item).ItemFragment.BuffIds)
+        {
+            m_PlayerStatus.AddStatusBuff(BuffFactory.GetBuff(id, 2, true));
+        }
+    }
+    #endregion
 }
-
-

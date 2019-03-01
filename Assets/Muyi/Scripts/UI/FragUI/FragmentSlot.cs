@@ -10,9 +10,9 @@ public class FragmentSlot : MSlot, IPointerClickHandler {
     public class SlotClickEvent : UnityEvent<FragmentItem>{ }
     public SlotClickEvent OnSlotClick;
 
-    public sealed override void Add(int _id, GameObject ItemPrefab)
+    private new void Add(int _id, GameObject ItemPrefab)
     {
-        base.Add(_id, ItemPrefab);
+        //base.Add(_id, ItemPrefab);
     }
 
     public void AddFragmentItem(FragmentType type, int id, GameObject ItemPrefab, Sprite _sprite)
@@ -22,6 +22,7 @@ public class FragmentSlot : MSlot, IPointerClickHandler {
         ItemChild.GetComponent<FragmentItem>().ItemFragment = FragmentFactory.GetFragment(type, id);
         isEmpty = false;
         ItemChild.localPosition = Vector3.zero;
+        OnItemAdd.Invoke(this, ItemChild.GetComponent<FragmentItem>());
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -29,6 +30,8 @@ public class FragmentSlot : MSlot, IPointerClickHandler {
         if (ItemChild == null) OnSlotClick.Invoke(null);
         else OnSlotClick.Invoke(ItemChild.GetComponent<FragmentItem>());
     }
+
+   
 }
 
 

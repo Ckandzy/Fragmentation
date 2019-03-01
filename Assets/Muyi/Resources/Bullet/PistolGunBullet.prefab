@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1757871402724532}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.1399674, y: 1.1133378, z: 0.012890625}
+  m_LocalPosition: {x: -4.143, y: 1.1133378, z: 0.012890625}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -94,32 +94,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 666d9530b12dd01458854ac539512c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  offset: {x: 1.5, y: 1}
-  size: {x: 2.5, y: 1}
-  offsetBasedOnSpriteFacing: 1
-  spriteRenderer: {fileID: 0}
-  canHitTriggers: 0
-  disableDamageAfterHit: 0
-  forceRespawn: 0
-  ignoreInvincibility: 0
-  hittableLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  OnDamageableHit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  OnNonDamageableHit:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
   LiveTime: 0
   Speed: 0
   DirVec: {x: 0, y: 0}
-  takeDamageNum: 50
+  NotInVisibleDestroy: 0
+  timer: 0
 --- !u!95 &95756348772964044
 Animator:
   serializedVersion: 3
@@ -151,9 +130,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
-  offset: {x: 0.15229928, y: 0.09097195}
-  size: {x: 1.7445076, y: 1.1413498}
+  ADamageType: 0
+  status: {fileID: 0}
+  offset: {x: -0.021113396, y: 0.023389578}
+  size: {x: 0.30525112, y: 0.18554449}
+  RefreshDamageTime: 0.07
   offsetBasedOnSpriteFacing: 1
   spriteRenderer: {fileID: 0}
   canHitTriggers: 0
@@ -165,7 +146,18 @@ MonoBehaviour:
     m_Bits: 512
   OnDamageableHit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114996313892114752}
+        m_MethodName: OnHit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnNonDamageableHit:
@@ -173,3 +165,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  OnHitMissing:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+OnHitMissingEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  HitMaxNum: 10

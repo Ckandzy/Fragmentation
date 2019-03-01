@@ -8,7 +8,7 @@ public abstract class IWeapon
     public IBuff buff;
     public Sprite sprite;
     public abstract void Init();
-    public abstract void Attack(Transform transform, Vector2 vec, IBuff[] _buff = null);
+    public abstract void Attack(Transform transform, Vector2 vec, List<IBuff> _buff = null);
     public abstract void Update();
 
     public abstract WeaponType getWeaponType();

@@ -2,26 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.Events;
 namespace MuyiFrame
 {
     public class MSlot : MonoBehaviour, IDropHandler
     {
+        [System.Serializable]
+        public class OnItemRemoveEvent : UnityEvent<MSlot, MItem> { }
+        [System.Serializable]
+        public class OnItemAddEvent : UnityEvent<MSlot, MItem> { }
 
         public bool isEmpty = true;
         public Transform ItemChild;
         public int ItemID;
+        public OnItemAddEvent OnItemAdd;
+        public OnItemRemoveEvent OnItemRemove;
+
         private void Awake()
         {
 
         }
+        public System.Action OnExcange; 
 
         /// <summary>
         /// Empty the slot
         /// </summary>
         public virtual void Empty()
         {
-            if (ItemChild != null) Destroy(ItemChild.gameObject);
+            if (ItemChild != null)
+            {
+                OnItemRemove.Invoke(this, ItemChild.GetComponent<MItem>());
+                Destroy(ItemChild.gameObject);
+            }
         }
 
         /// <summary>
@@ -31,7 +43,7 @@ namespace MuyiFrame
         /// <param name="_itemChild"></param>
         public virtual void Add(int _id, GameObject ItemPrefab)
         {
-
+            OnItemAdd.Invoke(this, ItemPrefab.GetComponent<MItem>());
         }
 
         public void OnDrop(PointerEventData eventData)
@@ -40,6 +52,8 @@ namespace MuyiFrame
             if (item == null) return;
             Exchange(item);
         }
+
+        /*
         /// <summary>
         /// 
         /// </summary>
@@ -70,7 +84,6 @@ namespace MuyiFrame
             }
             else
             {
-                Debug.Log("检测到进");
                 // 交换 
                 // ItemID, itemChild, ItemNum
                 // 1 保存pointerDrag的当前格子三个信息
@@ -104,21 +117,26 @@ namespace MuyiFrame
                 _item.nowSlot = this;
                 _item.nowSlot.GetComponent<MSlot>().isEmpty = false;
             }
+
+            OnExcange();
         }
+        */
 
         public void Exchange(MItem _item)
         {
             if (isEmpty)
             {
-                Debug.Log("空交换");
                 // 赋值slot信息
                 // ItemID, itemChild, ItemNum
                 MSlot slot = _item.nowSlot;
                 ItemID = slot.ItemID;
                 ItemChild = slot.ItemChild;
-                //ItemNum = slot.ItemNum;
-                //isEmpty = false;
-                //ItemData date = slot.iten
+
+                // 事件
+                slot.OnItemRemove.Invoke(slot, _item);
+                OnItemAdd.Invoke(this, _item);
+                
+
                 // 清除该item父slot的信息
                 slot.ItemID = -1;
                 slot.ItemChild = null;
@@ -127,25 +145,27 @@ namespace MuyiFrame
                 // 交换位置改写item信息
                
                 _item.transform.parent = transform;
-                //_item.transform.SetSiblingIndex(0);
                 _item.transform.localPosition = Vector2.zero;
                 _item.nowSlot = this;
                 _item.isFindSlot = true;
-                //_item.nowSlot.isEmpty = false;
                 isEmpty = false;
-
-                //ItemNum += 1;
+                
             }
             else
             {
-                Debug.Log("有交换");
                 // 交换 
                 // ItemID, itemChild, ItemNum
                 // 1 保存pointerDrag的当前格子三个信息
                 MSlot pointerSlot = _item.nowSlot.GetComponent<MSlot>();
                 int Pid = pointerSlot.ItemID;
                 Transform Pitemchild = pointerSlot.ItemChild;
-                //int Pitmenum = pointerSlot.ItemNum;
+                
+                // 事件
+                pointerSlot.OnItemRemove.Invoke(pointerSlot, pointerSlot.ItemChild.GetComponent<MItem>());
+                pointerSlot.OnItemAdd.Invoke(pointerSlot, ItemChild.GetComponent<MItem>());
+                OnItemRemove.Invoke(this, ItemChild.GetComponent<MItem>());
+                OnItemAdd.Invoke(this, pointerSlot.ItemChild.GetComponent<MItem>());
+                
 
                 // 防止执行item的itemDragEnter函数
                 _item.isFindSlot = true;
@@ -153,15 +173,15 @@ namespace MuyiFrame
                 // 将当前slot的item交给PointerItem的slot -信息
                 pointerSlot.ItemID = ItemID;
                 pointerSlot.ItemChild = ItemChild;
-                //pointerSlot.ItemNum = ItemNum;
                 pointerSlot.isEmpty = false;
+                
                 // item位置
                 ItemChild.transform.SetParent(pointerSlot.transform);
                 ItemChild.transform.SetSiblingIndex(0);
                 ItemChild.transform.localPosition = Vector2.zero;
                 // item.nowSlot
                 ItemChild.GetComponent<MItem>().nowSlot = this;
-                Debug.Log(pointerSlot.transform.GetSiblingIndex());
+                //Debug.Log(pointerSlot.transform.GetSiblingIndex());
                 // 3 将拖拽的item赋值给当前slot
                 // 信息
                 ItemID = Pid;

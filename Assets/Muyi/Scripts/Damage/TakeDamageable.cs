@@ -19,17 +19,20 @@ public class TakeDamageable : MonoBehaviour
     /// 伤害事件
     /// </summary>
     [Serializable]
-    public class DamageEvent : UnityEvent<TakeDamager, TakeDamageable, IBuff>
+    public class DamageEvent : UnityEvent<TakeDamager, TakeDamageable>
     { }
 
     /// <summary>
     /// 治愈事件
     /// </summary>
     [Serializable]
-    public class HealEvent : UnityEvent<int, TakeDamageable, IBuff>
+    public class HealEvent : UnityEvent<int, TakeDamageable>
     { }
 
-    Status Status;
+    public class OnMissingAttackEvent : UnityEvent { }
+
+    public Status status; //  如果有需求 可以改为像TakeDamager一样，注册到某一个Status中
+    public float DodgeRate { get { return status.DodgeRate; } }
 
     [Tooltip("当收到伤害时无敌")]
     public bool invulnerableAfterDamage = true;
@@ -42,9 +45,8 @@ public class TakeDamageable : MonoBehaviour
     public DamageEvent OnTakeDamage;
     public DamageEvent OnDie;
     public HealEvent OnGainHealth;
-    [HideInInspector]
-    public DataSettings dataSettings;
-
+    public OnMissingAttackEvent OnMissingAttack;
+    public Vector2 AttackPoint;
     protected bool m_Invulnerable;
     protected float m_InulnerabilityTimer;
     protected Vector2 m_DamageDirection;
@@ -52,8 +54,14 @@ public class TakeDamageable : MonoBehaviour
 
     public float CurrentHealth
     {
-        get { return Status.HP; }
+        get { return status.HP; }
     }
+
+    private void Awake()
+    {
+        if (status == null) { status = GetComponent<Status>(); }
+    }
+
 
     void OnEnable()
     {
@@ -114,85 +122,64 @@ public class TakeDamageable : MonoBehaviour
     /// </summary>
     /// <param name="damager"></param>
     /// <param name="ignoreInvincible"></param>
-    public void TakeDamage(TakeDamager damager, IBuff buff = null, bool ignoreInvincible = false)
+    public void TakeDamage(TakeDamager damager, List<IBuff> buffs = null, bool ignoreInvincible = false)
     {
+        AttackPoint = damager.hitPoint;//damager.AttackPoints[0].point;
         // 无敌，或忽略伤害
-        if ((m_Invulnerable && !ignoreInvincible) || Status.HP <= 0)
+        if ((m_Invulnerable && !ignoreInvincible) || CurrentHealth <= 0)
             return;
 
         //we can reach that point if the damager was one that was ignoring invincible state.
         //We still want the callback that we were hit, but not the damage to be removed from health.
         if (!m_Invulnerable)
         {
-            // 如果身上带有buff， 则刷新buff时间持续时间和效果
-            if (!Status.ContainsBuff(buff))
+            // 如果身上带有buff， 则刷新buff时间持续时间和效果 -- 需求变为可以有相同 buff 
+            foreach (IBuff buff in buffs)
             {
-                Status.AddBuff(buff);
-                buff.BuffOnEnter(gameObject);
-            }
-            else
-            {
-                IBuff b = Status.FindBuff(buff);
-                if (b != null)
+                if(buff != null)
                 {
-                    b.FlushBuff(buff.buffNum, buff.buffPercentage);
-                    b.FlushTime(buff.liveTime);
+                    status.AddStatusBuff(buff);
+                    buff.BuffOnEnter(gameObject);
                 }
+                /* 需求变为可以有相同 buff 
+                if (buff != null)
+                {
+                    if (!status.ContainsStatusBuff(buff.getBuffType()))
+                    {
+                        status.AddStatusBuff(buff);
+                        buff.BuffOnEnter(gameObject);
+                    }
+                    else
+                    {
+                        IBuff b = status.FindStatusBuff(buff.getBuffType());
+                        if (b != null && buff.LV > b.LV) b.FlushLV(b.LV);
+                    }
+                }*/
             }
+            // 秒杀
+            if (damager.IsSpike()) status.HP -= float.MaxValue;
+            else status.HP -= damager.CurrentDamagNum * status.HurtInfluences;
 
-            Status.HP -= damager.damage * Status.DamageInfluences;
+            //Debug.Log( status.HP);
             OnHealthSet.Invoke(this);
         }
 
         m_DamageDirection = transform.position + (Vector3)centreOffset - damager.transform.position;
 
-        OnTakeDamage.Invoke(damager, this, buff);
+        OnTakeDamage.Invoke(damager, this);
 
-        if (Status.HP <= 0)
+        if (status.HP <= 0)
         {
-            OnDie.Invoke(damager, this, buff);
-            m_ResetHealthOnSceneReload = true;
+            OnDie.Invoke(damager, this);
+            //m_ResetHealthOnSceneReload = true;
             EnableInvulnerability();
             if (disableOnDeath) gameObject.SetActive(false);
         }
     }
 
-    /// <summary>
-    /// 增加生命
-    /// </summary>
-    /// <param name="amount"></param>
-    public void GainHealth(int amount, IBuff buff = null)
+    public bool isHit(float rate)
     {
-        Status.HP += amount;
-
-        if (Status.HP > Status.MaxHP)
-            Status.HP = Status.MaxHP;
-
-        OnHealthSet.Invoke(this);
-
-        OnGainHealth.Invoke(amount, this, buff);
-    }
-
-    /// <summary>
-    /// 设置生命
-    /// </summary>
-    /// <param name="amount"></param>
-    public void SetHealth(int amount)
-    {
-        Status.HP = amount;
-
-        OnHealthSet.Invoke(this);
-    }
-
-    public DataSettings GetDataSettings()
-    {
-        return dataSettings;
-    }
-
-    public void SetDataSettings(string dataTag, DataSettings.PersistenceType persistenceType)
-    {
-        dataSettings.dataTag = dataTag;
-        dataSettings.persistenceType = persistenceType;
+        return UnityEngine.Random.Range(1, 11) / 10.0f > rate;
     }
 }
 

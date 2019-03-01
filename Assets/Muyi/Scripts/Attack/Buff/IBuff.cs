@@ -6,30 +6,30 @@ using UnityEngine;
 [System.Serializable]
 public abstract class IBuff
 {
-    public IBuff(float _buffNum, float percnetage = 0)
-    {
-        buffNum = _buffNum;
-        buffPercentage = percnetage;
-    }
-    public IBuff() { }
+    public IBuff() { LV = 1; }
+    public IBuff(int _lv) { LV = _lv; }
     public int buffID; // 用于识别buff，工厂模式或其他可用
     /// <summary>
     /// 持续时间
     /// </summary>
-    public float liveTime = 0.5f; // 持续时间
+    protected float liveTime = 0.5f; // 持续时间
     /// <summary>
     /// 当前已经持续的时间
     /// </summary>
-    public float nowTime = 0; // 当前已经持续的时间
+    protected float nowTime = 0; // 当前已经持续的时间
     /// <summary>
     /// buff的数值，如减速多少，每秒灼烧多少等
     /// </summary>
-    public float buffNum = 0;
+    protected float buffNum = 0;
     /// <summary>
     /// 百分比，如减伤25%。
     /// </summary>
     [Range(0, 1)]
-    public float buffPercentage = 0;
+    protected float buffPercentage = 0;
+    /// <summary>
+    /// 永久
+    /// </summary>
+    protected bool permanent = false;
     /// <summary>
     /// buff的等级--持续时间等由等级来算
     /// </summary>
@@ -37,32 +37,70 @@ public abstract class IBuff
     public bool Over = false;
     public abstract string Des();
     public abstract void BuffOnEnter(GameObject obj);
-    public abstract void BuffUpdate();
     public abstract void BuffOver();
-    public abstract void FlushTime(float _time);
-    public virtual void FlushBuff(float _num, float _percentage = 0)
+
+    public virtual void FlushTime(float _livetime) { nowTime = 0; liveTime = _livetime; }
+    public virtual void FlushTime(bool isPermanent) { permanent = isPermanent; }
+    public virtual void FlushLV(int lv) { LV = lv; }
+
+    public virtual void BuffUpdate()
     {
-        buffNum = _num;
-        buffPercentage = _percentage;
+        if(!permanent)
+            nowTime += Time.deltaTime;
+        if (nowTime >= liveTime) Over = true;
     }
+
+
+    public abstract void CalculationBuffNum();
     public abstract BuffType getBuffType();
+    public abstract BuffEffectType getBuffEffectType();
 }
 
 public abstract class IBuff<T> : IBuff
 {
-    public T TClass;
-
-    public IBuff(int lv) { this.LV = lv; } // 使用lv来控制BuffNum 和 buffpercentage
-
-    public IBuff(float _buffNum, float percnetage = 0)
-    {
-        buffNum = _buffNum;
-        buffPercentage = percnetage;
-    }
+    protected T TClass;
+    public IBuff(int lv):base(lv) { } // 使用lv来控制BuffNum 和 buffpercentage
     public IBuff() : base() { }
-    //public IBuff(float _buffNum, float percnetage = 0) : base(_buffNum, percnetage) { }
 }
 
+public abstract class GainBuff<T> : IBuff<T>
+{
+    public GainBuff(int lv):base(lv) { } // 使用lv来控制BuffNum 和 buffpercentage
+
+    public GainBuff() : base() { }
+
+    public override BuffEffectType getBuffEffectType()
+    {
+        return BuffEffectType.Gain;
+    }
+}
+
+public abstract class NegativeBuff<T> : IBuff<T>
+{
+    public NegativeBuff(int lv):base(lv) { } // 使用lv来控制BuffNum 和 buffpercentage
+
+    public NegativeBuff() : base() { }
+
+    public override BuffEffectType getBuffEffectType()
+    {
+        return BuffEffectType.Negative;
+    }
+}
+
+
+public abstract class AttackTakeBuff<T> : IBuff<T>
+{
+    public IBuff TakeBuff;
+
+    public AttackTakeBuff(int lv):base(lv) {  } // 使用lv来控制BuffNum 和 buffpercentage
+
+    public AttackTakeBuff() : base() { }
+
+    public override BuffEffectType getBuffEffectType()
+    {
+        return BuffEffectType.Gain;
+    }
+}
 /*
 // 定身
 // 建议人物和敌人的控制函数继承Controller函数，Controller函数中有速度，等基础类型，及函数

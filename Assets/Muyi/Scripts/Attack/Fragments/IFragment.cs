@@ -5,7 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public abstract class IFragment{
     public int ID;
-    public abstract List<int> GetBuffIDs();
+    public int LV;
+    public List<int> BuffIds = new List<int>();
     public abstract FragmentType GetFragType();
     public abstract string Des();
 }
@@ -15,15 +16,10 @@ public abstract class IFragment{
 /// </summary>
 public abstract class IGuardFrag : IFragment
 {
-    public List<int> BuffIds = new List<int>();
+   
     public override FragmentType GetFragType()
     {
         return FragmentType.Guard;
-    }
-
-    public override List<int> GetBuffIDs()
-    {
-        return BuffIds;
     }
 }
 
