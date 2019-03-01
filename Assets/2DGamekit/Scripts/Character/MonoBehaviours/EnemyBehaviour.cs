@@ -7,17 +7,6 @@ using UnityEditor;
 
 namespace Gamekit2D
 {
-    public enum LaunchMode
-    {
-        Parabola = 0,
-        Beeline,
-    }
-    public enum SightType
-    {
-        Rays = 0,
-        Cone,
-        Rectangle,
-    }
     [RequireComponent(typeof(CharacterController2D))]
     [RequireComponent(typeof(Collider2D))]
     public class EnemyBehaviour : MonoBehaviour
@@ -36,10 +25,8 @@ namespace Gamekit2D
 
         [Header("References")]
         [Tooltip("If the enemy will be using ranged attack, set a prefab of the projectile it should use")]
-        public Bullet projectilePrefab;
+        public Projectile projectilePrefab;
 
-        [Header("Scanning settings")]
-        public SightType sightType = SightType.Cone;
         [Header("SightType Rectangle")]
         [Tooltip("视野矩形偏移量")]
         public Vector2 offset = new Vector2(1.5f, 1f);
@@ -71,14 +58,15 @@ namespace Gamekit2D
         [Header("Range Attack Data")]
         [Tooltip("From where the projectile are spawned")]
         public Transform shootingOrigin;
-        public LaunchMode launchMode = LaunchMode.Beeline;
+        public LayerMask AttackLayerMask;
         public float launchSpeed = 20f;
-        public float shootAngle = 45.0f;
-        public float shootForce = 100.0f;
+        public float trackSensitivity = 0.1f;
+        public float launchAngle = 45.0f;
+        //public float shootForce = 100.0f;
         public float fireRate = 2.0f;
 
         [Header("Audio")]
-        public RandomAudioPlayer shootingAudio;
+        public RandomAudioPlayer LaunchAudio;
         public RandomAudioPlayer meleeAttackAudio;
         public RandomAudioPlayer dieAudio;
         public RandomAudioPlayer footStepAudio;
@@ -87,16 +75,21 @@ namespace Gamekit2D
         [Tooltip("Time in seconds during which the enemy flicker after being hit")]
         public float flickeringDuration;
 
+        [Header("Debug")]
+        public bool LaunchTracked = false;
+
         protected SpriteRenderer m_SpriteRenderer;
         protected CharacterController2D m_CharacterController2D;
         protected Collider2D m_Collider;
         protected Animator m_Animator;
 
         protected Vector3 m_MoveVector;
+        [SerializeField]
         protected Transform m_Target;
         protected Vector3 m_TargetShootPosition;
         protected float m_TimeSinceLastTargetView;
 
+        [SerializeField]
         protected float m_FireTimer = 0.0f;
 
         //as we flip the sprite instead of rotating/scaling the object, this give the forward vector according to the sprite orientation
@@ -110,13 +103,17 @@ namespace Gamekit2D
         protected Coroutine m_FlickeringCoroutine = null;
         protected Color m_OriginalColor;
 
-        protected BulletPool m_BulletPool;
+        //protected BulletPool m_BulletPool;
+        protected ProjectilePool m_ProjectilePool;
         protected BoxCollider2D boxCollider2D;
+
+        protected ContactFilter2D m_ContactFilter;
 
         protected bool m_Dead = false;
 
         protected readonly int m_HashSpottedPara = Animator.StringToHash("Spotted");
-        protected readonly int m_HashShootingPara = Animator.StringToHash("Shooting");
+        protected readonly int m_HashLaunchPara = Animator.StringToHash("Launch");
+        protected readonly int m_HashLaunch2Para = Animator.StringToHash("Launch2");
         protected readonly int m_HashTargetLostPara = Animator.StringToHash("TargetLost");
         protected readonly int m_HashMeleeAttackPara = Animator.StringToHash("MeleeAttack");
         protected readonly int m_HashHitPara = Animator.StringToHash("Hit");
@@ -133,8 +130,12 @@ namespace Gamekit2D
 
             m_OriginalColor = m_SpriteRenderer.color;
 
-            if(projectilePrefab != null)
-                m_BulletPool = BulletPool.GetObjectPool(projectilePrefab.gameObject, 8);
+            m_ContactFilter.layerMask = AttackLayerMask;
+            m_ContactFilter.useLayerMask = true;
+            m_ContactFilter.useTriggers = false;
+
+            if (projectilePrefab != null)
+                m_ProjectilePool = ProjectilePool.GetObjectPool(projectilePrefab.gameObject, 8);
 
             m_SpriteForward = spriteFaceLeft ? Vector2.left : Vector2.right;
             if (m_SpriteRenderer.flipX) m_SpriteForward = -m_SpriteForward;
@@ -185,6 +186,7 @@ namespace Gamekit2D
             UpdateTimers();
             
             m_Animator.SetBool(m_HashGroundedPara, m_CharacterController2D.IsGrounded);
+
         }
 
         void UpdateTimers()
@@ -262,46 +264,18 @@ namespace Gamekit2D
 
             Vector3 dir = PlayerCharacter.PlayerInstance.transform.position - transform.position;
 
-            switch (sightType)
+            if (dir.sqrMagnitude > viewDistance * viewDistance)
             {
-                case SightType.Cone:
-                    {
-                        if (dir.sqrMagnitude > viewDistance * viewDistance)
-                        {
-                            return;
-                        }
+                return;
+            }
 
-                        Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? Mathf.Sign(m_SpriteForward.x) * -viewDirection : Mathf.Sign(m_SpriteForward.x) * viewDirection) * m_SpriteForward;
+            Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? Mathf.Sign(m_SpriteForward.x) * -viewDirection : Mathf.Sign(m_SpriteForward.x) * viewDirection) * m_SpriteForward;
 
-                        float angle = Vector3.Angle(testForward, dir);
+            float angle = Vector3.Angle(testForward, dir);
 
-                        if (angle > viewFov * 0.5f)
-                        {
-                            return;
-                        }
-                    }
-                    break;
-                case SightType.Rectangle:
-                    {
-
-                    }
-                    break;
-                case SightType.Rays:
-                    {
-                        //if (Mathf.Abs(dir.x) > rayDistance)
-                        //{
-                        //    return;
-                        //}
-                        //Vector3[] point = new Vector3[3];
-                        //point[0] = boxCollider2D.bounds.center;
-                        //point[1] = new Vector3(boxCollider2D.bounds.center.x,
-                        //    boxCollider2D.bounds.center.y + boxCollider2D.bounds.extents.y,
-                        //    boxCollider2D.bounds.center.z);
-                        //point[2] = new Vector3(boxCollider2D.bounds.center.x,
-                        //    boxCollider2D.bounds.center.y - boxCollider2D.bounds.extents.y,
-                        //    boxCollider2D.bounds.center.z);
-                    }
-                    break;
+            if (angle > viewFov * 0.5f)
+            {
+                return;
             }
 
             m_Target = PlayerCharacter.PlayerInstance.transform;
@@ -331,36 +305,19 @@ namespace Gamekit2D
 
             Vector3 toTarget = m_Target.position - transform.position;
 
-            switch (sightType)
+            if (toTarget.sqrMagnitude < viewDistance * viewDistance)
             {
-                case SightType.Cone:
-                    {
-                        if (toTarget.sqrMagnitude < viewDistance * viewDistance)
-                        {
-                            //注：当viewDirection为0时, -viewDirection和viewDirection仍然有效, 在计算机有符号整数和浮点数中, +0和-0是两种不同的表示。
-                            Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * m_SpriteForward;
-                            if (m_SpriteRenderer.flipX) testForward.x = -testForward.x;
+                //注：当viewDirection为0时, -viewDirection和viewDirection仍然有效, 在计算机有符号整数和浮点数中, +0和-0是两种不同的表示。
+                Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * m_SpriteForward;
+                if (m_SpriteRenderer.flipX) testForward.x = -testForward.x;
 
-                            float angle = Vector3.Angle(testForward, toTarget);
+                float angle = Vector3.Angle(testForward, toTarget);
 
-                            if (angle <= viewFov * 0.5f)
-                            {
-                                //we reset the timer if the target is at viewing distance.
-                                m_TimeSinceLastTargetView = timeBeforeTargetLost;
-                            }
-                        }
-                    }
-                    break;
-                case SightType.Rectangle:
-                    {
-
-                    }
-                    break;
-                case SightType.Rays:
-                    {
-
-                    }
-                    break;
+                if (angle <= viewFov * 0.5f)
+                {
+                    //we reset the timer if the target is at viewing distance.
+                    m_TimeSinceLastTargetView = timeBeforeTargetLost;
+                }
             }
 
             if (m_TimeSinceLastTargetView <= 0.0f)
@@ -427,25 +384,52 @@ namespace Gamekit2D
         }
 
         //This is call each update if the enemy is in a attack/shooting state, but the timer will early exit if too early to shoot.
-        public void CheckShootingTimer()
+        public bool CheckShootingTimer()
         {
             if (m_FireTimer > 0.0f)
             {
-                return;
+                return false;
             }
 
             if (m_Target == null)
             {//we lost the target, shouldn't shoot
-                return;
+                return false;
             }
-
-            m_Animator.SetTrigger(m_HashShootingPara);
-            shootingAudio.PlayRandomSound();
-
-            m_FireTimer = fireRate;
+            return true;
         }
 
-        public void Shooting()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>true for track</returns>
+        public bool CheckLaunchMode()
+        {
+            Vector2 shootPosition = shootingOrigin.transform.localPosition;
+            RaycastHit2D[] m_HitBuffer = new RaycastHit2D[1];
+            bool flag = Physics2D.Raycast(shootingOrigin.position, m_SpriteForward, m_ContactFilter, m_HitBuffer, viewDistance) > 0 && m_Target != null;
+            return !flag;
+        }
+
+        public void StartLaunch(bool isTrack)
+        {
+            Vector2 shootPosition = shootingOrigin.transform.localPosition;
+            RaycastHit2D[] m_HitBuffer = new RaycastHit2D[1];
+            //Debug.Log(CheckShootingTimer());
+            if (CheckShootingTimer())
+            {
+                if (isTrack)
+                {
+                    m_Animator.SetTrigger("Launch");
+                }
+                else
+                {
+                    m_Animator.SetTrigger("Launch2");
+                }
+                m_FireTimer = fireRate;
+            }
+        }
+
+        public void Launch()
         {
             //Vector2 force = m_SpriteForward.x > 0 ? Vector2.right.Rotate(shootAngle) : Vector2.left.Rotate(-shootAngle);
 
@@ -453,13 +437,33 @@ namespace Gamekit2D
             Vector2 shootPosition = shootingOrigin.transform.localPosition;
 
             //if we are flipped compared to normal, we need to localy flip the shootposition too
-            if ((spriteFaceLeft && m_SpriteForward.x > 0) || (!spriteFaceLeft && m_SpriteForward.x > 0))
-                shootPosition.x *= -1;
+            //if ((spriteFaceLeft && m_SpriteForward.x > 0) || (!spriteFaceLeft && m_SpriteForward.x > 0))
+            //    shootPosition.x *= -1;
 
-            BulletObject obj = m_BulletPool.Pop(transform.TransformPoint(shootPosition));
-            shootingAudio.PlayRandomSound();
-
-            obj.rigidbody2D.velocity = (GetProjectilVelocity(m_TargetShootPosition, shootingOrigin.transform.position));
+            //BulletObject obj = m_BulletPool.Pop(transform.TransformPoint(shootPosition));
+            RaycastHit2D[] m_HitBuffer = new RaycastHit2D[1];
+            Projectile.ProjectData projectData = new Projectile.ProjectData()
+            {
+                direction = m_SpriteForward,
+                gravity = Vector2.zero,
+                lauchPos = shootingOrigin.position,
+                launchSpeed = launchSpeed
+            };
+            if ((Physics2D.Raycast(shootingOrigin.position, m_SpriteForward, m_ContactFilter, m_HitBuffer, viewDistance) > 0 || m_Target == null) && LaunchTracked == false)
+            {
+                projectData.Track = false;
+                projectData.Target = null;
+            }
+            else
+            {
+                projectData.Track = true;
+                projectData.direction = new Vector2(m_SpriteForward.x * Mathf.Cos(Mathf.Deg2Rad * launchAngle), Mathf.Sin(Mathf.Deg2Rad * launchAngle));
+                projectData.Target = m_Target;
+                projectData.trackSensitivity = trackSensitivity;
+            }
+            ProjectileObject obj = m_ProjectilePool.Pop(projectData);
+            LaunchAudio.PlayRandomSound();
+            //obj.rigidbody2D.velocity = (GetProjectilVelocity(m_TargetShootPosition, shootingOrigin.transform.position));
         }
 
         //This will give the velocity vector needed to give to the bullet rigidbody so it reach the given target from the origin.
@@ -470,66 +474,53 @@ namespace Gamekit2D
             Vector3 velocity = Vector3.zero;
             Vector3 toTarget = target - origin;
 
-            switch (launchMode)
+            float gSquared = Physics.gravity.sqrMagnitude;
+            float b = projectileSpeed * projectileSpeed + Vector3.Dot(toTarget, Physics.gravity);
+            float discriminant = b * b - gSquared * toTarget.sqrMagnitude;
+            // Check whether the target is reachable at max speed or less.
+            if (discriminant < 0)
             {
-                case LaunchMode.Beeline:
-                    {
-                        velocity = new Vector3(Mathf.Sign(toTarget.x), 0, 0) * projectileSpeed;
-                    }
+                velocity = toTarget;
+                Debug.Log(toTarget);
+                velocity.y = 0;
+                velocity.Normalize();
+                velocity.y = 0.7f;
+
+                velocity *= projectileSpeed;
+                return velocity;
+            }
+
+            float discRoot = Mathf.Sqrt(discriminant);
+
+            // Highest
+            float T_max = Mathf.Sqrt((b + discRoot) * 2f / gSquared);
+
+            // Lowest speed arc
+            float T_lowEnergy = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * 4f / gSquared));
+
+            // Most direct with max speed
+            float T_min = Mathf.Sqrt((b - discRoot) * 2f / gSquared);
+
+            float T = 0;
+
+            // 0 = highest, 1 = lowest, 2 = most direct
+            int shotType = 1;
+
+            switch (shotType)
+            {
+                case 0:
+                    T = T_max;
                     break;
-                case LaunchMode.Parabola:
-                    {
-                        float gSquared = Physics.gravity.sqrMagnitude;
-                        float b = projectileSpeed * projectileSpeed + Vector3.Dot(toTarget, Physics.gravity);
-                        float discriminant = b * b - gSquared * toTarget.sqrMagnitude;
-                        // Check whether the target is reachable at max speed or less.
-                        if (discriminant < 0)
-                        {
-                            velocity = toTarget;
-                            Debug.Log(toTarget);
-                            velocity.y = 0;
-                            velocity.Normalize();
-                            velocity.y = 0.7f;
-
-                            velocity *= projectileSpeed;
-                            return velocity;
-                        }
-
-                        float discRoot = Mathf.Sqrt(discriminant);
-
-                        // Highest
-                        float T_max = Mathf.Sqrt((b + discRoot) * 2f / gSquared);
-
-                        // Lowest speed arc
-                        float T_lowEnergy = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * 4f / gSquared));
-
-                        // Most direct with max speed
-                        float T_min = Mathf.Sqrt((b - discRoot) * 2f / gSquared);
-
-                        float T = 0;
-
-                        // 0 = highest, 1 = lowest, 2 = most direct
-                        int shotType = 1;
-
-                        switch (shotType)
-                        {
-                            case 0:
-                                T = T_max;
-                                break;
-                            case 1:
-                                T = T_lowEnergy;
-                                break;
-                            case 2:
-                                T = T_min;
-                                break;
-                            default:
-                                break;
-                        }
-
-                        velocity = toTarget / T - Physics.gravity * T / 2f;
-                    }
+                case 1:
+                    T = T_lowEnergy;
+                    break;
+                case 2:
+                    T = T_min;
+                    break;
+                default:
                     break;
             }
+            velocity = toTarget / T - Physics.gravity * T / 2f;
 
             return velocity;
         }
@@ -621,55 +612,36 @@ namespace Gamekit2D
 #if UNITY_EDITOR
         private void OnDrawGizmosSelected()
         {
-            switch (sightType)
-            {
-                case SightType.Cone:
-                    {
-                        //draw the cone of view
-                        Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
-                        forward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * forward;
+            //draw the cone of view
+            Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
+            forward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * forward;
 
-                        if (GetComponent<SpriteRenderer>().flipX) forward.x = -forward.x;
+            if (GetComponent<SpriteRenderer>().flipX) forward.x = -forward.x;
 
-                        Vector3 endpoint = transform.position + (Quaternion.Euler(0, 0, viewFov * 0.5f) * forward);
+            Vector3 endpoint = transform.position + (Quaternion.Euler(0, 0, viewFov * 0.5f) * forward);
 
-                        Handles.color = new Color(0, 1.0f, 0, 0.2f);
-                        Handles.DrawSolidArc(transform.position, -Vector3.forward, (endpoint - transform.position).normalized, viewFov, viewDistance);
-                    } break;
-                case SightType.Rectangle:
-                    {
-                        //Handles.color = new Color(0, 1.0f, 0, 0.2f);
-                        Handles.DrawSolidRectangleWithOutline(new Rect((Vector2)transform.position + offset, size), new Color(0, 1.0f, 0, 0.2f), new Color(0, 1.0f, 0, 0.2f));
-                    } break;
-                //case SightType.Rays:
-                //    {
-                //        Vector3[] point = new Vector3[3];
-                //        point[0] = boxCollider2D.bounds.center;
-                //        point[1] = new Vector3(boxCollider2D.bounds.center.x,
-                //            boxCollider2D.bounds.center.y + boxCollider2D.bounds.extents.y,
-                //            boxCollider2D.bounds.center.z);
-                //        point[2] = new Vector3(boxCollider2D.bounds.center.x,
-                //            boxCollider2D.bounds.center.y - boxCollider2D.bounds.extents.y,
-                //            boxCollider2D.bounds.center.z);
-                //        if (isDoubleSide)
-                //        {
-                //            for (int i = 0; i < point.Length; i++)
-                //            {
-                //                Handles.DrawLine(point[i], new Vector3(point[i].x + rayDistance, point[i].y, point[i].z));
-                //                Handles.DrawLine(point[i], new Vector3(point[i].x - rayDistance, point[i].y, point[i].z));
-                //            }
-                //        }
-                //        else
-                //        {
-                //            Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
-                //            if (GetComponent<SpriteRenderer>().flipX) forward.x = -forward.x;
-                //            for (int i = 0; i < point.Length; i++)
-                //            {
-                //                Handles.DrawLine(point[i], new Vector3(point[i].x + rayDistance * forward.x, point[i].y, point[i].z));
-                //            }
-                //        }
-                //    } break;
-            }
+            Handles.color = new Color(0, 1.0f, 0, 0.2f);
+            Handles.DrawSolidArc(transform.position, -Vector3.forward, (endpoint - transform.position).normalized, viewFov, viewDistance);
+            //switch (sightType)
+            //{
+            //    case SightType.Cone:
+            //        {
+            //            //draw the cone of view
+            //            Vector3 forward = spriteFaceLeft ? Vector2.left : Vector2.right;
+            //            forward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * forward;
+
+            //            if (GetComponent<SpriteRenderer>().flipX) forward.x = -forward.x;
+
+            //            Vector3 endpoint = transform.position + (Quaternion.Euler(0, 0, viewFov * 0.5f) * forward);
+
+            //            Handles.color = new Color(0, 1.0f, 0, 0.2f);
+            //            Handles.DrawSolidArc(transform.position, -Vector3.forward, (endpoint - transform.position).normalized, viewFov, viewDistance);
+            //        } break;
+            //    case SightType.Rectangle:
+            //        {
+            //            Handles.DrawSolidRectangleWithOutline(new Rect((Vector2)transform.position + offset, size), new Color(0, 1.0f, 0, 0.2f), new Color(0, 1.0f, 0, 0.2f));
+            //        } break;
+            //}
             //Draw attack range
             Handles.color = new Color(1.0f, 0, 0, 0.1f);
             Handles.DrawSolidDisc(transform.position, Vector3.back, meleeRange);
