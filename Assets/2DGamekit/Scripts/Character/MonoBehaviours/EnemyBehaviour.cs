@@ -27,11 +27,6 @@ namespace Gamekit2D
         [Tooltip("If the enemy will be using ranged attack, set a prefab of the projectile it should use")]
         public Projectile projectilePrefab;
 
-        [Header("SightType Rectangle")]
-        [Tooltip("视野矩形偏移量")]
-        public Vector2 offset = new Vector2(1.5f, 1f);
-        [Tooltip("视野矩形大小")]
-        public Vector2 size = new Vector2(2.5f, 1f);
         [Header("SightType Cone")]
         [Tooltip("The angle of the forward of the view cone. 0 is forward of the sprite, 90 is up, 180 behind etc.")]
         [Range(0.0f,360.0f)]
@@ -111,10 +106,10 @@ namespace Gamekit2D
 
         protected bool m_Dead = false;
 
-        protected readonly int m_HashSpottedPara = Animator.StringToHash("Spotted");
+        protected readonly int m_HashAlertPara = Animator.StringToHash("Alert");
+        protected readonly int m_HashPatrolPara = Animator.StringToHash("Patrol");
         protected readonly int m_HashLaunchPara = Animator.StringToHash("Launch");
         protected readonly int m_HashLaunch2Para = Animator.StringToHash("Launch2");
-        protected readonly int m_HashTargetLostPara = Animator.StringToHash("TargetLost");
         protected readonly int m_HashMeleeAttackPara = Animator.StringToHash("MeleeAttack");
         protected readonly int m_HashHitPara = Animator.StringToHash("Hit");
         protected readonly int m_HashDeathPara = Animator.StringToHash("Death");
@@ -191,7 +186,7 @@ namespace Gamekit2D
 
         void UpdateTimers()
         {
-            if (m_TimeSinceLastTargetView > 0.0f)
+            if (m_TimeSinceLastTargetView > 0.0f && m_Target == null)
                 m_TimeSinceLastTargetView -= Time.deltaTime;
 
             if (m_FireTimer > 0.0f)
@@ -258,30 +253,18 @@ namespace Gamekit2D
 
         public void ScanForPlayer()
         {
-            //If the player don't have control, they can't react, so do not pursue them
-            if (!PlayerInput.Instance.HaveControl)
-                return;
-
-            Vector3 dir = PlayerCharacter.PlayerInstance.transform.position - transform.position;
-
-            if (dir.sqrMagnitude > viewDistance * viewDistance)
+            if (DetectTarget())
             {
-                return;
+                m_Target = PlayerCharacter.PlayerInstance.transform;
+                m_TimeSinceLastTargetView = timeBeforeTargetLost;
+
+                m_Animator.SetBool(m_HashAlertPara, true);
+                m_Animator.SetBool(m_HashPatrolPara, false);
             }
-
-            Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? Mathf.Sign(m_SpriteForward.x) * -viewDirection : Mathf.Sign(m_SpriteForward.x) * viewDirection) * m_SpriteForward;
-
-            float angle = Vector3.Angle(testForward, dir);
-
-            if (angle > viewFov * 0.5f)
+            else
             {
-                return;
+                m_Animator.SetBool(m_HashAlertPara, false);
             }
-
-            m_Target = PlayerCharacter.PlayerInstance.transform;
-            m_TimeSinceLastTargetView = timeBeforeTargetLost;
-
-            m_Animator.SetTrigger(m_HashSpottedPara);
         }
 
         public void OrientToTarget()
@@ -300,35 +283,50 @@ namespace Gamekit2D
 
         public void CheckTargetStillVisible()
         {
-            if (m_Target == null)
-                return;
-
-            Vector3 toTarget = m_Target.position - transform.position;
-
-            if (toTarget.sqrMagnitude < viewDistance * viewDistance)
+            if (m_Target == null || !DetectTarget(false))
             {
-                //注：当viewDirection为0时, -viewDirection和viewDirection仍然有效, 在计算机有符号整数和浮点数中, +0和-0是两种不同的表示。
-                Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? -viewDirection : viewDirection) * m_SpriteForward;
-                if (m_SpriteRenderer.flipX) testForward.x = -testForward.x;
-
-                float angle = Vector3.Angle(testForward, toTarget);
-
-                if (angle <= viewFov * 0.5f)
-                {
-                    //we reset the timer if the target is at viewing distance.
-                    m_TimeSinceLastTargetView = timeBeforeTargetLost;
-                }
+                m_Animator.SetBool(m_HashAlertPara, false);
+                m_Target = null;
+                return;
             }
-
+            
             if (m_TimeSinceLastTargetView <= 0.0f)
             {
                 ForgetTarget();
             }
         }
 
+        public bool DetectTarget(bool checkPlayerInput = true)
+        {
+            if (checkPlayerInput)
+            {
+                //If the player don't have control, they can't react, so do not pursue them
+                if (!PlayerInput.Instance.HaveControl)
+                    return false;
+            }
+
+            Vector3 dir = PlayerCharacter.PlayerInstance.transform.position - transform.position;
+
+            if (dir.sqrMagnitude > viewDistance * viewDistance)
+            {
+                return false;
+            }
+            //注：当viewDirection为0时, -viewDirection和viewDirection仍然有效, 在计算机有符号整数和浮点数中, +0和-0是两种不同的表示。
+            Vector3 testForward = Quaternion.Euler(0, 0, spriteFaceLeft ? Mathf.Sign(m_SpriteForward.x) * -viewDirection : Mathf.Sign(m_SpriteForward.x) * viewDirection) * m_SpriteForward;
+
+            float angle = Vector3.Angle(testForward, dir);
+
+            if (angle > viewFov * 0.5f)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void ForgetTarget()
         {
-            m_Animator.SetTrigger(m_HashTargetLostPara);
+            m_Animator.SetBool(m_HashAlertPara, false);
             m_Target = null;
         }
 
@@ -356,7 +354,6 @@ namespace Gamekit2D
                 meleeAttackAudio.PlayRandomSound();
             }
         }
-
 
         //This is called when the damager get enabled (so the enemy can damage the player). 
         //Likely be called by the animation throught animation event (see the attack animation of the Chomper)
@@ -417,18 +414,20 @@ namespace Gamekit2D
             //Debug.Log(CheckShootingTimer());
             if (CheckShootingTimer())
             {
+                Debug.Log("nmsl");
                 if (isTrack)
                 {
-                    m_Animator.SetTrigger("Launch");
+                    m_Animator.SetTrigger(m_HashLaunchPara);
                 }
                 else
                 {
-                    m_Animator.SetTrigger("Launch2");
+                    m_Animator.SetTrigger(m_HashLaunch2Para);
                 }
                 m_FireTimer = fireRate;
             }
         }
 
+        #region Call By Event
         public void Launch()
         {
             //Vector2 force = m_SpriteForward.x > 0 ? Vector2.right.Rotate(shootAngle) : Vector2.left.Rotate(-shootAngle);
@@ -446,8 +445,8 @@ namespace Gamekit2D
             {
                 direction = m_SpriteForward,
                 gravity = Vector2.zero,
-                lauchPos = shootingOrigin.position,
-                launchSpeed = launchSpeed
+                shootOrigin = shootingOrigin.position,
+                shootSpeed = launchSpeed
             };
             if ((Physics2D.Raycast(shootingOrigin.position, m_SpriteForward, m_ContactFilter, m_HitBuffer, viewDistance) > 0 || m_Target == null) && LaunchTracked == false)
             {
@@ -464,65 +463,6 @@ namespace Gamekit2D
             ProjectileObject obj = m_ProjectilePool.Pop(projectData);
             LaunchAudio.PlayRandomSound();
             //obj.rigidbody2D.velocity = (GetProjectilVelocity(m_TargetShootPosition, shootingOrigin.transform.position));
-        }
-
-        //This will give the velocity vector needed to give to the bullet rigidbody so it reach the given target from the origin.
-        private Vector3 GetProjectilVelocity(Vector3 target, Vector3 origin)
-        {
-            float projectileSpeed = launchSpeed;
-
-            Vector3 velocity = Vector3.zero;
-            Vector3 toTarget = target - origin;
-
-            float gSquared = Physics.gravity.sqrMagnitude;
-            float b = projectileSpeed * projectileSpeed + Vector3.Dot(toTarget, Physics.gravity);
-            float discriminant = b * b - gSquared * toTarget.sqrMagnitude;
-            // Check whether the target is reachable at max speed or less.
-            if (discriminant < 0)
-            {
-                velocity = toTarget;
-                Debug.Log(toTarget);
-                velocity.y = 0;
-                velocity.Normalize();
-                velocity.y = 0.7f;
-
-                velocity *= projectileSpeed;
-                return velocity;
-            }
-
-            float discRoot = Mathf.Sqrt(discriminant);
-
-            // Highest
-            float T_max = Mathf.Sqrt((b + discRoot) * 2f / gSquared);
-
-            // Lowest speed arc
-            float T_lowEnergy = Mathf.Sqrt(Mathf.Sqrt(toTarget.sqrMagnitude * 4f / gSquared));
-
-            // Most direct with max speed
-            float T_min = Mathf.Sqrt((b - discRoot) * 2f / gSquared);
-
-            float T = 0;
-
-            // 0 = highest, 1 = lowest, 2 = most direct
-            int shotType = 1;
-
-            switch (shotType)
-            {
-                case 0:
-                    T = T_max;
-                    break;
-                case 1:
-                    T = T_lowEnergy;
-                    break;
-                case 2:
-                    T = T_min;
-                    break;
-                default:
-                    break;
-            }
-            velocity = toTarget / T - Physics.gravity * T / 2f;
-
-            return velocity;
         }
 
         public void Die(TakeDamager damager, TakeDamageable damageable)
@@ -566,7 +506,7 @@ namespace Gamekit2D
             m_FlickeringCoroutine = StartCoroutine(Flicker(damageable));
             CameraShaker.Shake(0.15f, 0.3f);
         }
-
+        #endregion
 
 
         protected IEnumerator Flicker(Damageable damageable)

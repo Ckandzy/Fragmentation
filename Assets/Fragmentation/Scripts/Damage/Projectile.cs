@@ -10,9 +10,9 @@ public class Projectile : MonoBehaviour
     [System.Serializable]
     public class ProjectData
     {
-        public Vector3 lauchPos;
+        public Vector3 shootOrigin;
         public Vector2 gravity;
-        public float launchSpeed;
+        public float shootSpeed;
         public Vector2 direction;
         public bool Track;
         public Transform Target;
@@ -20,6 +20,8 @@ public class Projectile : MonoBehaviour
         /// 灵敏度, 导弹追踪强度
         /// </summary>
         public float trackSensitivity;
+        public bool destroyWhenOutOfView = true;
+        public float timeBeforeAutodestruct = -1.0f;
     }
     #region Trajectory Mode
     [Header("Trajectory")]
@@ -29,6 +31,7 @@ public class Projectile : MonoBehaviour
     #endregion
 
     protected Rigidbody2D m_Rigidbody2D;
+    protected float m_Timer;   
 
     [HideInInspector]
     public ProjectileObject projectilePoolObject;
@@ -42,9 +45,13 @@ public class Projectile : MonoBehaviour
     private void OnEnable()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
-        moveVector = projectData.launchSpeed * projectData.direction.normalized;
-        transform.rotation = Quaternion.FromToRotation(transform.right, projectData.direction);
-        Debug.Log(moveVector.normalized + " , " + transform.right);
+        moveVector = projectData.shootSpeed * projectData.direction.normalized;
+        mainCamera = Camera.main;
+        m_Timer = 0f;
+        //transform.rotation = Quaternion.FromToRotation(Vector3.right, projectData.direction);
+
+        //Debug.Log(Vector3.SignedAngle(Vector3.right, projectData.direction, Vector3.back));
+        transform.Rotate(0, 0, -Vector3.SignedAngle(Vector3.right, projectData.direction, Vector3.back));
     }
 
     void FixedUpdate()
@@ -58,11 +65,8 @@ public class Projectile : MonoBehaviour
                 projectData.trackSensitivity, 
                 0f
              );
-
-            Debug.DrawRay(transform.position, moveVector, Color.red);
-            moveVector = projectData.launchSpeed * dir;
-            Debug.DrawRay(transform.position, transform.right, Color.blue);
-
+            
+            moveVector = projectData.shootSpeed * dir;
             //Unity源代码:
             //public Vector3 right { get { return rotation * Vector3.right; } set { rotation = Quaternion.FromToRotation(Vector3.right, value); } }
             
@@ -70,6 +74,25 @@ public class Projectile : MonoBehaviour
             //正确写法[1] :transform.right = dir;
             //正确写法[2] :
             transform.rotation = Quaternion.FromToRotation(Vector3.right, dir);
+        }
+
+        if (projectData.destroyWhenOutOfView)
+        {
+            Vector3 screenPoint = mainCamera.WorldToViewportPoint(transform.position);
+            bool onScreen = screenPoint.z > 0 && screenPoint.x > 0 &&
+                            screenPoint.x < 1 && screenPoint.y > 0 &&
+                            screenPoint.y < 1;
+            if (!onScreen)
+                projectilePoolObject.ReturnToPool();
+        }
+
+        if (projectData.timeBeforeAutodestruct > 0)
+        {
+            m_Timer += Time.deltaTime;
+            if (m_Timer > projectData.timeBeforeAutodestruct)
+            {
+                projectilePoolObject.ReturnToPool();
+            }
         }
     }
 

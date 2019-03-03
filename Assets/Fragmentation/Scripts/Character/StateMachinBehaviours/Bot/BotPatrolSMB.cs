@@ -4,25 +4,31 @@ using UnityEngine;
 
 namespace Gamekit2D
 {
-    public class BotPatrolSMB : SceneLinkedSMB<EnemyBehaviour>
+    public class BotPatrolSMB : SceneLinkedSMB<SupportBot>
     {
+        public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            //m_MonoBehaviour.
+        }
+
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //We do this explicitly here instead of in the enemy class, that allow to handle obstacle differently according to state
-            // (e.g. look at the ChomperRunToTargetSMB that stop the pursuit if there is an obstacle) 
             float dist = m_MonoBehaviour.speed;
-            if (m_MonoBehaviour.CheckForObstacle(dist))
+            if (m_MonoBehaviour.CheckForObstacle(dist * 0.5f))
             {
-                //this will inverse the move vector, and UpdateFacing will then flip the sprite & forward vector as moveVector will be in the other direction
                 m_MonoBehaviour.SetHorizontalSpeed(-dist);
-                m_MonoBehaviour.UpdateFacing();
             }
             else
             {
                 m_MonoBehaviour.SetHorizontalSpeed(dist);
             }
-
+            m_MonoBehaviour.UpdateFacing();
             m_MonoBehaviour.ScanForPlayer();
+        }
+
+        public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            m_MonoBehaviour.SetMoveVector(Vector2.zero);
         }
     }
 }

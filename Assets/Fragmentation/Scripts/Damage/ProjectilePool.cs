@@ -57,12 +57,8 @@ public class ProjectileObject : PoolObject<ProjectilePool, ProjectileObject, Pro
     public override void WakeUp(Projectile.ProjectData projectData)
     {
         transform.rotation = Quaternion.identity;
-        transform.position = projectData.lauchPos;
+        transform.position = projectData.shootOrigin;
         projectile.projectData = projectData;
-        if (projectData.direction.x < 0)
-            spriteRenderer.flipX = true;
-        else
-            spriteRenderer.flipX = false;
         instance.SetActive(true);
     }
 

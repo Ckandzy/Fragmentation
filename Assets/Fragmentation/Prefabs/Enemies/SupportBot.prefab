@@ -43,7 +43,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -53,9 +53,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -71,6 +71,24 @@ AudioSource:
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.30074286
+      value: 1
+      inSlope: -0.008256417
+      outSlope: -0.008256417
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.36702925
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.49397314
+      value: 0.3072685
+      inSlope: -1.3701847
+      outSlope: -1.3701847
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.23333755
     - serializedVersion: 3
       time: 1
       value: 0
@@ -88,7 +106,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -141,7 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: e088266f863539c4283b1ea2c6ef216e, type: 3}
   overrides: []
   randomizePitch: 0
   pitchRange: 0.2
@@ -200,7 +218,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1690812473}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 0}
+  m_LocalPosition: {x: 0.2, y: 2.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6364925281971268533}
@@ -285,9 +303,9 @@ GameObject:
   - component: {fileID: 6364925281971268520}
   - component: {fileID: 6364925281971268521}
   - component: {fileID: 6364925281971268526}
-  - component: {fileID: 6364925281971268527}
   - component: {fileID: 6364925282520779900}
   - component: {fileID: 6364925282520779901}
+  - component: {fileID: 1193579266}
   m_Layer: 9
   m_Name: SupportBot
   m_TagString: Untagged
@@ -354,7 +372,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10, y: 5}
+  m_Size: {x: 3.3, y: 2.7}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -392,18 +410,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.2, y: -0.1}
+  m_Offset: {x: 0.20000005, y: 1.35}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10, y: 5}
-    newSize: {x: 10, y: 5}
+    pivot: {x: 0.43939394, y: 0}
+    oldSize: {x: 3.3, y: 2.7}
+    newSize: {x: 3.3, y: 2.7}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3, y: 2.3}
+  m_Size: {x: 3.3, y: 2.7}
   m_EdgeRadius: 0
 --- !u!50 &6364925281971268521
 Rigidbody2D:
@@ -442,52 +460,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2147483648
   groundedRaycastDistance: 0.1
---- !u!114 &6364925281971268527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6364925281971268532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83dfa83e29f454446b6abdda921f4bfd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteFaceLeft: 0
-  speed: 0
-  gravity: 10
-  projectilePrefab: {fileID: 3744283042342034914, guid: 020f078364896e44aa15b65e81ee56c0,
-    type: 3}
-  offset: {x: 1.5, y: 1}
-  size: {x: 2.5, y: 1}
-  viewDirection: 0
-  viewFov: 360
-  viewDistance: 10
-  isDoubleSide: 0
-  rayDistance: 0
-  timeBeforeTargetLost: 3
-  meleeRange: 0
-  meleeDamager: {fileID: 0}
-  contactDamager: {fileID: 0}
-  attackDash: 0
-  attackForce: {x: 0, y: 0}
-  shootingOrigin: {fileID: 1690812474}
-  AttackLayerMask:
-    serializedVersion: 2
-    m_Bits: 8192
-  launchSpeed: 3
-  trackSensitivity: 0.02
-  launchAngle: 45
-  fireRate: 2
-  shootingAudio: {fileID: 0}
-  meleeAttackAudio: {fileID: 0}
-  dieAudio: {fileID: 0}
-  footStepAudio: {fileID: 0}
-  flickeringDuration: 0
-  m_Target: {fileID: 0}
-  m_FireTimer: 0
-  m_SpriteForward: {x: 0, y: 0}
 --- !u!114 &6364925282520779900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,7 +497,7 @@ MonoBehaviour:
   OnTakeDamage:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6364925281971268527}
+      - m_Target: {fileID: 0}
         m_MethodName: Hit
         m_Mode: 0
         m_Arguments:
@@ -541,7 +513,7 @@ MonoBehaviour:
   OnDie:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6364925281971268527}
+      - m_Target: {fileID: 0}
         m_MethodName: Die
         m_Mode: 0
         m_Arguments:
@@ -562,3 +534,46 @@ MonoBehaviour:
   dataSettings:
     dataTag: 
     persistenceType: 0
+--- !u!114 &1193579266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6364925281971268532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd9421c2881d6584a9145dd353651dad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteFaceLeft: 0
+  shootOriginLeft: 0
+  speed: 5
+  gravity: 10
+  projectilePrefab: {fileID: 3744283042342034914, guid: 020f078364896e44aa15b65e81ee56c0,
+    type: 3}
+  viewDirection: 0
+  viewFov: 360
+  viewDistance: 20
+  timeBeforeTargetLost: 3
+  shootingOrigin: {fileID: 1690812474}
+  trackLayerMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  launchSpeed: 10
+  destroyWhenOutOfView: 1
+  track: 0
+  trackTime: 4
+  locate: 0
+  trackSensitivity: 0.02
+  shootAngle: 5
+  shootRate: 2
+  shootingAudio: {fileID: 219743544}
+  dieAudio: {fileID: 0}
+  footStepAudio: {fileID: 0}
+  engineAudio: {fileID: 0}
+  moveAudio: {fileID: 0}
+  flickeringDuration: 0
+  m_Target: {fileID: 0}
+  m_FireTimer: 0
+  m_SpriteForward: {x: 0, y: 0}

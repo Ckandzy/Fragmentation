@@ -28,7 +28,7 @@ public class RotateTest : MonoBehaviour
         //     );
 
         //Debug.DrawRay(transform.position, moveVector, Color.red);
-        //moveVector = projectData.launchSpeed * rotation;
+        //moveVector = projectData.shootSpeed * rotation;
         //Debug.DrawRay(transform.position, rotation);
         //Debug.DrawRay(transform.position, transform.right, Color.blue);
         ////Debug.Log()

@@ -102,23 +102,23 @@ namespace Gamekit2D
                 if (GetComponent<BoxCollider2D>())
                 {
                     raycastStart = m_Rigidbody2D.position + m_BoxCollider2D.offset;
-                    raycastDistance = m_BoxCollider2D.size.y + groundedRaycastDistance;
+                    raycastDistance = m_BoxCollider2D.size.y * 0.5f + groundedRaycastDistance;
 
                     if (bottom)
                     {
                         raycastDirection = Vector2.down;
 
-                        m_RaycastPositions[0] = raycastStart + Vector2.left * m_BoxCollider2D.size.x;
+                        m_RaycastPositions[0] = raycastStart + Vector2.left * m_BoxCollider2D.size.x * 0.5f;
                         m_RaycastPositions[1] = raycastStart;
-                        m_RaycastPositions[2] = raycastStart + Vector2.right * m_BoxCollider2D.size.x;
+                        m_RaycastPositions[2] = raycastStart + Vector2.right * m_BoxCollider2D.size.x * 0.5f;
                     }
                     else
                     {
                         raycastDirection = Vector2.up;
 
-                        m_RaycastPositions[0] = raycastStart + Vector2.left * m_BoxCollider2D.size.x;
+                        m_RaycastPositions[0] = raycastStart + Vector2.left * m_BoxCollider2D.size.x * 0.5f;
                         m_RaycastPositions[1] = raycastStart;
-                        m_RaycastPositions[2] = raycastStart + Vector2.right * m_BoxCollider2D.size.x;
+                        m_RaycastPositions[2] = raycastStart + Vector2.right * m_BoxCollider2D.size.x * 0.5f;
                     }
                 }
                 else
