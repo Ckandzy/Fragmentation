@@ -13,7 +13,6 @@ public class FragmenMgr : MonoBehaviour {
             return _instance;
         }
     }
-
     // 拖拽
     public FragmentSlot[] EquipSlot;
     public ExtraSlot ExtraSlot;
@@ -71,17 +70,18 @@ public class FragmenMgr : MonoBehaviour {
     #region event of equipslot add or remove fragmentations
     public void RemoveFragment(MSlot slot, MItem item)
     {
-        foreach (int id in ((FragmentItem)item).ItemFragment.BuffIds)
+        foreach (IBuff buff in ((FragmentItem)item).ItemFragment.buffs)
         {
-            m_PlayerStatus.RemoveStatuBuff(BuffFactory.GetBuff(id));
+            m_PlayerStatus.RemoveStatuBuff(buff);
+            Debug.Log("Remove");
         }
     }
 
     public void AddFragment(MSlot slot, MItem item)
     {
-        foreach (int id in ((FragmentItem)item).ItemFragment.BuffIds)
+        foreach (IBuff buff in ((FragmentItem)item).ItemFragment.buffs)
         {
-            m_PlayerStatus.AddStatusBuff(BuffFactory.GetBuff(id, 2, true));
+            m_PlayerStatus.AddStatusBuff(buff);
         }
     }
     #endregion

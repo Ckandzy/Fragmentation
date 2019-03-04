@@ -99,6 +99,7 @@ MonoBehaviour:
   DirVec: {x: 0, y: 0}
   NotInVisibleDestroy: 0
   timer: 0
+  BlowoutObj: {fileID: 1757871402724532, guid: 15f2640c06f399947b627e0398a3ac9d, type: 3}
 --- !u!95 &95756348772964044
 Animator:
   serializedVersion: 3
@@ -158,6 +159,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1757871402724532}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnNonDamageableHit:
@@ -171,3 +183,4 @@ MonoBehaviour:
     m_TypeName: TakeDamager+OnHitMissingEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   HitMaxNum: 10
+  hitPoint: {x: 0, y: 0}

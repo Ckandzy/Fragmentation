@@ -19,7 +19,7 @@ public class WeaponTaker : MonoBehaviour
     public Transform BulletPoint; // 子弹发射点
     public GameObject MeleeAttackDamager; // 近战武器范围框
 
-    public int CurrentIndex = 0;
+    public int CurrentIndex = -1;
     public IWeapon[] CurrentTakeWeapons = new IWeapon[4]; // 当前携带的武器
     public ABulletsPool BulletsPool;
     // 子弹池父类
@@ -128,9 +128,10 @@ public class WeaponTaker : MonoBehaviour
             if (CurrentIndex != index)
             {
                 CurrentIndex = index;
-                CurrentTakeWeaponSprite.GetComponent<SpriteRenderer>().sprite = CurrentTakeWeapons[index].sprite;
+                
                 Debug.Log("enter");
             }
+            CurrentTakeWeaponSprite.GetComponent<SpriteRenderer>().sprite = CurrentTakeWeapons[index].sprite;
             AdjustCurrentWeapon(CurrentTakeWeapons[index].getWeaponType(), index);
         }
     }
@@ -143,9 +144,10 @@ public class WeaponTaker : MonoBehaviour
             case WeaponType.MeleeType:
                 Hands.transform.localEulerAngles = new Vector3(0, 0, -80f);
                 CurrentTakeWeaponSprite.transform.localEulerAngles = new Vector3(0, 0, 90f);
-                MeleeAttackDamager.GetComponent<TakeDamager>().offset = ((MeleeWeapon)CurrentTakeWeapons[index]).offset;
-                MeleeAttackDamager.GetComponent<TakeDamager>().size = ((MeleeWeapon)CurrentTakeWeapons[index]).size;
-                MeleeAttackDamager.GetComponent<TakeDamager>().hitPoint = ((MeleeWeapon)CurrentTakeWeapons[index]).HitPoint;
+                TakeDamager takeDamager = MeleeAttackDamager.GetComponent<TakeDamager>();
+                takeDamager.offset = ((MeleeWeapon)CurrentTakeWeapons[index]).offset;
+                takeDamager.size = ((MeleeWeapon)CurrentTakeWeapons[index]).size;
+                takeDamager.hitPoint = ((MeleeWeapon)CurrentTakeWeapons[index]).HitPoint;
                 break;
             case WeaponType.RangeType:
                 Hands.transform.localEulerAngles = new Vector3(0, 0, -45f);

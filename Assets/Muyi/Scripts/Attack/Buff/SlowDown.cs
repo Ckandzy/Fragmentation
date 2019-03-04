@@ -59,6 +59,7 @@ public class AttackPowerReduce : NegativeBuff<Status>
     public AttackPowerReduce(int lv, bool _permanent = false) : base(lv) { buffID = 4; permanent = _permanent; }
     public override void BuffOnEnter(GameObject obj)
     {
+        Over = false;
         TClass = obj.GetComponent<Status>();
         CalculationBuffNum();
         TClass.TakeDamageInfluences += buffPercentage;
@@ -66,6 +67,7 @@ public class AttackPowerReduce : NegativeBuff<Status>
 
     public override void BuffOver()
     {
+        Over = true;
         TClass.TakeDamageInfluences -= buffPercentage;
     }
 

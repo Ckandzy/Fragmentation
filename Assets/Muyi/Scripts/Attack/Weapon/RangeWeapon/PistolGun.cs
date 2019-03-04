@@ -103,8 +103,8 @@ public class Sword : MeleeWeapon
     public override void Init()
     {
         sprite = Resources.Load<Sprite>("GunSprite/Gun3");
-        offset = new Vector2(0.93f, 1.3f);
-        size = new Vector2(0.91f, 2.73f);
+        offset = new Vector2(1.09f, 1.3f);
+        size = new Vector2(1.24f, 2.83f);
         AttackNum = 1;
         HitPoint = new Vector2(1.32f, 0.01f);
     }

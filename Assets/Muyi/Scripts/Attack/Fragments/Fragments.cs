@@ -21,8 +21,8 @@ public class CriterionFrag : IGuardFrag
     public CriterionFrag()
     {
         ID = 1;
-        BuffIds.Add((int)BuffType.DamageReduction);
-        BuffIds.Add((int)BuffType.SlowDown);
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.DamageReduction, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.SlowDown, LV, true));
     }
 
     public override string Des()
@@ -39,8 +39,10 @@ public class ShockFrag : IGuardFrag
     public ShockFrag()
     {
         ID = 2;
-        BuffIds.Add((int)BuffType.AttackMakeBlowout);
-        BuffIds.Add((int)BuffType.SlowDown);
+        //BuffIds.Add((int)BuffType.AttackMakeBlowout);
+        //BuffIds.Add((int)BuffType.SlowDown);
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.AttackMakeBlowout, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.GetTwoSegmentJump, LV, true));
     }
 
     public override string Des()
@@ -57,8 +59,8 @@ public class TrialFrag : IGuardFrag
     public TrialFrag()
     {
         ID = 3;
-        BuffIds.Add((int)BuffType.DamageReduction);
-        BuffIds.Add((int)BuffType.SlowDown);
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.DamageReduction, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.AtttakMakeCatapult, LV, true));
     }
 
     public override string Des()

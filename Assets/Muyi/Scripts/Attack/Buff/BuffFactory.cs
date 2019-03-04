@@ -4,6 +4,13 @@ using UnityEngine;
 
 public static class BuffFactory
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="lv"></param>
+    /// <param name="forever">是否永久持有，不进行计时</param>
+    /// <returns></returns>
     public static IBuff GetBuff(int index, int lv = 1, bool forever = false)
     {
         switch (index)
@@ -13,6 +20,10 @@ public static class BuffFactory
             case 3: return new AttackMakeBlowout(lv, forever);
             case 4: return new AttackPowerReduce(lv, forever);
             case 5: return new UpSpikeRate(lv, forever);
+            case 6: return new Frozen(lv, forever);
+            case 7: return new AttakeMakeFrozen(lv, forever);
+            case 8:return new GetTwoSegmentJump(lv, forever);
+            case 9:return new AtttakMakeCatapult(lv, forever);
         }
         throw new System.Exception("no this buff, but try get it");
     }
@@ -51,7 +62,12 @@ public enum BuffType
     /// <summary>
     /// 获得2段跳技能
     /// </summary>
-    GetTwoSegmentJump
+    GetTwoSegmentJump = 8,
+    /// <summary>
+    /// 攻击弹射
+    /// </summary>
+    AtttakMakeCatapult = 9
+
 }
 
 public enum BuffEffectType

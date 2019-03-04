@@ -66,11 +66,13 @@ public class AttackMakeSlowDown : AttackTakeBuff<Status>
         liveTime = 10;
         TakeBuff = BuffFactory.GetBuff(2, 1);
         TClass.AddAttackCarryingBuff(TakeBuff);
+        Over = false;
     }
 
     public override void BuffOver()
     {
-        //TClass.RemoveAttackCarryingBuff(TakeBuff);
+        TClass.RemoveAttackCarryingBuff(TakeBuff);
+        Over = true;
     }
 
     public override void CalculationBuffNum()
@@ -109,13 +111,13 @@ public class AttackMakeBlowout : AttackTakeBuff<Status>
     public GameObject BlowoutEffect;
     public override void BuffOnEnter(GameObject obj)
     {
+        Over = false;
         TClass = obj.GetComponent<Status>();
         BlowoutEffect = Resources.Load<GameObject>("VFX/Blowout/Blowout");
         foreach(TakeDamager damager in TClass.TakeDamagers)
         {
             damager.OnDamageableHit.AddListener(Blowout);
         }
-        Debug.Log(TClass.TakeDamagers.Count);
     }
 
     public void Blowout(TakeDamager damager, TakeDamageable damageable)
@@ -130,6 +132,7 @@ public class AttackMakeBlowout : AttackTakeBuff<Status>
         {
             damager.OnDamageableHit.RemoveListener(Blowout);
         }
+        Over = true;
     }
 
     public override void CalculationBuffNum()
@@ -163,11 +166,13 @@ public class UpSpikeRate : GainBuff<Status>
         TClass = obj.GetComponent<Status>();
         CalculationBuffNum();
         TClass.SpikeRate += buffPercentage;
+        Over = false;
     }
 
     public override void BuffOver()
     {
         TClass.SpikeRate -= buffPercentage;
+        Over = true;
     }
 
     public override void CalculationBuffNum()
@@ -198,11 +203,13 @@ public class AttakeMakeFrozen : AttackTakeBuff<Status>
         TClass = obj.GetComponent<Status>();
         CalculationBuffNum();
         TClass.AddAttackCarryingBuff(TakeBuff);
+        Over = false;
     }
 
     public override void BuffOver()
     {
         TClass.RemoveAttackCarryingBuff(TakeBuff);
+        Over = true;
     }
 
     public override void CalculationBuffNum()
@@ -229,16 +236,20 @@ public class AttakeMakeFrozen : AttackTakeBuff<Status>
 // 获得2段跳技能
 public class GetTwoSegmentJump : GainBuff<PlayerCharacter>
 {
+    public GetTwoSegmentJump() { buffID = 6; }
+    public GetTwoSegmentJump(int lv, bool _permanent = false) : base(lv) { buffID = 6; permanent = _permanent; }
     public override void BuffOnEnter(GameObject obj)
     {
         TClass = obj.GetComponent<PlayerCharacter>();
         CalculationBuffNum();
         TClass.CanJumpCount += (int)buffNum;
+        Over = false;
     }
 
     public override void BuffOver()
     {
         TClass.CanJumpCount -= (int)buffNum;
+        Over = true;
     }
 
     public override void CalculationBuffNum()
@@ -261,5 +272,80 @@ public class GetTwoSegmentJump : GainBuff<PlayerCharacter>
     public override BuffEffectType getBuffEffectType()
     {
         return BuffEffectType.Gain;
+    }
+}
+
+// 弹射
+// 使用弹射buff时-必须要有VFX_lightning场景中
+public class AtttakMakeCatapult : GainBuff<Status>
+{
+    public AtttakMakeCatapult() { buffID = 6; }
+    public AtttakMakeCatapult(int lv, bool _permanent = false) : base(lv) { buffID = 6; permanent = _permanent; }
+    private int CatapultNum = 0;
+   
+    public override void BuffOnEnter(GameObject obj)
+    {
+        Over = false;
+        TClass = obj.GetComponent<Status>();
+        CalculationBuffNum();
+        List<TakeDamager> takeDamagers = TClass.TakeDamagers;
+        for (int i = 0; i < takeDamagers.Count; i++)
+        {
+            takeDamagers[i].OnDamageableHit.AddListener(Calculat);
+        }
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        List<TakeDamager> takeDamagers = TClass.TakeDamagers;
+        for (int i = 0; i < takeDamagers.Count; i++)
+        {
+            takeDamagers[i].OnDamageableHit.RemoveListener(Calculat);
+        }
+    }
+
+    public override void CalculationBuffNum()
+    {
+        nowTime = 0;
+        liveTime = 10;
+    }
+
+    /// <summary>
+    /// 目前的弹射未携带之前的攻击特效 -- 同时可以优化，缓存GameObject.FindGameObjectsWithTag("Enemy");
+    /// 不用每次都计算
+    /// </summary>
+    /// <param name="_damager"></param>
+    /// <param name="_damageable"></param>
+    public void Calculat(TakeDamager _damager, TakeDamageable _damageable)
+    {
+        GameObject calculatObj = FindOtherEnemyInRange(_damageable.transform);
+        if (calculatObj == null) return;
+        VFXControllerM.Instance.MakeLighting(_damageable.transform, calculatObj.transform, 0.2f);
+        calculatObj.GetComponent<TakeDamageable>().TakeDamage(_damager);
+    }
+
+    private GameObject FindOtherEnemyInRange(Transform _start)
+    {
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject obj in gameObjects)
+        {
+            if (obj == _start.gameObject) continue;
+            if((obj.transform.position - _start.position).sqrMagnitude <= 49)
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
+
+    public override string Des()
+    {
+        return "弹射伤害";
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.AtttakMakeCatapult;
     }
 }

@@ -21,7 +21,11 @@ public class HJumpSMB : SceneLinkedSMB<PlayerCharacter>
         m_MonoBehaviour.CheckForGrounded();
 
         if (m_MonoBehaviour.CheckForJumpInput() && m_JumpCount < m_MonoBehaviour.CanJumpCount)
+        {
             m_MonoBehaviour.SetVerticalMovement(m_MonoBehaviour.jumpSpeed);
+            m_JumpCount += 1;
+        }
+            
         //m_MonoBehaviour.move
     }
 

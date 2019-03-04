@@ -50,13 +50,16 @@ public class Status : MonoBehaviour {
 
     private void Update()
     {
+        Debug.Log(m_StatusBuffs.Count);
         for (int i = 0; i < m_StatusBuffs.Count; i++)
         {
             m_StatusBuffs[i].BuffUpdate();
             if (m_StatusBuffs[i].Over)
             {
-                StateUIMgr.Instance.RemoveBuff(m_StatusBuffs[i]);
+                // StateUIMgr.Instance.RemoveBuff(m_StatusBuffs[i]);
+                OnStatusBuffRemove.Invoke(m_StatusBuffs[i]);
                 RemoveStatuBuff(m_StatusBuffs[i]);
+                
             }
         }
 
@@ -158,9 +161,11 @@ public class Status : MonoBehaviour {
     //  current if player has type of this buff of his status buffs, add false 
     public void AddStatusBuff(IBuff _buff)
     {
-        if (!StatusBuffs.Contains(_buff))
+        //if (!StatusBuffs.Contains(_buff))
         {
             m_StatusBuffs.Add(_buff);
+            Debug.Log("Add  " + _buff.getBuffType());
+            Debug.Log(m_StatusBuffs.Count);
             _buff.BuffOnEnter(gameObject);
             OnStatusBuffAdd.Invoke(_buff);
         }
@@ -171,6 +176,8 @@ public class Status : MonoBehaviour {
     {
         if (m_StatusBuffs.Contains(_buff))
         {
+            //Debug.Log(StatusBuffs.Count);
+            _buff.Over = true;
             _buff.BuffOver();
             m_StatusBuffs.Remove(_buff);
             OnStatusBuffRemove.Invoke(_buff);
