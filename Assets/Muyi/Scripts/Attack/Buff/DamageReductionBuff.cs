@@ -349,3 +349,200 @@ public class AtttakMakeCatapult : GainBuff<Status>
         return BuffType.AtttakMakeCatapult;
     }
 }
+
+/// <summary>
+/// 血量下降
+/// </summary>
+public class HPDown : NegativeBuff<Status>
+{
+
+    public HPDown() { buffID = 6; }
+    public HPDown(int lv, bool _permanent = false) : base(lv) { buffID = 6; permanent = _permanent; }
+    float MaxHp;
+    public override void BuffOnEnter(GameObject obj)
+    {
+        Over = false;
+        TClass = obj.GetComponent<Status>();
+        CalculationBuffNum();
+        MaxHp = TClass.MaxHP;
+        TClass.MaxHP *= (1 + buffPercentage);
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        TClass.MaxHP = MaxHp;
+    }
+
+    public override void CalculationBuffNum()
+    {
+        nowTime = 0;
+        liveTime = 6 * LV;
+        buffPercentage = -0.25f * LV;
+    }
+
+    public override string Des()
+    {
+        return "降低最大生命值";
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.HPDown;
+    }
+}
+
+/// <summary>
+/// 提高移动速度
+/// </summary>
+public class UpSpeed : GainBuff<PlayerCharacter>
+{
+    public UpSpeed() { buffID = 6; }
+    public UpSpeed(int lv, bool _permanent = false) : base(lv) { buffID = 6; permanent = _permanent; }
+    public override void BuffOnEnter(GameObject obj)
+    {
+        Over = false;
+        TClass = obj.GetComponent<PlayerCharacter>();
+        CalculationBuffNum();
+        TClass.maxSpeed *= (1 + buffPercentage);
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        TClass.maxSpeed /= (1 + buffPercentage); 
+    }
+
+    public override void CalculationBuffNum()
+    {
+        buffPercentage = 0.3f;
+        nowTime = 0;
+        liveTime = 10 * LV;
+    }
+
+    public override string Des()
+    {
+        return "提高移动速度";
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.UpSpeed;
+    }
+}
+
+/// <summary>
+/// 吸血
+/// </summary>
+public class Bloodsucking : GainBuff<Status>
+{
+
+    public Bloodsucking() { buffID = 6; }
+    public Bloodsucking(int lv, bool _permanent = false) : base(lv) { buffID = 6; permanent = _permanent; }
+    public override void BuffOnEnter(GameObject obj)
+    {
+        Over = false;
+        TClass = obj.GetComponent<Status>();
+        CalculationBuffNum();
+        TClass.BloodsuckingRate += buffPercentage;
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        TClass.BloodsuckingRate -= buffPercentage;
+    }
+
+    public override void CalculationBuffNum()
+    {
+        buffPercentage = 0.2f * LV;
+        nowTime = 0;
+        liveTime = 8 * LV;
+    }
+
+    public override string Des()
+    {
+        return "提高吸血";
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.Bloodsucking;
+    }
+}
+
+/// <summary>
+/// 受到的伤害提高
+/// </summary>
+public class DamageableUpBuff : NegativeBuff<Status>
+{
+    public DamageableUpBuff() { buffID = 1; }
+    public DamageableUpBuff(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
+    public override void BuffOnEnter(GameObject t)
+    {
+        TClass = t.GetComponent<Status>();
+        this.CalculationBuffNum();
+        TClass.HurtInfluences += buffPercentage;
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        TClass.HurtInfluences -= buffPercentage;
+    }
+
+    public override string Des()
+    {
+        return "提高" + (buffPercentage == 0 ? buffNum : buffPercentage) + "伤害";
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.DamageableUp;
+    }
+
+    public override void CalculationBuffNum()
+    {
+        nowTime = 0;
+        buffPercentage = 0.25f * LV;
+        liveTime = 5 * LV;
+    }
+}
+
+/// <summary>
+/// 提高攻击力
+/// </summary>
+public class AttackNumUp : GainBuff<Status>
+{
+    public AttackNumUp() { buffID = 1; }
+    public AttackNumUp(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
+    public override void BuffOnEnter(GameObject obj)
+    {
+        TClass = obj.GetComponent<Status>();
+        CalculationBuffNum();
+        TClass.TakeDamageInfluences += buffPercentage;
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        TClass.TakeDamageInfluences -= buffPercentage;
+    }
+
+    public override void CalculationBuffNum()
+    {
+        nowTime = 0;
+        liveTime = 10 * LV;
+        buffPercentage = 0.2f * LV;
+    }
+
+    public override string Des()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.AttackNumUp;
+    }
+}

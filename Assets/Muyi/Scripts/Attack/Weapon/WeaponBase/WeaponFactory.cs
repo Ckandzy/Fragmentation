@@ -21,6 +21,7 @@ public static class WeaponFactory {
         {
             case 1: return new PistolGun();
             case 2: return new SniperGun();
+            case 3: return new SubmachineGun();
         }
         throw new System.Exception("No weapon, but try get it");
     }

@@ -56,7 +56,6 @@ public class MeleeEnemyBase : MonoBehaviour
     public Vector2 attackForce;
 
     [Header("Audio")]
-    public RandomAudioPlayer LaunchAudio;
     public RandomAudioPlayer meleeAttackAudio;
     public RandomAudioPlayer dieAudio;
     public RandomAudioPlayer footStepAudio;
@@ -66,7 +65,6 @@ public class MeleeEnemyBase : MonoBehaviour
     public float flickeringDuration;
 
     [Header("Debug")]
-    public bool LaunchTracked = false;
 
     protected SpriteRenderer m_SpriteRenderer;
     protected CharacterController2D m_CharacterController2D;

@@ -22,8 +22,13 @@ public static class BuffFactory
             case 5: return new UpSpikeRate(lv, forever);
             case 6: return new Frozen(lv, forever);
             case 7: return new AttakeMakeFrozen(lv, forever);
-            case 8:return new GetTwoSegmentJump(lv, forever);
-            case 9:return new AtttakMakeCatapult(lv, forever);
+            case 8: return new GetTwoSegmentJump(lv, forever);
+            case 9: return new AtttakMakeCatapult(lv, forever);
+            case 10: return new HPDown(lv, forever);
+            case 11: return new UpSpeed(lv, forever);
+            case 12: return new Bloodsucking(lv, forever);
+            case 13: return new DamageableUpBuff(lv, forever);
+            case 14: return new AttackNumUp(lv, forever);
         }
         throw new System.Exception("no this buff, but try get it");
     }
@@ -66,8 +71,27 @@ public enum BuffType
     /// <summary>
     /// 攻击弹射
     /// </summary>
-    AtttakMakeCatapult = 9
-
+    AtttakMakeCatapult = 9,
+    /// <summary>
+    /// 血量下降
+    /// </summary>
+    HPDown = 10,
+    /// <summary>
+    /// 移速增加
+    /// </summary>
+    UpSpeed = 11,
+    /// <summary>
+    /// 吸血
+    /// </summary>
+    Bloodsucking = 12,
+    /// <summary>
+    /// 受到的伤害提高
+    /// </summary>
+    DamageableUp = 13,
+    /// <summary>
+    /// 提高攻击力
+    /// </summary>
+    AttackNumUp = 14
 }
 
 public enum BuffEffectType

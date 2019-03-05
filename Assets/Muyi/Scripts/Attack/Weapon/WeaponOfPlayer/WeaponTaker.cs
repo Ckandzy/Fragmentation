@@ -11,7 +11,7 @@ using UnityEngine.Events;
 public class WeaponTaker : MonoBehaviour
 {
     [System.Serializable]
-    public class FragEvent : UnityEvent<FragmentType, int, Sprite> { }
+    public class FragEvent : UnityEvent<FragmentName, Sprite> { }
 
     // 武器
     public GameObject Hands; // 手
@@ -27,6 +27,7 @@ public class WeaponTaker : MonoBehaviour
     // 碎片
     public IFragment[] TakeFragments = new IFragment[4]; // 
     public FragEvent OnFragAdd;
+    public SkillBase CurrentSkill = null;
 
     protected readonly int m_HashRangeAttak = Animator.StringToHash("RangeAttack");
     protected readonly int m_HashIdle = Animator.StringToHash("Grounded");
@@ -34,6 +35,9 @@ public class WeaponTaker : MonoBehaviour
 
     private Animator m_Animator;
     private Status m_Status;
+    
+
+
     private void Awake()
     {
         PoolGameobj = new GameObject("PoolGameobj");
@@ -56,12 +60,32 @@ public class WeaponTaker : MonoBehaviour
         if (CurrentTakeWeapons[CurrentIndex] != null) CurrentTakeWeapons[CurrentIndex].Update();
         CutoverWeaponByKeyCode();
         CheckWeaponCanTake();
+
+        if (CurrentSkill != null) CurrentSkill.SkillUpdate();
     }
 
     private void FixedUpdate()
     {
         
     }
+
+    #region 技能
+
+    public void UseSkill()
+    {
+        if (CurrentSkill != null)
+        {
+            CurrentSkill.UseSkill(transform);
+        }
+    }
+
+    public void SetSkill(SkillBase skill)
+    {
+        CurrentSkill = skill;
+        CurrentSkill.SkillEnter();
+        SkillSlot.Instance.SkillInit(CurrentSkill);
+    }
+    #endregion
 
     #region 攻击
     // 进入动画，
@@ -77,15 +101,22 @@ public class WeaponTaker : MonoBehaviour
         }
     }
 
-   
     // 远程释放子弹，近战调整碰撞框
     public void WeaponAttackEnter()
     {
         if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
         {
-            GameObject bullet = BulletsPool.Pop().transform.gameObject;
-            m_Status.RegisteredTakeDamger(bullet.GetComponent<TakeDamager>());
-            ((RangedWeapon)CurrentTakeWeapons[CurrentIndex]).Attack(bullet, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { });
+            if (CurrentTakeWeapons[CurrentIndex].GetWeaponName() == WeaponName.SubmachineGun)
+            {
+                StartCoroutine(((SubmachineGun)CurrentTakeWeapons[CurrentIndex]).Shoot(m_Status, BulletsPool, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { }));
+            }
+            else
+            {
+                GameObject bullet = BulletsPool.Pop().transform.gameObject;
+                m_Status.RegisteredTakeDamger(bullet.GetComponent<TakeDamager>());
+                ((RangedWeapon)CurrentTakeWeapons[CurrentIndex]).Attack(bullet, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { });
+            }
+                
         }
         else if (CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.MeleeType)
         {
@@ -215,7 +246,7 @@ public class WeaponTaker : MonoBehaviour
                 break;
             case "Fragment":
                 Fragments frag = collider.GetComponent<Fragments>();
-                AddFragment(frag.type, frag.fragmentID, frag.sprite);
+                AddFragment(frag.FragName, frag.sprite);
                 Destroy(collider.gameObject);
                 break;
         }
@@ -226,11 +257,11 @@ public class WeaponTaker : MonoBehaviour
     /// </summary>
     /// <param name="type"></param>
     /// <param name="id"></param>
-    public void AddFragment(FragmentType type, int id, Sprite _sprite = null)
+    public void AddFragment(FragmentName _name, Sprite _sprite = null)
     {
         // UI上显示
-        //FragmenMgr.Instance.AddFragmentItem(type, id, _sprite);
-        OnFragAdd.Invoke(type, id, _sprite);
+        //FragmenMgr.Instance.AddFragmentItem(_name, _sprite);
+        OnFragAdd.Invoke(_name, _sprite);
     }
 }
 

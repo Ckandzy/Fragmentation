@@ -4,12 +4,14 @@ using UnityEngine;
 
 public abstract class SkillBase
 {
-    public bool ReadyUse = true;
     public float LeftTime { get { return CD - m_WaitTime; } }
     public List<IBuff> buffs = new List<IBuff>();
     public float CD = 30;
-
+    public float DurationTime = 10; // 持续时间
+    public Sprite SkillIcon;
+    public SkillStatusEnum MSkillStatus;
     protected float m_WaitTime = 0;
+    public abstract void SkillEnter();
 
     public abstract void SkillUpdate();
 

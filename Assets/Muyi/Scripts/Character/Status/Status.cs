@@ -4,11 +4,21 @@ using UnityEngine;
 using UnityEngine.Events;
 public class Status : MonoBehaviour {
     [System.Serializable]
+    public class BuffAttribute
+    {
+        public int BuffId;
+        public int Lv;
+        public bool Forever;
+    }
+
+    [System.Serializable]
     public class BuffEvent : UnityEvent<IBuff> { }
 
-    public float MaxHP = 100; // 最大生命值
-    public float HP = 100;
-
+    [SerializeField] private float maxHp = 100;
+    [SerializeField] private float hp = 100;
+    public float MaxHP { get { return maxHp; } set { maxHp = value; if (HP > maxHp) { HP = maxHp; } } }// 最大生命值
+    public float HP { get { return hp; } set { hp = value; if (hp > maxHp) hp = maxHp; }  }
+    
     // all TakeDamagers such bullet, and melee take, you can add to this list
     public List<TakeDamager> TakeDamagers;
     public List<TakeDamageable> TakeDamageables;
@@ -20,10 +30,12 @@ public class Status : MonoBehaviour {
 
     public float Precision = 1; // 精准度
     public float DodgeRate = 0; // 闪避率
-
+    public float BloodsuckingRate = 0f; // 吸血率
     public BuffEvent OnStatusBuffAdd;
     public BuffEvent OnAttackCarryingBuffAdd;
     public BuffEvent OnStatusBuffRemove;
+    [Tooltip("初始携带的buff")]
+    public List<BuffAttribute> buffAttributes = new List<BuffAttribute>();
 
     // 当前身上的状态buff -- 如受到减速
     protected List<IBuff> m_StatusBuffs = new List<IBuff>();
@@ -44,13 +56,16 @@ public class Status : MonoBehaviour {
 
     private void Start()
     {
+        for(int i = 0; i < buffAttributes.Count; i++)
+        {
+            AddStatusBuff(BuffFactory.GetBuff(buffAttributes[i].BuffId, buffAttributes[i].BuffId, buffAttributes[i].Forever));
+        }
         foreach (TakeDamager damager in TakeDamagers) { damager.status = this; }
         foreach (TakeDamageable damageable in TakeDamageables) { damageable.status = this; }
     }
 
     private void Update()
     {
-        Debug.Log(m_StatusBuffs.Count);
         for (int i = 0; i < m_StatusBuffs.Count; i++)
         {
             m_StatusBuffs[i].BuffUpdate();
@@ -164,13 +179,22 @@ public class Status : MonoBehaviour {
         //if (!StatusBuffs.Contains(_buff))
         {
             m_StatusBuffs.Add(_buff);
-            Debug.Log("Add  " + _buff.getBuffType());
-            Debug.Log(m_StatusBuffs.Count);
             _buff.BuffOnEnter(gameObject);
             OnStatusBuffAdd.Invoke(_buff);
         }
-           
     }
+
+    public void AddStatusBuff(List<IBuff> _buff)
+    {
+        if (_buff == null) return;
+        m_StatusBuffs.AddRange(_buff);
+        foreach(IBuff buff in _buff)
+        {
+            buff.BuffOnEnter(gameObject);
+            OnStatusBuffAdd.Invoke(buff);
+        }
+    }
+       
 
     public void RemoveStatuBuff(IBuff _buff)
     {

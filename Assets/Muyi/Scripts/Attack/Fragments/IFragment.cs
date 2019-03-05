@@ -10,6 +10,7 @@ public abstract class IFragment{
     public List<IBuff> buffs = new List<IBuff>();
     public abstract FragmentType GetFragType();
     public abstract string Des();
+    public abstract FragmentName GetFragName();
 }
 
 /// <summary>
@@ -58,7 +59,42 @@ public enum FragmentType
     /// <summary>
     /// 元素碎片
     /// </summary>
-    Natural
+    Natural,
+    Null
+}
+
+public enum FragmentName
+{
+    /// <summary>
+    /// 怒焰
+    /// </summary>
+    AngryFlame,
+    /// <summary>
+    /// 审判
+    /// </summary>
+    TrialFrag,
+    /// <summary>
+    /// 震慑
+    /// </summary>
+    ShockFrag,
+    /// <summary>
+    /// 准绳
+    /// </summary>
+    CriterionFrag,
+    /// <summary>
+    /// 无序
+    /// </summary>
+    Disorder,
+    /// <summary>
+    /// 狂躁
+    /// </summary>
+    Arrogant,
+    /// <summary>
+    /// 暴乱
+    /// </summary>
+    Riot,
+    Null
+
 }
 
 

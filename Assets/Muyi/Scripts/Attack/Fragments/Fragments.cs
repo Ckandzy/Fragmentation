@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Fragments : MonoBehaviour {
-    public FragmentType type;
-    public int fragmentID;
+    public FragmentName FragName;
     public Sprite sprite;
     public int Lv = 1;
     private void Start()
@@ -29,6 +28,11 @@ public class CriterionFrag : IGuardFrag
     {
         return "守护者碎片，准绳， 降低25%所受伤害，移速下降30 %";
     }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.CriterionFrag;
+    }
 }
 
 /// <summary>
@@ -49,6 +53,11 @@ public class ShockFrag : IGuardFrag
     {
         return "守护者碎片，震慑碎片， 攻击具有小范围爆炸效果,攻击力下降30 %";
     }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.ShockFrag;
+    }
 }
 
 /// <summary>
@@ -66,5 +75,76 @@ public class TrialFrag : IGuardFrag
     public override string Des()
     {
         return "守护者碎片，准绳， 降低25%所受伤害，移速下降30 %";
+    }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.TrialFrag;
+    }
+}
+
+/// <summary>
+/// 狂躁，移速增加30%， 获得二段跳，血量降低25%
+/// </summary>
+public class ArrogantFrag : IDemonFrag
+{
+    public ArrogantFrag()
+    {
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.GetTwoSegmentJump, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.HPDown, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpeed, LV, true));
+    }
+
+    public override string Des()
+    {
+        return "移速增加，获得二段跳，最大血量值降低";
+    }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.Arrogant;
+    }
+}
+
+/// <summary>
+/// 无序碎片
+/// </summary>
+public class DisorderFrag : IDemonFrag
+{
+    public DisorderFrag()
+    {
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.AtttakMakeCatapult, LV, true));
+    }
+    public override string Des()
+    {
+        return "攻击会弹射到另一名敌人身上";
+    }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.Disorder;
+    }
+}
+
+/// <summary>
+/// 暴乱，伤害提高20%， 获得吸血30%， 最高生命值降低一半，受到的伤害增加20%
+/// </summary>
+public class RiotFrag : IDemonFrag
+{
+    public RiotFrag()
+    {
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.AttackNumUp, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.Bloodsucking, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.HPDown, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.DamageableUp, LV, true));
+    }
+    public override string Des()
+    {
+        return "吸血";
+    }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.Riot;
     }
 }

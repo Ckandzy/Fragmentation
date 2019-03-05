@@ -61,7 +61,7 @@ public class TakeDamager : MonoBehaviour {
 
     private void OnEnable()
     {
-        if(hitTransforms != null)
+        if (hitTransforms != null)
             foreach(Transform trans in hitTransforms)
             {
                 RemoveHitInfo(trans);
@@ -123,7 +123,7 @@ public class TakeDamager : MonoBehaviour {
         Vector2 facingOffset = Vector2.Scale(offset, scale);
 
         CurrentFramePoint = (Vector2)transform.position + facingOffset;
-        float len = 10;
+        float len = 3;
         if (!m_CanDamage)
             return;
 
@@ -160,6 +160,7 @@ public class TakeDamager : MonoBehaviour {
             {
                 hitPoint = getPoint(CurrentFramePoint, (CurrentFramePoint - LastFramePoint).normalized, len, hittableLayers);
                 damageable.TakeDamage(this, TakeAttackBuffs, ignoreInvincibility);
+                status.HP += status.AttackDamageNum * status.BloodsuckingRate; // 吸血
                 OnDamageableHit.Invoke(this, damageable);
                 if (disableDamageAfterHit)
                     DisableDamage();
@@ -244,8 +245,8 @@ public class TakeDamager : MonoBehaviour {
     private Vector2 getPoint(Vector2 start, Vector2 dir, float len, LayerMask layer)
     {
         RaycastHit2D hit =  Physics2D.Raycast(start, dir, len, layer);
-        Debug.Log(dir + transform.name);
-        Debug.DrawRay(start, dir, Color.blue);
+        //Debug.Log(dir + transform.name);
+        //Debug.DrawRay(start, dir, Color.blue);
         return hit.point;
     }
 

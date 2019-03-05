@@ -20,13 +20,16 @@ public class FragmenMgr : MonoBehaviour {
     public GameObject ItemPrefab;
     public Text InfoText;
     // 当前碎片携带的信息
-    //public List<int> EquipBuffIds = new List<int>();
+    public StatisticsFrag Frags = new StatisticsFrag();
 
     private Status m_PlayerStatus;
+    private WeaponTaker m_WeaponTaker;
 
     private void Awake()
     {
-        m_PlayerStatus = GameObject.FindGameObjectWithTag("Player").GetComponent<Status>();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        m_PlayerStatus = player.GetComponent<Status>();
+        m_WeaponTaker = player.GetComponent<WeaponTaker>();
     }
 
     private void Start()
@@ -38,22 +41,28 @@ public class FragmenMgr : MonoBehaviour {
         }
     }
 
+    public void NotifyWeaponTaker(SkillBase _skill)
+    {
+        m_WeaponTaker.SetSkill(_skill);
+    }
+
     // 添加碎片
-    public void AddFragmentItem(FragmentType type, int itemid, Sprite _sprite)
+    public void AddFragmentItem(FragmentName _name, Sprite _sprite)
     {
         bool hasEmpty = false;
         foreach(FragmentSlot mSlot in EquipSlot)
         {
             if (mSlot.isEmpty)
             {
-                mSlot.AddFragmentItem(type, itemid, ItemPrefab, _sprite);
+                mSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
                 hasEmpty = true;
+                Frags.FlushFrag(EquipSlot);
                 break;
             }
         }
         if (!hasEmpty)
         {
-            ExtraSlot.AddFragmentItem(type, itemid, ItemPrefab, _sprite);
+            ExtraSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
         }
     }
     
@@ -68,13 +77,17 @@ public class FragmenMgr : MonoBehaviour {
     }
 
     #region event of equipslot add or remove fragmentations
+    SkillBase skill;
     public void RemoveFragment(MSlot slot, MItem item)
     {
         foreach (IBuff buff in ((FragmentItem)item).ItemFragment.buffs)
         {
             m_PlayerStatus.RemoveStatuBuff(buff);
-            Debug.Log("Remove");
         }
+        Frags.FlushFrag(EquipSlot);
+        skill = GetSkill();
+        if (skill != null)
+            NotifyWeaponTaker(skill);
     }
 
     public void AddFragment(MSlot slot, MItem item)
@@ -83,6 +96,88 @@ public class FragmenMgr : MonoBehaviour {
         {
             m_PlayerStatus.AddStatusBuff(buff);
         }
+        Frags.FlushFrag(EquipSlot);
+        skill = GetSkill();
+        if (skill != null)
+            NotifyWeaponTaker(skill);
     }
     #endregion
+
+    public SkillBase GetSkill()
+    {
+        return Frags.GetSkill();
+    }
+
+    // Statistics : 统计
+    public class StatisticsFrag
+    {
+        public StatisticsFrag() { Init(); }
+
+        public List<FragmentName> names = new List<FragmentName>(3) {FragmentName.Null, FragmentName.Null , FragmentName.Null };
+
+        public void FlushFrag(FragmentSlot[] fragmentSlot)
+        {
+            for (int i = 0; i < fragmentSlot.Length; i++)
+            {
+                if(fragmentSlot[i].ItemChild != null && fragmentSlot[i].ItemChild.GetComponent<FragmentItem>())
+                {
+                    names[i] = fragmentSlot[i].ItemChild.GetComponent<FragmentItem>().ItemFragment.GetFragName();
+                }
+                else
+                {
+                    names[i] = FragmentName.Null;
+                }
+            }
+        }
+
+        public SkillBase GetSkill()
+        {
+            Debug.Log("进入");
+            for(int i = 0; i < names.Count; i++)
+            {
+                if (names[i] == FragmentName.Null) return null;
+                Debug.Log("Enter   " + i);
+            }
+            Debug.Log("进入检查");
+            for(int i = 0; i < fragmentsList.Count; i++)
+            {
+                if (isMatchSkill(fragmentsList[i]))
+                {
+                    if (i == 0) Debug.Log("获得技能");
+                    switch (i)
+                    {
+                        case 0: return SKillFactory.GetSkill(1);
+                    }
+                }
+            }
+            Debug.Log("结束");
+            return null;
+        }
+        public List<SkillFragAttr> fragmentsList = new List<SkillFragAttr>();
+
+        public void Init()
+        {
+            fragmentsList.Add(new SkillFragAttr(FragmentName.Disorder, FragmentName.Riot)); // 无法无天
+        }
+
+
+        public bool isMatchSkill(SkillFragAttr attr)
+        {
+            for(int i = 0; i < attr.names.Length; i++)
+            {
+                if (!names.Contains(attr.names[i])) return false;
+            }
+            return true;
+        }
+
+        public class SkillFragAttr
+        {
+            public FragmentName[] names = new FragmentName[2];
+
+            public SkillFragAttr(params FragmentName[] _names)
+            {
+                names = _names;
+            }
+        }
+    }
 }

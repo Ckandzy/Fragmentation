@@ -28,6 +28,7 @@ namespace Gamekit2D
         public InputButton Weapon4 = new InputButton(KeyCode.Alpha4, XboxControllerButtons.A);
         public InputButton Tab = new InputButton(KeyCode.Tab, XboxControllerButtons.X);
         public InputButton Exit = new InputButton(KeyCode.Escape, XboxControllerButtons.X);
+        public InputButton UseSkill = new InputButton(KeyCode.K, XboxControllerButtons.X);
         [HideInInspector]
         public DataSettings dataSettings;
 
@@ -83,7 +84,7 @@ namespace Gamekit2D
             Weapon4.Get(fixedUpdateHappened, inputType);
             Tab.Get(fixedUpdateHappened, inputType);
             Exit.Get(fixedUpdateHappened, inputType);
-
+            UseSkill.Get(fixedUpdateHappened, inputType);
             if (Input.GetKeyDown(KeyCode.F12))
             {
                 m_DebugMenuIsOpen = !m_DebugMenuIsOpen;
@@ -109,6 +110,7 @@ namespace Gamekit2D
             GainControl(Weapon4);
             GainControl(Tab);
             GainControl(Exit);
+            GainControl(UseSkill);
         }
 
         public override void ReleaseControl(bool resetValues = true)

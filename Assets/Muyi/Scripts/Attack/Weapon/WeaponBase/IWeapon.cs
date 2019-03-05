@@ -12,6 +12,24 @@ public abstract class IWeapon
     public abstract void Update();
 
     public abstract WeaponType getWeaponType();
+    public abstract WeaponName GetWeaponName();
+}
+
+public enum WeaponName
+{
+    /// <summary>
+    /// 手枪
+    /// </summary>
+    PistolGun,
+    /// <summary>
+    /// 激光枪
+    /// </summary>
+    SniperGun,
+    /// <summary>
+    /// 冲锋枪
+    /// </summary>
+    SubmachineGun,
+    Sword
 }
 
 
