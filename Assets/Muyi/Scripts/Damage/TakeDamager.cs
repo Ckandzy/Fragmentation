@@ -12,9 +12,10 @@ public class TakeDamager : MonoBehaviour {
     [Serializable]
     public class NonDamagableEvent : UnityEvent<TakeDamager>{ }
     [Serializable]
-    public class OnHitMissingEvent : UnityEvent { } 
+    public class OnHitMissingEvent : UnityEvent { }
 
-    public DamageType ADamageType = DamageType.Once;
+    //public TakeDamagerType DamagerType = TakeDamagerType.AttachStatus;
+
     public Status status;  // 面板拖拽 or use Status' RegisteredTakeDamger(this) way
     public List<IBuff> TakeAttackBuffs { get {return status.AttackCarryingBuffs; } }
     public float CurrentDamagNum { get { return status.AttackDamageNum * status.TakeDamageInfluences; } }
@@ -88,10 +89,6 @@ public class TakeDamager : MonoBehaviour {
         hitTransforms = new Transform[HitMaxNum];
         hitTimersCounter = new float[HitMaxNum];
         m_AttackOverlapResults = new Collider2D[HitMaxNum];
-        if(ADamageType == DamageType.Once)
-        {
-            //OnHitMissing.AddListener();
-        }
     }
 
     /// <summary>
@@ -292,10 +289,11 @@ public class TakeDamager : MonoBehaviour {
     }
 }
 
-public enum DamageType
+public enum TakeDamagerType
 {
-    Once,
-    Continued
+    /// <summary>
+    /// 依附于Status类，并附带攻击特效
+    /// </summary>
+    AttachStatus,
+    Independent
 }
-
-   

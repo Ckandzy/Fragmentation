@@ -21,7 +21,7 @@ public class UnlawlessSkill : SkillBase
         MSkillStatus = SkillStatusEnum.Ready;
         buffs = new List<IBuff>();
         CD = 30;
-        SkillObjPath = "";
+        DurationTime = 5;
         SkillIcon = Resources.Load<Sprite>("SkillIcon/UnlawlessSkill");
     }
 
@@ -58,14 +58,12 @@ public class UnlawlessSkill : SkillBase
     {
         if (MSkillStatus == SkillStatusEnum.Ready)
         {
-            SkillPrefab = Resources.Load<GameObject>(SkillObjPath);
+            //SkillPrefab = Resources.Load<GameObject>(SkillObjPath);
+            VFXControllerM.Instance.MakeForceField(_trans, DurationTime);
             MSkillStatus = SkillStatusEnum.Continued;
-            if (SkillPrefab != null)
-            {
-                GameObject skillObj = MonoBehaviour.Instantiate(SkillPrefab, _trans);
-            }
             m_WaitTime = 0;
-            _trans.GetComponent<Status>().AddStatusBuff(buffs);
+            _trans.parent.GetComponent<Status>().AddStatusBuff(buffs);
+            _trans.parent.GetComponent<Status>().RegisteredTakeDamger(VFXControllerM.Instance.ForceField.GetComponent<TakeDamager>());
         }
     }
 }

@@ -18,7 +18,7 @@ public class WeaponTaker : MonoBehaviour
     public GameObject CurrentTakeWeaponSprite; // 当前携带的武器 -- 图片
     public Transform BulletPoint; // 子弹发射点
     public GameObject MeleeAttackDamager; // 近战武器范围框
-
+    public Transform CenterPoint; // 中心
     public int CurrentIndex = -1;
     public IWeapon[] CurrentTakeWeapons = new IWeapon[4]; // 当前携带的武器
     public ABulletsPool BulletsPool;
@@ -35,8 +35,10 @@ public class WeaponTaker : MonoBehaviour
 
     private Animator m_Animator;
     private Status m_Status;
-    
 
+    private bool m_InBattle = false;
+    private float battleTimer = 0f;
+    private float m_OutBattleTime = 5f;
 
     private void Awake()
     {
@@ -62,6 +64,25 @@ public class WeaponTaker : MonoBehaviour
         CheckWeaponCanTake();
 
         if (CurrentSkill != null) CurrentSkill.SkillUpdate();
+        if (m_InBattle && CurrentTakeWeapons[CurrentIndex] != null && CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
+        {
+            InBattle();
+            battleTimer += Time.deltaTime;
+            if (battleTimer >= m_OutBattleTime)
+                OutBattle();
+        }
+    }
+
+    private void InBattle()
+    {
+        m_InBattle = true;
+        Hands.transform.localEulerAngles = new Vector3(0, 0, 0f);
+    }
+
+    private void OutBattle()
+    {
+        m_InBattle = false;
+        Hands.transform.localEulerAngles = new Vector3(0, 0, -45f);
     }
 
     private void FixedUpdate()
@@ -75,7 +96,7 @@ public class WeaponTaker : MonoBehaviour
     {
         if (CurrentSkill != null)
         {
-            CurrentSkill.UseSkill(transform);
+            CurrentSkill.UseSkill(CenterPoint);
         }
     }
 
@@ -93,7 +114,10 @@ public class WeaponTaker : MonoBehaviour
     {
         if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
         {
+            InBattle();
             m_Animator.SetTrigger(m_HashRangeAttak);
+            battleTimer = 0;
+           
         }
         else if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.MeleeType)
         {
@@ -106,9 +130,14 @@ public class WeaponTaker : MonoBehaviour
     {
         if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
         {
+            // 两个特殊情况
             if (CurrentTakeWeapons[CurrentIndex].GetWeaponName() == WeaponName.SubmachineGun)
             {
                 StartCoroutine(((SubmachineGun)CurrentTakeWeapons[CurrentIndex]).Shoot(m_Status, BulletsPool, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { }));
+            }
+            else if(CurrentTakeWeapons[CurrentIndex].GetWeaponName() == WeaponName.SniperGun)
+            {
+                ((RangedWeapon)CurrentTakeWeapons[CurrentIndex]).Attack(null, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { });
             }
             else
             {
@@ -129,6 +158,10 @@ public class WeaponTaker : MonoBehaviour
         if (CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.MeleeType)
         {
             MeleeAttackDamager.SetActive(false);
+        }
+        else if (CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
+        {
+            InBattle();
         }
     }
 

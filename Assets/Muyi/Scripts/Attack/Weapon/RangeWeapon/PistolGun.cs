@@ -82,14 +82,17 @@ public class SniperGun : RangedWeapon
     {
         if (nowWaitTime >= mustWaitTime)
         {
+            Vector2 start = _transform.position;
+            Vector2 end = (Vector2)_transform.position + new Vector2(30 * _transform.lossyScale.x, 0);
+            VFXControllerM.Instance.MakeLaser(start, end, 0.2f);
             nowWaitTime = 0;
-            GameObject bullet1 = _bullet;
-            bullet1.transform.position = _transform.position;
-            bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
-            foreach (IBuff buff in _buff)
-            {
-                if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
-            }
+            //GameObject bullet1 = _bullet;
+            //bullet1.transform.position = _transform.position;
+            //bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+            //foreach (IBuff buff in _buff)
+            //{
+             //   if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+            //}
         }
     }
 
@@ -119,7 +122,7 @@ public class SubmachineGun : RangedWeapon
         sprite = Resources.Load<Sprite>("GunSprite/SubmachineGun");
         this.Frequency = 4;
         mustWaitTime = 1 / 4.00f;
-        OffsetPoint = new Vector2(0.37f, 0.21f);
+        OffsetPoint = new Vector2(0.37f, 0.216f);
         AttackNum = 10;
     }
 
@@ -168,8 +171,9 @@ public class SubmachineGun : RangedWeapon
 
     public IEnumerator Shoot(Status status, ABulletsPool _bullet, Transform _transform, Vector2 vec, List<IBuff> _buff = null)
     {
-        for (int i = 0; i < 5; i++)
-        {
+        if (nowWaitTime >= mustWaitTime)
+            for (int i = 0; i < 5; i++)
+            {
             nowWaitTime = 0;
             GameObject bullet1 = _bullet.Pop().transform.gameObject;
             status.RegisteredTakeDamger(bullet1.GetComponent<TakeDamager>());
@@ -179,8 +183,8 @@ public class SubmachineGun : RangedWeapon
             {
                 if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
             }
-            yield return new WaitForSeconds(0.01f);
-        }
+            yield return new WaitForSeconds(0.05f);
+            }
     }
 }
 

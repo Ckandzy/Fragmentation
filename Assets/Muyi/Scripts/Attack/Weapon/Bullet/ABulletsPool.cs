@@ -72,13 +72,17 @@ public class ABulletsPool : ObjectPool<ABulletsPool, APoolBullet>
 
     public APoolBullet CreateNewPoolObject(Transform _parent)
     {
-        APoolBullet newPoolObject = new APoolBullet();
-        newPoolObject.instance = Instantiate(prefab);
-        newPoolObject.instance.transform.SetParent(_parent);
-        newPoolObject.inPool = true;
-        newPoolObject.SetReferences(this as ABulletsPool);
-        newPoolObject.Sleep();
-        return newPoolObject;
+        if (prefab != null)
+        {
+            APoolBullet newPoolObject = new APoolBullet();
+            newPoolObject.instance = Instantiate(prefab);
+            newPoolObject.instance.transform.SetParent(_parent);
+            newPoolObject.inPool = true;
+            newPoolObject.SetReferences(this as ABulletsPool);
+            newPoolObject.Sleep();
+            return newPoolObject;
+        }
+        return null;
     }
 
     //initialPoolCount is only used when the objectpool don't exist

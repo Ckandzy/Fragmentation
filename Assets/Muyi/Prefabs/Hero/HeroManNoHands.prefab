@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1707475863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1707475864}
+  m_Layer: 13
+  m_Name: CenterPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1707475864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1707475863}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.09, y: 1.44, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6337330976892148322}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6337330975339544870
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,6 +1155,7 @@ Transform:
   - {fileID: 6337330976898639133}
   - {fileID: 6337330976421460720}
   - {fileID: 6337330976022556790}
+  - {fileID: 1707475864}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1264,6 +1295,7 @@ MonoBehaviour:
   CurrentTakeWeaponSprite: {fileID: 6337330975758769642}
   BulletPoint: {fileID: 6337330976440809578}
   MeleeAttackDamager: {fileID: 6337330976022556788}
+  CenterPoint: {fileID: 1707475864}
   CurrentIndex: 0
   BulletsPool: {fileID: 0}
   PoolGameobj: {fileID: 0}
@@ -1295,8 +1327,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6fb594d15067e4ebd9739c98563ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 100
-  HP: 100
+  maxHp: 100
+  hp: 100
   TakeDamagers:
   - {fileID: 1207845389}
   TakeDamageables: []
@@ -1306,6 +1338,7 @@ MonoBehaviour:
   TakeDamageInfluences: 1
   Precision: 1
   DodgeRate: 0
+  BloodsuckingRate: 0
   OnStatusBuffAdd:
     m_PersistentCalls:
       m_Calls:
@@ -1343,6 +1376,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  buffAttributes: []
   isStoic: 0
 --- !u!114 &6337330976892148345
 MonoBehaviour:
@@ -1411,6 +1445,10 @@ MonoBehaviour:
     m_Enabled: 1
   Exit:
     key: 27
+    controllerButton: 3
+    m_Enabled: 1
+  UseSkill:
+    key: 107
     controllerButton: 3
     m_Enabled: 1
   dataSettings:
