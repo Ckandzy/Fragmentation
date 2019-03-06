@@ -71,6 +71,7 @@ public class BossBehaviour : MonoBehaviour
 
     [Header("Audio")]
     public RandomAudioPlayer strafeAudio;
+    public RandomAudioPlayer launchAudio;
     public RandomAudioPlayer dieAudio;
     public RandomAudioPlayer footStepAudio;
     public RandomAudioPlayer meleeAttackAudio;
@@ -371,7 +372,7 @@ public class BossBehaviour : MonoBehaviour
     }
 
     #region Call By Event
-    public virtual void DoStrafe()
+    public virtual void DoShoot()
     {
         Vector2 shootPosition = shootingOrigin.transform.localPosition;
         RaycastHit2D[] m_HitBuffer = new RaycastHit2D[1];
@@ -403,19 +404,53 @@ public class BossBehaviour : MonoBehaviour
         if (!strafe)
             m_ProjectilePool[0].Pop(projectData);
         else
-            StartCoroutine(Strafe(projectData));
+            StartCoroutine(Strafe(projectData, m_ProjectilePool[0]));
         strafeAudio.PlayRandomSound();
     }
 
     public virtual void DoLaunch()
     {
-
+        Vector2 shootPosition = shootingOrigin.transform.localPosition;
+        RaycastHit2D[] m_HitBuffer = new RaycastHit2D[1];
+        Projectile.ProjectData projectData = new Projectile.ProjectData()
+        {
+            direction = m_SpriteForward,
+            gravity = Vector2.zero,
+            shootOrigin = shootingOrigin.position,
+            shootSpeed = launchSpeed,
+            destroyWhenOutOfView = destroyWhenOutOfView
+        };
+        if (track)
+        {
+            projectData.Track = true;
+            projectData.direction = new Vector2(m_SpriteForward.x * Mathf.Cos(Mathf.Deg2Rad * shootAngle), Mathf.Sin(Mathf.Deg2Rad * shootAngle));
+            projectData.Target = target;
+            projectData.trackSensitivity = trackSensitivity;
+            projectData.timeBeforeAutodestruct = trackTime;
+        }
+        else
+        {
+            projectData.Track = false;
+            projectData.Target = null;
+            if (locate)
+            {
+                projectData.direction = (target.transform.position - shootingOrigin.position).normalized;
+            }
+        }
+        if (!strafe)
+        {
+            m_ProjectilePool[1].Pop(projectData);
+            launchAudio.PlayRandomSound();
+        }
+        else
+            StartCoroutine(Strafe(projectData, m_ProjectilePool[1]));
     }
-    protected virtual IEnumerator Strafe(Projectile.ProjectData projectData)
+    protected virtual IEnumerator Strafe(Projectile.ProjectData projectData, ProjectilePool projectilePool)
     {
         while (m_StrafeTimer < strafeDuration)
         {
-            m_ProjectilePool[0].Pop(projectData);
+            launchAudio.PlayRandomSound();
+            projectilePool.Pop(projectData);
             m_StrafeTimer += strafeDuration / strafeTimes;
             yield return new WaitForSeconds(strafeDuration / strafeTimes);
         }
