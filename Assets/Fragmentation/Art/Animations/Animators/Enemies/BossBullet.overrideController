@@ -9,5 +9,5 @@ AnimatorOverrideController:
   m_Name: BossBullet
   m_Controller: {fileID: 9100000, guid: 9ab0bf1a9607b174aac8da614a9819e6, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 5b26e4cac2134c7449ea103e2c61e20e, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: fb3ab89ff11e2f24b8746a3935e1f6d5, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 5b26e4cac2134c7449ea103e2c61e20e, type: 2}

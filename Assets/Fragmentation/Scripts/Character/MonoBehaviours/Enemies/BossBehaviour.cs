@@ -10,6 +10,9 @@ using UnityEditor;
 [RequireComponent(typeof(CharacterController2D))]
 [RequireComponent(typeof(Collider2D))]
 public class BossBehaviour : MonoBehaviour
+#if UNITY_EDITOR
+    , BTAI.IBTDebugable
+#endif
 {
     static Collider2D[] s_ColliderCache = new Collider2D[16];
 
@@ -18,7 +21,7 @@ public class BossBehaviour : MonoBehaviour
 
     [Tooltip("If the sprite face left on the spritesheet, enable this. Otherwise, leave disabled")]
     public bool spriteFaceLeft = false;
-    public bool shootOriginLeft = false;
+    //public bool shootOriginPos = false;
 
     [Header("Movement")]
     public float speed;
@@ -38,7 +41,9 @@ public class BossBehaviour : MonoBehaviour
 
     [Header("Range Attack Data")]
     [Tooltip("From where the projectile are spawned")]
+    public Transform RangeAttackOriginGroup;
     public Transform shootingOrigin;
+    public Transform launchOrigin;
     [Tooltip("Which layer will be checked for track")]
     public LayerMask trackLayerMask;
     public float launchSpeed = 20f;
@@ -54,10 +59,15 @@ public class BossBehaviour : MonoBehaviour
     //public float shootForce = 100.0f;
     public float shootRate = 2.0f;
 
-    public bool strafe = false;
-    public float strafeDuration = 0.0f;
-    public int strafeTimes = 0;
-    protected float m_StrafeTimer = 0.0f;
+    public bool shootStrafe = false;
+    public float shootStrafeDuration = 0.0f;
+    public int shootStrafeTimes = 0;
+    protected float m_ShootStrafeTimer = 0.0f;
+
+    public bool launchStrafe = false;
+    public float launchStrafeDuration = 0.0f;
+    public int launchStrafeTimes = 0;
+    protected float m_LaunchStrafeTimer = 0.0f;
 
     [Header("Melee Attack Data")]
     [EnemyMeleeRangeCheck]
@@ -81,10 +91,13 @@ public class BossBehaviour : MonoBehaviour
     public float flickeringDuration;
 
     [Header("AI")]
-    public int stage1StrafeTime = 2;
+    public int stage1StrafeTimes = 2;
+    public int stage2MeleeTimes = 2;
     public float strafeInterval = 1f;
+    protected bool tick = false;
 
     [Header("Debug")]
+    public bool enableSwitch = false;
     protected SpriteRenderer m_SpriteRenderer;
     protected CharacterController2D m_CharacterController2D;
     protected Collider2D m_Collider;
@@ -116,13 +129,18 @@ public class BossBehaviour : MonoBehaviour
     protected ContactFilter2D m_ContactFilter;
 
     protected bool m_Dead = false;
+    protected bool m_Switch = false;
    
     protected readonly int m_HashHitPara = Animator.StringToHash("Hit");
     protected readonly int m_HashDeathPara = Animator.StringToHash("Death");
     protected readonly int m_HashGroundedPara = Animator.StringToHash("Grounded");
-    protected readonly int m_HashWalk1Para = Animator.StringToHash("Walk1");
+    protected readonly int m_HashWalk1Para = Animator.StringToHash("Walk 1");
     protected readonly int m_HashMeleeAttack1Para = Animator.StringToHash("MeleeAttack 1");
     protected readonly int m_HashRangeAttack1Para = Animator.StringToHash("RangeAttack 1");
+    protected readonly int m_HashWalk2Para = Animator.StringToHash("Walk 2");
+    protected readonly int m_HashMeleeAttack2Para = Animator.StringToHash("MeleeAttack 2");
+    protected readonly int m_HashRangeAttack2Para = Animator.StringToHash("RangeAttack 2");
+    protected readonly int m_HashSwitchPara = Animator.StringToHash("Switch");
 
     Root m_Ai = BT.Root();
 
@@ -140,6 +158,7 @@ public class BossBehaviour : MonoBehaviour
         m_ContactFilter.useLayerMask = true;
         m_ContactFilter.useTriggers = false;
 
+        m_ProjectilePool = new ProjectilePool[projectilePrefab.Length];
         for (int i = 0; i < projectilePrefab.Length; i++)
         {
             m_ProjectilePool[i] = ProjectilePool.GetObjectPool(projectilePrefab[i].gameObject, 8);
@@ -155,22 +174,20 @@ public class BossBehaviour : MonoBehaviour
         m_Collider.enabled = true;
 
         m_Ai.OpenBranch(
-            BT.RandomSequence().OpenBranch(
+            BT.RandomSequence(new int[] { 2, 6, 1 }).OpenBranch(
                 BT.Root().OpenBranch(
                     BT.SetBool(m_Animator, "Walk 1", true),
-                    BT.Wait(Random.Range(1f, 3f)),
+                    BT.Wait(Random.Range(1f, 2f)),
                     BT.SetBool(m_Animator, "Walk 1", false),
                     BT.WaitForAnimatorState(m_Animator, "Idle 1")
                 ),
-                BT.Wait(Random.Range(1f, 3f)),
                 BT.Root().OpenBranch(
-                    BT.If( ()=> { return CheckMeleeAttack(); } ).OpenBranch(
+                    BT.If(() => { return CheckMeleeAttack(); }).OpenBranch(
                         BT.Wait(0.2f),
                         BT.WaitForAnimatorState(m_Animator, "Idle 1")
                     )
                 ),
-                BT.Wait(Random.Range(1f, 3f)),
-                BT.Repeat(stage1StrafeTime).OpenBranch(
+                BT.Repeat(stage1StrafeTimes).OpenBranch(
                     BT.Call(OrientToTarget),
                     BT.Trigger(m_Animator, "RangeAttack 1"),
                     BT.Wait(0.2f),
@@ -179,6 +196,8 @@ public class BossBehaviour : MonoBehaviour
                 )
             )
         );
+
+        tick = true;
     }
 
     protected virtual void Start()
@@ -199,7 +218,13 @@ public class BossBehaviour : MonoBehaviour
 
     private void Update()
     {
-        m_Ai.Tick();
+        if (!m_Switch && PlayerInput.Instance.Exit.Down)
+        {
+            StartSwitch();
+            m_Switch = true;
+        }
+        if(tick)
+            m_Ai.Tick();
     }
 
     void FixedUpdate()
@@ -252,26 +277,6 @@ public class BossBehaviour : MonoBehaviour
         return false;
     }
 
-    public void SetFacingData(int facing)
-    {
-        Vector3 vector = shootingOrigin.transform.localPosition;
-        float absX = Mathf.Abs(vector.x);
-        if (facing == -1)
-        {
-            m_SpriteRenderer.flipX = !spriteFaceLeft;
-            m_SpriteForward = Vector2.left;
-            vector.x = shootOriginLeft ^ spriteFaceLeft ? absX : -absX;
-            shootingOrigin.transform.localPosition = vector;
-        }
-        else if (facing == 1)
-        {
-            m_SpriteRenderer.flipX = spriteFaceLeft;
-            m_SpriteForward = Vector2.right;
-            vector.x = shootOriginLeft ^ spriteFaceLeft ? -absX : absX;
-            shootingOrigin.transform.localPosition = vector;
-        }
-    }
-
     public void SetMoveVector(Vector2 newMoveVector)
     {
         m_MoveVector = newMoveVector;
@@ -289,6 +294,27 @@ public class BossBehaviour : MonoBehaviour
         else if (faceRight)
         {
             SetFacingData(1);
+        }
+    }
+
+    public void SetFacingData(int facing)
+    {
+        //Vector3 vector = shootingOrigin.transform.localPosition;
+        Vector3 vector = RangeAttackOriginGroup.transform.localScale;
+        if (facing == -1)
+        {
+            m_SpriteRenderer.flipX = !spriteFaceLeft;
+            //vector.x = shootOriginLeft ^ spriteFaceLeft ? absX : -absX;
+            m_SpriteForward = Vector2.left;
+            vector.x = spriteFaceLeft ? 1 : -1;
+            RangeAttackOriginGroup.transform.localScale = vector;
+        }
+        else if (facing == 1)
+        {
+            m_SpriteRenderer.flipX = spriteFaceLeft;
+            m_SpriteForward = Vector2.right;
+            vector.x = spriteFaceLeft ? -1 : 1;
+            RangeAttackOriginGroup.transform.localScale = vector;
         }
     }
 
@@ -384,27 +410,27 @@ public class BossBehaviour : MonoBehaviour
             shootSpeed = launchSpeed,
             destroyWhenOutOfView = destroyWhenOutOfView
         };
-        if (track)
-        {
-            projectData.Track = true;
-            projectData.direction = new Vector2(m_SpriteForward.x * Mathf.Cos(Mathf.Deg2Rad * shootAngle), Mathf.Sin(Mathf.Deg2Rad * shootAngle));
-            projectData.Target = target;
-            projectData.trackSensitivity = trackSensitivity;
-            projectData.timeBeforeAutodestruct = trackTime;
-        }
-        else
-        {
+        //if (track)
+        //{
+        //    projectData.Track = true;
+        //    projectData.direction = new Vector2(m_SpriteForward.x * Mathf.Cos(Mathf.Deg2Rad * shootAngle), Mathf.Sin(Mathf.Deg2Rad * shootAngle));
+        //    projectData.Target = target;
+        //    projectData.trackSensitivity = trackSensitivity;
+        //    projectData.timeBeforeAutodestruct = trackTime;
+        //}
+        //else
+        //{
             projectData.Track = false;
             projectData.Target = null;
             if (locate)
             {
                 projectData.direction = (target.transform.position - shootingOrigin.position).normalized;
             }
-        }
-        if (!strafe)
+        //}
+        if (!shootStrafe)
             m_ProjectilePool[0].Pop(projectData);
         else
-            StartCoroutine(Strafe(projectData, m_ProjectilePool[0]));
+            StartCoroutine(Strafe(projectData, 0));
         strafeAudio.PlayRandomSound();
     }
 
@@ -416,7 +442,7 @@ public class BossBehaviour : MonoBehaviour
         {
             direction = m_SpriteForward,
             gravity = Vector2.zero,
-            shootOrigin = shootingOrigin.position,
+            shootOrigin = launchOrigin.position,
             shootSpeed = launchSpeed,
             destroyWhenOutOfView = destroyWhenOutOfView
         };
@@ -434,28 +460,42 @@ public class BossBehaviour : MonoBehaviour
             projectData.Target = null;
             if (locate)
             {
-                projectData.direction = (target.transform.position - shootingOrigin.position).normalized;
+                projectData.direction = (target.transform.position - launchOrigin.position).normalized;
             }
         }
-        if (!strafe)
+        if (!launchStrafe)
         {
             m_ProjectilePool[1].Pop(projectData);
             launchAudio.PlayRandomSound();
         }
         else
-            StartCoroutine(Strafe(projectData, m_ProjectilePool[1]));
+            StartCoroutine(Strafe(projectData, 1));
     }
-    protected virtual IEnumerator Strafe(Projectile.ProjectData projectData, ProjectilePool projectilePool)
+    protected virtual IEnumerator Strafe(Projectile.ProjectData projectData, int strafeMode)
     {
-        while (m_StrafeTimer < strafeDuration)
+        if (strafeMode == 0)
         {
-            launchAudio.PlayRandomSound();
-            projectilePool.Pop(projectData);
-            m_StrafeTimer += strafeDuration / strafeTimes;
-            yield return new WaitForSeconds(strafeDuration / strafeTimes);
+            while (m_ShootStrafeTimer < shootStrafeDuration)
+            {
+                m_ProjectilePool[strafeMode].Pop(projectData);
+                m_ShootStrafeTimer += shootStrafeDuration / shootStrafeTimes;
+                yield return new WaitForSeconds(shootStrafeDuration / shootStrafeTimes);
+            }
+            m_ShootStrafeTimer = 0.0f;
+            yield break;
         }
-        m_StrafeTimer = 0.0f;
-        yield break;
+        else
+        {
+            while (m_LaunchStrafeTimer < launchStrafeDuration)
+            {
+                launchAudio.PlayRandomSound();
+                m_ProjectilePool[strafeMode].Pop(projectData);
+                m_LaunchStrafeTimer += launchStrafeDuration / launchStrafeTimes;
+                yield return new WaitForSeconds(launchStrafeDuration / launchStrafeTimes);
+            }
+            m_LaunchStrafeTimer = 0.0f;
+            yield break;
+        } 
     }
 
     public void Die(TakeDamager damager, TakeDamageable damageable)
@@ -508,8 +548,14 @@ public class BossBehaviour : MonoBehaviour
 
         if ((target.transform.position - transform.position).sqrMagnitude < (meleeRange * meleeRange))
         {
-            m_Animator.SetTrigger(m_HashMeleeAttack1Para);
-            meleeAttackAudio.PlayRandomSound();
+            if (m_Switch)
+            {
+                m_Animator.SetTrigger(m_HashMeleeAttack2Para);
+            }
+            else
+            {
+                m_Animator.SetTrigger(m_HashMeleeAttack1Para);
+            }
             return true;
         }
         return false;
@@ -584,7 +630,75 @@ public class BossBehaviour : MonoBehaviour
         footStepAudio.PlayRandomSound();
     }
 
+    public void StartSwitch()
+    {
+        StartCoroutine(Switch());
+    }
+
+    public IEnumerator Switch()
+    {
+        tick = false;
+        m_Animator.ResetTrigger(m_HashMeleeAttack1Para);
+        m_Animator.ResetTrigger(m_HashRangeAttack1Para);
+        m_Animator.ResetTrigger(m_HashWalk1Para);
+        m_Animator.SetTrigger(m_HashSwitchPara);
+        yield return new WaitForAnimatorState(m_Animator, "Idle 2");
+        m_Ai = BT.Root();
+        m_Ai.OpenBranch(
+            BT.RandomSequence(new int[] { 2, 15, 6, 6 }).OpenBranch(
+                BT.Root().OpenBranch(
+                    BT.Log("mmp1-1"),
+                    BT.SetBool(m_Animator, "Walk 2", true),
+                    BT.Wait(Random.Range(1f, 2f)),
+                    BT.SetBool(m_Animator, "Walk 2", false),
+                    BT.Log("mmp1-2"),
+                    BT.WaitForAnimatorState(m_Animator, "Idle 2")
+                ),
+                BT.Root().OpenBranch(
+                    BT.Repeat(stage2MeleeTimes).OpenBranch(
+                        BT.Log("mmp2-1"),
+                        BT.If(() => { return CheckMeleeAttack(); }).OpenBranch(
+                            //BT.Wait(0.1f),
+                            BT.Log("mmp2-2"),
+                            BT.WaitForAnimatorState(m_Animator, "Idle 2")
+                        )
+                    )
+                ), 
+                BT.Root().OpenBranch(
+                    BT.Repeat(stage2MeleeTimes).OpenBranch(
+                        //BT.Call(OrientToTarget),
+                        BT.Log("mmp3-1"),
+                        BT.Trigger(m_Animator, "Launch"),
+                        BT.Wait(0.1f),
+                        BT.Log("mmp3-2"),
+                        BT.WaitForAnimatorState(m_Animator, "Idle 2")
+                    )
+                ),
+                BT.Repeat(stage1StrafeTimes).OpenBranch(
+                    BT.Log("mmp4-1"),
+                    BT.Call(OrientToTarget),
+                    BT.Trigger(m_Animator, "RangeAttack 2"),
+                    BT.Wait(0.1f),
+                    BT.Log("mmp4-2"),
+                    BT.WaitForAnimatorState(m_Animator, "Idle 2"),
+                    BT.Wait(strafeInterval)
+                )
+            )
+        );
+        tick = true;
+    }
+
+    #region Audio
+    public void PlayMeleeSound()
+    {
+        meleeAttackAudio.PlayRandomSound();
+    }
+    #endregion
 #if UNITY_EDITOR
+    public BTAI.Root GetAIRoot()
+    {
+        return m_Ai;
+    }
     private void OnDrawGizmosSelected()
     {
         //draw the cone of view

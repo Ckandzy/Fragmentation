@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3744283042342034914}
   - component: {fileID: 1283812669}
   m_Layer: 19
-  m_Name: BossMissile
+  m_Name: BossBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -243,7 +243,7 @@ Animator:
   m_GameObject: {fileID: 3744283042342034919}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9ab0bf1a9607b174aac8da614a9819e6, type: 2}
+  m_Controller: {fileID: 22100000, guid: 23a2d86a10a0b7d468fc2ed81f229767, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
