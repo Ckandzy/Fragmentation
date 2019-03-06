@@ -13,6 +13,7 @@ public class SlowDown : NegativeBuff<PlayerCharacter>
 
     public override void BuffOnEnter(GameObject t)
     {
+        Over = false;
         TClass = t.GetComponent<PlayerCharacter>();
         CalculationBuffNum();
 

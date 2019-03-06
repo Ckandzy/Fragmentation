@@ -105,7 +105,11 @@ public class WeaponTaker : MonoBehaviour
     public void SetSkill(SkillBase skill)
     {
         CurrentSkill = skill;
-        CurrentSkill.SkillEnter();
+        if (skill != null)
+        {
+            CurrentSkill.SkillEnter();
+        }
+        
         SkillSlot.Instance.SkillInit(CurrentSkill);
     }
     #endregion
@@ -194,8 +198,6 @@ public class WeaponTaker : MonoBehaviour
             if (CurrentIndex != index)
             {
                 CurrentIndex = index;
-                
-                Debug.Log("enter");
             }
             CurrentTakeWeaponSprite.GetComponent<SpriteRenderer>().sprite = CurrentTakeWeapons[index].sprite;
             AdjustCurrentWeapon(CurrentTakeWeapons[index].getWeaponType(), index);

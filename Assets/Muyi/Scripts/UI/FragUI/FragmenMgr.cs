@@ -65,7 +65,6 @@ public class FragmenMgr : MonoBehaviour {
             {
                 mSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
                 hasEmpty = true;
-                FlushSkill();
                 break;
             }
         }
@@ -73,6 +72,7 @@ public class FragmenMgr : MonoBehaviour {
         {
             ExtraSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
         }
+        FlushSkill();
     }
     
     public void FlushSkill()
@@ -82,8 +82,8 @@ public class FragmenMgr : MonoBehaviour {
         if (skill != null)
         {
             skill.OnSkillCDOver = SlotCanInteraciveNotify;
-            NotifyWeaponTaker(skill);
         }
+        NotifyWeaponTaker(skill);
     }
 
     /// <summary>
@@ -159,6 +159,7 @@ public class FragmenMgr : MonoBehaviour {
                     { 
                         case 0: return SKillFactory.GetSkill(1); // 无法无天
                         case 1: return SKillFactory.GetSkill(2); // 铁腕强权
+                        case 2: return SKillFactory.GetSkill(3); // 风助火威
                     }
                 }
             }
@@ -170,6 +171,7 @@ public class FragmenMgr : MonoBehaviour {
         {
             fragmentsList.Add(new SkillFragAttr(FragmentName.Disorder, FragmentName.Riot)); // 无法无天
             fragmentsList.Add(new SkillFragAttr(FragmentName.CriterionFrag, FragmentName.TrialFrag));
+            fragmentsList.Add(new SkillFragAttr(FragmentName.FireFrag, FragmentName.WindFrag));
         }
 
 
