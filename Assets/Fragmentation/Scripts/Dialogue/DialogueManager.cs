@@ -8,6 +8,8 @@ public class DialogueManager : MonoBehaviour
 
     public DialogueCanvasController dialogueCanvasController;
 
+    public bool isActive = false;
+
     public void StartDialogue(Dialogue dialogue)
     {
         sentences.Clear();
@@ -31,6 +33,7 @@ public class DialogueManager : MonoBehaviour
             EndDialogue();
             return true;
         }
+        isActive = true;
         string sentence = sentences.Dequeue();
         dialogueCanvasController.ActivateCanvasWithText(sentence);
         Debug.Log(sentence);
@@ -39,7 +42,11 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
-        dialogueCanvasController.DeactivateCanvasWithDelay(0);
+        if (isActive)
+        {
+            dialogueCanvasController.DeactivateCanvasWithDelay(0);
+            isActive = false;
+        }
     }
 
     public void DisplaySentence(string sentence)
