@@ -13,6 +13,7 @@ namespace Gamekit2D
         {
             public TileBase tile;
             public AudioClip[] clips;
+            
         }
 
         public AudioClip[] clips;
@@ -29,7 +30,7 @@ namespace Gamekit2D
         {
             m_Source = GetComponent<AudioSource>();
             m_LookupOverride = new Dictionary<TileBase, AudioClip[]>();
-
+            
             for(int i = 0; i < overrides.Length; ++i)
             {
                 if (overrides[i].tile == null)
@@ -51,7 +52,7 @@ namespace Gamekit2D
 
             if(randomizePitch)
                 m_Source.pitch = Random.Range(1.0f - pitchRange, 1.0f + pitchRange);
-
+            Debug.Log(source[choice]);
             m_Source.PlayOneShot(source[choice]);
         }
 

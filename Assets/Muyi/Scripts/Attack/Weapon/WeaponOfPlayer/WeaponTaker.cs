@@ -33,6 +33,9 @@ public class WeaponTaker : MonoBehaviour
     protected readonly int m_HashIdle = Animator.StringToHash("Grounded");
     protected readonly int m_HashMeleeAttackPara = Animator.StringToHash("MeleeAttack");
 
+    public RandomAudioPlayer PickUpMeleeWaponAudio;
+    public RandomAudioPlayer SkillSource;
+
     private Animator m_Animator;
     private Status m_Status;
 
@@ -197,6 +200,11 @@ public class WeaponTaker : MonoBehaviour
         {
             if (CurrentIndex != index)
             {
+                if(CurrentTakeWeapons[index].getWeaponType() == WeaponType.MeleeType)
+                {
+                    Debug.Log("播放");
+                    PickUpMeleeWaponAudio.PlayRandomSound();
+                }
                 CurrentIndex = index;
             }
             CurrentTakeWeaponSprite.GetComponent<SpriteRenderer>().sprite = CurrentTakeWeapons[index].sprite;
