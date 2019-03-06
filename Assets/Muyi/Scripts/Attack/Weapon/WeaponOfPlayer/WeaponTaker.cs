@@ -33,8 +33,8 @@ public class WeaponTaker : MonoBehaviour
     protected readonly int m_HashIdle = Animator.StringToHash("Grounded");
     protected readonly int m_HashMeleeAttackPara = Animator.StringToHash("MeleeAttack");
 
-    public RandomAudioPlayer PickUpMeleeWaponAudio;
-    public RandomAudioPlayer SkillSource;
+    public Audio PickUpWeaponAudio;
+    public Audio SkillSource;
 
     private Animator m_Animator;
     private Status m_Status;
@@ -98,9 +98,10 @@ public class WeaponTaker : MonoBehaviour
 
     public void UseSkill()
     {
-        if (CurrentSkill != null)
+        if (CurrentSkill != null && CurrentSkill.MSkillStatus == SkillStatusEnum.Ready)
         {
             CurrentSkill.UseSkill(CenterPoint);
+            SkillSource.PlayRandomSound((int)CurrentSkill.SkillName());
             FragmenMgr.Instance.SlotCanInteraciveNotify(false);
         }
     }
@@ -200,11 +201,7 @@ public class WeaponTaker : MonoBehaviour
         {
             if (CurrentIndex != index)
             {
-                if(CurrentTakeWeapons[index].getWeaponType() == WeaponType.MeleeType)
-                {
-                    Debug.Log("播放");
-                    PickUpMeleeWaponAudio.PlayRandomSound();
-                }
+                PickUpWeaponAudio.PlayRandomSound((int)CurrentTakeWeapons[index].getWeaponType());
                 CurrentIndex = index;
             }
             CurrentTakeWeaponSprite.GetComponent<SpriteRenderer>().sprite = CurrentTakeWeapons[index].sprite;

@@ -121,77 +121,77 @@ public class FragmenMgr : MonoBehaviour {
     {
         return Frags.GetSkill();
     }
+}
 
-    // Statistics : 统计
-    public class StatisticsFrag
+// Statistics : 统计
+public class StatisticsFrag
+{
+    public StatisticsFrag() { Init(); }
+
+    public List<FragmentName> names = new List<FragmentName>(3) { FragmentName.Null, FragmentName.Null, FragmentName.Null };
+
+    public void FlushFrag(FragmentSlot[] fragmentSlot)
     {
-        public StatisticsFrag() { Init(); }
-
-        public List<FragmentName> names = new List<FragmentName>(3) {FragmentName.Null, FragmentName.Null , FragmentName.Null };
-
-        public void FlushFrag(FragmentSlot[] fragmentSlot)
+        for (int i = 0; i < fragmentSlot.Length; i++)
         {
-            for (int i = 0; i < fragmentSlot.Length; i++)
+            if (fragmentSlot[i].ItemChild != null && fragmentSlot[i].ItemChild.GetComponent<FragmentItem>())
             {
-                if(fragmentSlot[i].ItemChild != null && fragmentSlot[i].ItemChild.GetComponent<FragmentItem>())
-                {
-                    names[i] = fragmentSlot[i].ItemChild.GetComponent<FragmentItem>().ItemFragment.GetFragName();
-                }
-                else
-                {
-                    names[i] = FragmentName.Null;
-                }
+                names[i] = fragmentSlot[i].ItemChild.GetComponent<FragmentItem>().ItemFragment.GetFragName();
+            }
+            else
+            {
+                names[i] = FragmentName.Null;
             }
         }
+    }
 
-        public SkillBase GetSkill()
+    public SkillBase GetSkill()
+    {
+        for (int i = 0; i < names.Count; i++)
         {
-            for(int i = 0; i < names.Count; i++)
+            if (names[i] == FragmentName.Null) return null;
+        }
+        for (int i = 0; i < fragmentsList.Count; i++)
+        {
+            if (isMatchSkill(fragmentsList[i]))
             {
-                if (names[i] == FragmentName.Null) return null;
-            }
-            for(int i = 0; i < fragmentsList.Count; i++)
-            {
-                if (isMatchSkill(fragmentsList[i]))
+                //if (i == 0) Debug.Log("获得技能");
+                switch (i)
                 {
-                    //if (i == 0) Debug.Log("获得技能");
-                    switch (i)
-                    { 
-                        case 0: return SKillFactory.GetSkill(1); // 无法无天
-                        case 1: return SKillFactory.GetSkill(2); // 铁腕强权
-                        case 2: return SKillFactory.GetSkill(3); // 风助火威
-                    }
+                    case 0: return SKillFactory.GetSkill(1); // 无法无天
+                    case 1: return SKillFactory.GetSkill(2); // 铁腕强权
+                    case 2: return SKillFactory.GetSkill(3); // 风助火威
                 }
             }
-            return null;
         }
-        public List<SkillFragAttr> fragmentsList = new List<SkillFragAttr>();
+        return null;
+    }
+    public List<SkillFragAttr> fragmentsList = new List<SkillFragAttr>();
 
-        public void Init()
+    public void Init()
+    {
+        fragmentsList.Add(new SkillFragAttr(FragmentName.Disorder, FragmentName.Riot)); // 无法无天
+        fragmentsList.Add(new SkillFragAttr(FragmentName.CriterionFrag, FragmentName.TrialFrag));
+        fragmentsList.Add(new SkillFragAttr(FragmentName.FireFrag, FragmentName.WindFrag));
+    }
+
+
+    public bool isMatchSkill(SkillFragAttr attr)
+    {
+        for (int i = 0; i < attr.names.Length; i++)
         {
-            fragmentsList.Add(new SkillFragAttr(FragmentName.Disorder, FragmentName.Riot)); // 无法无天
-            fragmentsList.Add(new SkillFragAttr(FragmentName.CriterionFrag, FragmentName.TrialFrag));
-            fragmentsList.Add(new SkillFragAttr(FragmentName.FireFrag, FragmentName.WindFrag));
+            if (!names.Contains(attr.names[i])) return false;
         }
+        return true;
+    }
 
+    public class SkillFragAttr
+    {
+        public FragmentName[] names = new FragmentName[2];
 
-        public bool isMatchSkill(SkillFragAttr attr)
+        public SkillFragAttr(params FragmentName[] _names)
         {
-            for(int i = 0; i < attr.names.Length; i++)
-            {
-                if (!names.Contains(attr.names[i])) return false;
-            }
-            return true;
-        }
-
-        public class SkillFragAttr
-        {
-            public FragmentName[] names = new FragmentName[2];
-
-            public SkillFragAttr(params FragmentName[] _names)
-            {
-                names = _names;
-            }
+            names = _names;
         }
     }
 }

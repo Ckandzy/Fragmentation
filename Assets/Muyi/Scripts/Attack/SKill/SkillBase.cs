@@ -20,6 +20,14 @@ public abstract class SkillBase
     public abstract void OnSkillOver();
 
     public abstract void UseSkill(Transform _trans);
+    public abstract SkillNameEnum SkillName();
+}
+
+public enum SkillNameEnum
+{
+    UnlawlessSkill = 0,
+    IronFistPowerSKill = 1,
+    WindHelpFire = 2
 }
 
 public enum SkillStatusEnum

@@ -134,7 +134,7 @@ public class TakeDamageable : MonoBehaviour
         if (!m_Invulnerable)
         {
             // 如果身上带有buff， 则刷新buff时间持续时间和效果 -- 需求变为可以有相同 buff 
-            if(buffs != null)
+            if (buffs != null)
                 foreach (IBuff buff in buffs)
                 {
                     if(buff != null)

@@ -52,7 +52,6 @@ namespace Gamekit2D
 
             if(randomizePitch)
                 m_Source.pitch = Random.Range(1.0f - pitchRange, 1.0f + pitchRange);
-            Debug.Log(source[choice]);
             m_Source.PlayOneShot(source[choice]);
         }
 

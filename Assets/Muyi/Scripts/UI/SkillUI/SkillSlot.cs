@@ -44,7 +44,6 @@ public class SkillSlot : MonoBehaviour
         }
         else
         {
-            Debug.Log("Null");
             SkillIconImage.sprite = null;
             CurrentSkill = null;
         }

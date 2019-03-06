@@ -80,4 +80,9 @@ public class IronFistPowerSKill : SkillBase
             }
         }
     }
+
+    public override SkillNameEnum SkillName()
+    {
+        return SkillNameEnum.IronFistPowerSKill;
+    }
 }

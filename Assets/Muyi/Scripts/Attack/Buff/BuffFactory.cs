@@ -29,6 +29,8 @@ public static class BuffFactory
             case 12: return new Bloodsucking(lv, forever);
             case 13: return new DamageableUpBuff(lv, forever);
             case 14: return new AttackNumUp(lv, forever);
+            case 15: return new Burning(lv, forever);
+            case 16: return new AttackMakeBurning(lv, forever);
         }
         throw new System.Exception("no this buff, but try get it");
     }
@@ -99,7 +101,7 @@ public enum BuffType
     /// <summary>
     /// 攻击具有灼烧效果
     /// </summary>
-    AttackMakeBurning
+    AttackMakeBurning = 16
 }
 
 public enum BuffEffectType

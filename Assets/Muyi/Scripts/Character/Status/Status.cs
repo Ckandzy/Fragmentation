@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-public class Status : MonoBehaviour {
+using Gamekit2D;
+
+public class Status : MonoBehaviour, IDataPersister
+{
     [System.Serializable]
     public class BuffAttribute
     {
@@ -58,10 +61,21 @@ public class Status : MonoBehaviour {
     public List<IBuff> AttackCarryingBuffs { get { return m_AttackCarryingBuffs; } }
     
     public bool isStoic = false;
-
+    public DataSettings dataSettings;
     private void Awake()
     {
         
+    }
+
+    void OnEnable()
+    {
+        PersistentDataManager.RegisterPersister(this);
+        hp = maxHp;
+    }
+
+    void OnDisable()
+    {
+        PersistentDataManager.UnregisterPersister(this);
     }
 
     private void Start()
@@ -167,7 +181,7 @@ public class Status : MonoBehaviour {
 
     public void AddAttackCarryingBuff(IBuff _buff)
     {
-        if (AttackCarryingBuffs.Contains(_buff))
+        if (!AttackCarryingBuffs.Contains(_buff))
         {
             m_AttackCarryingBuffs.Add(_buff);
             _buff.BuffOnEnter(gameObject);
@@ -236,7 +250,39 @@ public class Status : MonoBehaviour {
     }
     #endregion
 
+    public DataSettings GetDataSettings()
+    {
+        return dataSettings;
+    }
 
+    public void SetDataSettings(string dataTag, DataSettings.PersistenceType persistenceType)
+    {
+        dataSettings.dataTag = dataTag;
+        dataSettings.persistenceType = persistenceType;
+    }
+
+    public Data SaveData()
+    {
+        return new IData(StatusType, maxHp, hp, m_StatusBuffs, isStoic, FragmenMgr.Instance.Frags);
+    }
+
+    public void LoadData(Data data)
+    {
+        StatusType = ((IData)data).StatusType;
+        maxHp = ((IData)data).maxHp;
+        hp = maxHp;
+        AddStatusBuff(((IData)data).m_StatusBuffs);
+        isStoic = ((IData)data).isStoic;
+        if(StatusType == CharacterType.Player)
+        {
+            WeaponTaker taker = GetComponent<WeaponTaker>();
+            for (int i = 0; i < ((IData)data).frags.names.Count; i++)
+            {
+                taker.AddFragment(((IData)data).frags.names[i]);
+            }
+        }
+
+    }
 }
 
 public enum CharacterType

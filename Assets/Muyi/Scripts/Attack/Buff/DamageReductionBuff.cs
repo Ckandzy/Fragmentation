@@ -599,9 +599,11 @@ public class Burning : NegativeBuff<Status>
     public Burning(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
     public override void BuffOnEnter(GameObject obj)
     {
+        Debug.Log("mmmmmmmmmmmmmm");
         Over = false;
         TClass = obj.GetComponent<Status>();
         CalculationBuffNum();
+        ShowVFX(obj.transform, liveTime);
     }
 
     public override void BuffUpdate()
@@ -613,7 +615,6 @@ public class Burning : NegativeBuff<Status>
     public override void BuffOver()
     {
         Over = true;
-        //TClass.HP *= (1 - buffPercentage);
     }
 
     public override void CalculationBuffNum()
@@ -629,6 +630,11 @@ public class Burning : NegativeBuff<Status>
             case CharacterType.LowLevelEnemy: buffPercentage = TClass.AttackDamageNum * 0.1f / 5; break;
             
         }
+    }
+
+    public void ShowVFX(Transform _trans, float _time)
+    {
+        VFXControllerM.Instance.MakeFire(_trans, _time);
     }
 
     public override string Des()
@@ -652,10 +658,13 @@ public class AttackMakeBurning : AttackTakeBuff<Status>
     IBuff takeBuff;
     public override void BuffOnEnter(GameObject obj)
     {
-        takeBuff = new Burning(LV, true);
+        Debug.Log("nnnnnnnnnnnnnnnnnnn");
+        TClass = obj.GetComponent<Status>();
+        takeBuff = new Burning(LV, false);
         Over = false;
         CalculationBuffNum();
         TClass.AddAttackCarryingBuff(takeBuff);
+        Debug.Log(TClass.AttackCarryingBuffs.Count);
     }
 
     public override void BuffOver()

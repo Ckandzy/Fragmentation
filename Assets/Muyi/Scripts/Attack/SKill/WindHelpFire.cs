@@ -48,6 +48,11 @@ public class WindHelpFire : SkillBase
         }
     }
 
+    public override SkillNameEnum SkillName()
+    {
+        return SkillNameEnum.WindHelpFire;
+    }
+
     Status status;
     public override void OnSkillOver()
     {

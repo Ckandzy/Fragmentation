@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Gamekit2D;
 public class VFXControllerM : MonoBehaviour
 {
     private static VFXControllerM _instance;
@@ -15,13 +15,33 @@ public class VFXControllerM : MonoBehaviour
     }
     public GameObject VFXLighting; // 闪电链
     public GameObject XLine; // 激光
-    public GameObject ForceField;
+    public GameObject ForceField; // 力场
+    public GameObject Fire;
 
     private IEnumerator ShutDown(float time, System.Action call)
     {
         yield return new WaitForSeconds(time);
         call ();
     }
+
+    private void Start()
+    {
+        m_FirePool = FireVFXPool.GetObjectPool(Fire);
+    }
+    #region 火焰
+    private FireVFXPool m_FirePool;
+    public void MakeFire(Transform _start, float _time)
+    {
+        FireVFXObject obj = m_FirePool.Pop();
+        Debug.Log(obj.instance + "hhhhhhhhhhhhhhh");
+        obj.instance.transform.SetParent(_start);
+        obj.instance.transform.localPosition = Vector2.zero;
+        StartCoroutine(ShutDown(_time,
+            () => { obj.ReturnToPool(); }
+            ));
+    }
+
+    #endregion
 
     #region 力场
     public void MakeForceField(Transform _start, float _time)
@@ -60,4 +80,65 @@ public class VFXControllerM : MonoBehaviour
         VFXLighting.GetComponent<LineRenderer>().enabled = false;
     }
     #endregion
+}
+
+public class FireVFXPool : ObjectPool<FireVFXPool, FireVFXObject, Fire>
+{
+    static protected Dictionary<GameObject, FireVFXPool> s_PoolInstances = new Dictionary<GameObject, FireVFXPool>();
+
+    private void Awake()
+    {
+        //This allow to make Pool manually added in the scene still automatically findable & usable
+        if (prefab != null && !s_PoolInstances.ContainsKey(prefab))
+            s_PoolInstances.Add(prefab, this);
+    }
+
+    private void OnDestroy()
+    {
+        s_PoolInstances.Remove(prefab);
+    }
+
+    //initialPoolCount is only used when the objectpool don't exist
+    static public FireVFXPool GetObjectPool(GameObject prefab, int initialPoolCount = 10)
+    {
+        FireVFXPool objPool = null;
+        if (!s_PoolInstances.TryGetValue(prefab, out objPool))
+        {
+            GameObject obj = new GameObject(prefab.name + "_Pool");
+            objPool = obj.AddComponent<FireVFXPool>();
+            objPool.prefab = prefab;
+            objPool.initialPoolCount = initialPoolCount;
+
+            s_PoolInstances[prefab] = objPool;
+        }
+
+        return objPool;
+    }
+}
+
+public class FireVFXObject : PoolObject<FireVFXPool, FireVFXObject, Fire>
+{
+    public Transform transform;
+    //public Rigidbody2D rigidbody2D;
+    public SpriteRenderer spriteRenderer;
+    //public Bullet bullet;
+    public Fire fire;
+    protected override void SetReferences()
+    {
+        transform = instance.transform;
+        //rigidbody2D = instance.GetComponent<Rigidbody2D>();
+        spriteRenderer = instance.GetComponent<SpriteRenderer>();
+        fire = instance.GetComponent<Fire>();
+        fire.PoolObject = this;
+    }
+
+    public override void WakeUp()
+    {
+        instance.SetActive(true);
+    }
+
+    public override void Sleep()
+    {
+        instance.SetActive(false);
+    }
 }

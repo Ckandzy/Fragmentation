@@ -17,7 +17,7 @@ public class TakeDamager : MonoBehaviour {
     //public TakeDamagerType DamagerType = TakeDamagerType.AttachStatus;
 
     public Status status;  // 面板拖拽 or use Status' RegisteredTakeDamger(this) way
-    public List<IBuff> TakeAttackBuffs { get { Debug.Log(name); return status.AttackCarryingBuffs; } }
+    public List<IBuff> TakeAttackBuffs { get { return status.AttackCarryingBuffs; } }
     public float CurrentDamagNum { get { return status.AttackDamageNum * status.TakeDamageInfluences; } }
     public float SpikeRate { get { return status.SpikeRate; } }
     //call that from inside the onDamageableHIt or OnNonDamageableHit to get what was hit.

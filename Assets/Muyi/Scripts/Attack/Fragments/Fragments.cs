@@ -179,18 +179,15 @@ public class FireFrag: INaturalFrag
 {
     public FireFrag()
     {
-        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpeed, 2, true));
-        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpikeRate, LV, true));
-        buffs.Add(BuffFactory.GetBuff((int)BuffType.GetTwoSegmentJump, LV, true));
-        buffs.Add(BuffFactory.GetBuff((int)BuffType.HPDown, 2, true)); // 50%
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.AttackMakeBurning, LV, true));
     }
     public override string Des()
     {
-        return "元碎片，风，移动速度增加，  控制时间减半, 提高闪避率， 获得二段跳， 血量上限降低 ";
+        return "元碎片，火，攻击带有灼烧效果 ";
     }
 
     public override FragmentName GetFragName()
     {
-        return FragmentName.WindFrag;
+        return FragmentName.FireFrag;
     }
 }

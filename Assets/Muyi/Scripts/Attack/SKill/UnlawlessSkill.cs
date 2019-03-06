@@ -57,6 +57,11 @@ public class UnlawlessSkill : SkillBase
         
     }
 
+    public override SkillNameEnum SkillName()
+    {
+        return SkillNameEnum.UnlawlessSkill;
+    }
+
     public override void UseSkill(Transform _trans)
     {
         if (MSkillStatus == SkillStatusEnum.Ready)

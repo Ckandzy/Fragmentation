@@ -40,8 +40,8 @@ public static class WeaponFactory {
 
 public enum WeaponType
 {
-    RangeType,
-    MeleeType
+    RangeType = 0,
+    MeleeType = 1
 }
 
 
