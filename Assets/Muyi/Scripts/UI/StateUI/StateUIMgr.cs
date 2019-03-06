@@ -26,7 +26,6 @@ public class StateUIMgr : MonoBehaviour {
 
     public void AddBuff(IBuff buff)
     {
-        Debug.Log(buff.getBuffType());
         switch (buff.getBuffType())
         {
             case BuffType.DamageReduction: AddState(DamageReductionState);break;
@@ -44,18 +43,11 @@ public class StateUIMgr : MonoBehaviour {
 
     protected void AddState(UIType type)
     {
-        if (StateTypes.ContainsKey(type))
-        {
-            // 刷新时间
-        }
-        else
-        {
-            GameObject stateItem = Resources.Load<GameObject>(type.Path);
-            stateItem = Instantiate(stateItem);
-            StateTypes.Add(type, stateItem);
-            stateItem.transform.SetParent(TopPanel);
-            stateItem.GetComponent<BaseView>().OnEnter(type);
-        }
+        GameObject stateItem = Resources.Load<GameObject>(type.Path);
+        stateItem = Instantiate(stateItem);
+        StateTypes.Add(type, stateItem);
+        stateItem.transform.SetParent(TopPanel);
+        stateItem.GetComponent<BaseView>().OnEnter(type);
     }
 
     protected void RemoveState(UIType type)

@@ -18,6 +18,7 @@ namespace MuyiFrame
         public OnItemAddEvent OnItemAdd;
         public OnItemRemoveEvent OnItemRemove;
 
+        public bool CanInteractive = true;
         private void Awake()
         {
 
@@ -124,6 +125,7 @@ namespace MuyiFrame
 
         public void Exchange(MItem _item)
         {
+            if (!CanInteractive) return;
             if (isEmpty)
             {
                 // 赋值slot信息

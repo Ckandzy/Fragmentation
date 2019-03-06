@@ -134,28 +134,29 @@ public class TakeDamageable : MonoBehaviour
         if (!m_Invulnerable)
         {
             // 如果身上带有buff， 则刷新buff时间持续时间和效果 -- 需求变为可以有相同 buff 
-            foreach (IBuff buff in buffs)
-            {
-                if(buff != null)
+            if(buffs != null)
+                foreach (IBuff buff in buffs)
                 {
-                    status.AddStatusBuff(buff);
-                    buff.BuffOnEnter(gameObject);
-                }
-                /* 需求变为可以有相同 buff 
-                if (buff != null)
-                {
-                    if (!status.ContainsStatusBuff(buff.getBuffType()))
+                    if(buff != null)
                     {
                         status.AddStatusBuff(buff);
                         buff.BuffOnEnter(gameObject);
                     }
-                    else
+                    /* 需求变为可以有相同 buff 
+                    if (buff != null)
                     {
-                        IBuff b = status.FindStatusBuff(buff.getBuffType());
-                        if (b != null && buff.LV > b.LV) b.FlushLV(b.LV);
-                    }
-                }*/
-            }
+                        if (!status.ContainsStatusBuff(buff.getBuffType()))
+                        {
+                            status.AddStatusBuff(buff);
+                            buff.BuffOnEnter(gameObject);
+                        }
+                        else
+                        {
+                            IBuff b = status.FindStatusBuff(buff.getBuffType());
+                            if (b != null && buff.LV > b.LV) b.FlushLV(b.LV);
+                        }
+                    }*/
+                }
             // 秒杀
             if (damager.IsSpike()) status.HP -= float.MaxValue;
             else status.HP -= damager.CurrentDamagNum * status.HurtInfluences;

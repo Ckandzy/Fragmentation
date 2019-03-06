@@ -4,7 +4,7 @@ using UnityEngine;
 using Gamekit2D;
 
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Damager))]
+[RequireComponent(typeof(TakeDamager))]
 public class Projectile : MonoBehaviour
 {
     [System.Serializable]

@@ -12,11 +12,12 @@ public class TakeDamager : MonoBehaviour {
     [Serializable]
     public class NonDamagableEvent : UnityEvent<TakeDamager>{ }
     [Serializable]
-    public class OnHitMissingEvent : UnityEvent { } 
+    public class OnHitMissingEvent : UnityEvent { }
 
-    public DamageType ADamageType = DamageType.Once;
+    //public TakeDamagerType DamagerType = TakeDamagerType.AttachStatus;
+
     public Status status;  // 面板拖拽 or use Status' RegisteredTakeDamger(this) way
-    public List<IBuff> TakeAttackBuffs { get {return status.AttackCarryingBuffs; } }
+    public List<IBuff> TakeAttackBuffs { get { Debug.Log(name); return status.AttackCarryingBuffs; } }
     public float CurrentDamagNum { get { return status.AttackDamageNum * status.TakeDamageInfluences; } }
     public float SpikeRate { get { return status.SpikeRate; } }
     //call that from inside the onDamageableHIt or OnNonDamageableHit to get what was hit.
@@ -61,7 +62,7 @@ public class TakeDamager : MonoBehaviour {
 
     private void OnEnable()
     {
-        if(hitTransforms != null)
+        if (hitTransforms != null)
             foreach(Transform trans in hitTransforms)
             {
                 RemoveHitInfo(trans);
@@ -88,10 +89,6 @@ public class TakeDamager : MonoBehaviour {
         hitTransforms = new Transform[HitMaxNum];
         hitTimersCounter = new float[HitMaxNum];
         m_AttackOverlapResults = new Collider2D[HitMaxNum];
-        if(ADamageType == DamageType.Once)
-        {
-            //OnHitMissing.AddListener();
-        }
     }
 
     /// <summary>
@@ -123,7 +120,7 @@ public class TakeDamager : MonoBehaviour {
         Vector2 facingOffset = Vector2.Scale(offset, scale);
 
         CurrentFramePoint = (Vector2)transform.position + facingOffset;
-        float len = 10;
+        float len = 3;
         if (!m_CanDamage)
             return;
 
@@ -160,6 +157,7 @@ public class TakeDamager : MonoBehaviour {
             {
                 hitPoint = getPoint(CurrentFramePoint, (CurrentFramePoint - LastFramePoint).normalized, len, hittableLayers);
                 damageable.TakeDamage(this, TakeAttackBuffs, ignoreInvincibility);
+                status.HP += status.AttackDamageNum * status.BloodsuckingRate; // 吸血
                 OnDamageableHit.Invoke(this, damageable);
                 if (disableDamageAfterHit)
                     DisableDamage();
@@ -244,8 +242,8 @@ public class TakeDamager : MonoBehaviour {
     private Vector2 getPoint(Vector2 start, Vector2 dir, float len, LayerMask layer)
     {
         RaycastHit2D hit =  Physics2D.Raycast(start, dir, len, layer);
-        Debug.Log(dir + transform.name);
-        Debug.DrawRay(start, dir, Color.blue);
+        //Debug.Log(dir + transform.name);
+        //Debug.DrawRay(start, dir, Color.blue);
         return hit.point;
     }
 
@@ -291,10 +289,11 @@ public class TakeDamager : MonoBehaviour {
     }
 }
 
-public enum DamageType
+public enum TakeDamagerType
 {
-    Once,
-    Continued
+    /// <summary>
+    /// 依附于Status类，并附带攻击特效
+    /// </summary>
+    AttachStatus,
+    Independent
 }
-
-   

@@ -15,6 +15,10 @@ public class MoveBehavoir :  SceneLinkedSMB<WeaponTaker>{
         {
             m_MonoBehaviour.Attack();
         }
+        if (PlayerInput.Instance.UseSkill.Down)
+        {
+            m_MonoBehaviour.UseSkill();
+        }
     }
 
     public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -5,10 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public abstract class IFragment{
     public int ID;
-    public int LV;
-    public List<int> BuffIds = new List<int>();
+    public int LV = 1;
+    //public List<int> BuffIds = new List<int>();
+    public List<IBuff> buffs = new List<IBuff>();
     public abstract FragmentType GetFragType();
     public abstract string Des();
+    public abstract FragmentName GetFragName();
 }
 
 /// <summary>
@@ -16,7 +18,6 @@ public abstract class IFragment{
 /// </summary>
 public abstract class IGuardFrag : IFragment
 {
-   
     public override FragmentType GetFragType()
     {
         return FragmentType.Guard;
@@ -58,7 +59,50 @@ public enum FragmentType
     /// <summary>
     /// 元素碎片
     /// </summary>
-    Natural
+    Natural,
+    Null
+}
+
+public enum FragmentName
+{
+    /// <summary>
+    /// 怒焰
+    /// </summary>
+    AngryFlame,
+    /// <summary>
+    /// 审判
+    /// </summary>
+    TrialFrag,
+    /// <summary>
+    /// 震慑
+    /// </summary>
+    ShockFrag,
+    /// <summary>
+    /// 准绳
+    /// </summary>
+    CriterionFrag,
+    /// <summary>
+    /// 无序
+    /// </summary>
+    Disorder,
+    /// <summary>
+    /// 狂躁
+    /// </summary>
+    Arrogant,
+    /// <summary>
+    /// 暴乱
+    /// </summary>
+    Riot,
+    /// <summary>
+    /// 风
+    /// </summary>
+    WindFrag,
+    /// <summary>
+    /// 火
+    /// </summary>
+    FireFrag,
+    Null
+
 }
 
 

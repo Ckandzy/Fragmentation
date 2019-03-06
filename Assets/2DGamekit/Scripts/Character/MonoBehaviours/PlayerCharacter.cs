@@ -137,6 +137,8 @@ namespace Gamekit2D
         //used in non alloc version of physic function
         protected ContactPoint2D[] m_ContactsBuffer = new ContactPoint2D[16];
 
+        private SpriteRenderer HandSpriteRender;
+        private SpriteRenderer TakeWeaponSpriteRender;
         // MonoBehaviour Messages - called by Unity internally.
         void Awake()
         {
@@ -155,7 +157,8 @@ namespace Gamekit2D
             hurtJumpAngle = Mathf.Clamp(hurtJumpAngle, k_MinHurtJumpAngle, k_MaxHurtJumpAngle);
             m_TanHurtJumpAngle = Mathf.Tan(Mathf.Deg2Rad * hurtJumpAngle);
             m_FlickeringWait = new WaitForSeconds(flickeringDuration);
-
+            HandSpriteRender = GameObject.Find("Hands").GetComponent<SpriteRenderer>();
+            TakeWeaponSpriteRender = GameObject.Find("TakeWeapon").GetComponent<SpriteRenderer>();
             //meleeDamager.DisableDamage();
 
             m_ShotSpawnGap = 1f / shotsPerSecond;
@@ -285,6 +288,7 @@ namespace Gamekit2D
             cameraFollowTarget.localPosition = new Vector2(newLocalPosX, newLocalPosY);
         }
 
+        
         /// <summary>
         /// 无敌闪烁
         /// </summary>
@@ -296,11 +300,15 @@ namespace Gamekit2D
             while (timer < damageable.invulnerabilityDuration)
             {
                 spriteRenderer.enabled = !spriteRenderer.enabled;
+                HandSpriteRender.enabled = !HandSpriteRender.enabled;
+                TakeWeaponSpriteRender.enabled = !TakeWeaponSpriteRender.enabled;
                 yield return m_FlickeringWait;
                 timer += flickeringDuration;
             }
 
             spriteRenderer.enabled = true;
+            HandSpriteRender.enabled = true;
+            TakeWeaponSpriteRender.enabled = true;
         }
 
         #region Public functions - called mostly by StateMachineBehaviours in the character's Animator Controller but also by Events.
