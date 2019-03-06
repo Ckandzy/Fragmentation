@@ -134,11 +134,6 @@ namespace MuyiFrame
                 ItemID = slot.ItemID;
                 ItemChild = slot.ItemChild;
 
-                // 事件
-                slot.OnItemRemove.Invoke(slot, _item);
-                OnItemAdd.Invoke(this, _item);
-                
-
                 // 清除该item父slot的信息
                 slot.ItemID = -1;
                 slot.ItemChild = null;
@@ -151,7 +146,10 @@ namespace MuyiFrame
                 _item.nowSlot = this;
                 _item.isFindSlot = true;
                 isEmpty = false;
-                
+
+                // 事件
+                slot.OnItemRemove.Invoke(slot, _item);
+                OnItemAdd.Invoke(this, _item);
             }
             else
             {
@@ -162,11 +160,7 @@ namespace MuyiFrame
                 int Pid = pointerSlot.ItemID;
                 Transform Pitemchild = pointerSlot.ItemChild;
                 
-                // 事件
-                pointerSlot.OnItemRemove.Invoke(pointerSlot, pointerSlot.ItemChild.GetComponent<MItem>());
-                pointerSlot.OnItemAdd.Invoke(pointerSlot, ItemChild.GetComponent<MItem>());
-                OnItemRemove.Invoke(this, ItemChild.GetComponent<MItem>());
-                OnItemAdd.Invoke(this, pointerSlot.ItemChild.GetComponent<MItem>());
+                
                 
 
                 // 防止执行item的itemDragEnter函数
@@ -197,6 +191,12 @@ namespace MuyiFrame
                 _item.transform.localPosition = Vector2.zero;
                 //item.nowSLot
                 _item.nowSlot = this;
+
+                // 事件
+                pointerSlot.OnItemRemove.Invoke(pointerSlot, pointerSlot.ItemChild.GetComponent<MItem>());
+                pointerSlot.OnItemAdd.Invoke(pointerSlot, ItemChild.GetComponent<MItem>());
+                OnItemRemove.Invoke(this, ItemChild.GetComponent<MItem>());
+                OnItemAdd.Invoke(this, pointerSlot.ItemChild.GetComponent<MItem>());
             }
         }
     }

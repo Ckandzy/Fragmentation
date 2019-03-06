@@ -13,6 +13,7 @@ public class DamageReductionBuff : GainBuff<Status>
     public DamageReductionBuff(int lv, bool _permanent = false):base(lv) { buffID = 1; permanent = _permanent; }
     public override void BuffOnEnter(GameObject t)
     {
+        Over = false;
         TClass = t.GetComponent<Status>();
         this.CalculationBuffNum();
         TClass.HurtInfluences += buffPercentage;
@@ -62,6 +63,7 @@ public class AttackMakeSlowDown : AttackTakeBuff<Status>
 
     public override void BuffOnEnter(GameObject obj)
     {
+        Over = false;
         TClass = obj.GetComponent<Status>();
         liveTime = 10;
         TakeBuff = BuffFactory.GetBuff(2, 1);
@@ -177,8 +179,8 @@ public class UpSpikeRate : GainBuff<Status>
 
     public override void CalculationBuffNum()
     {
-        buffPercentage = 0.1f;
-        liveTime = 10 * LV;
+        buffPercentage = 0.1f * LV;
+        liveTime = 6 ;
         nowTime = 0;
     }
 
@@ -480,6 +482,7 @@ public class DamageableUpBuff : NegativeBuff<Status>
     public DamageableUpBuff(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
     public override void BuffOnEnter(GameObject t)
     {
+        Over = false;
         TClass = t.GetComponent<Status>();
         this.CalculationBuffNum();
         TClass.HurtInfluences += buffPercentage;
@@ -518,6 +521,7 @@ public class AttackNumUp : GainBuff<Status>
     public AttackNumUp(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
     public override void BuffOnEnter(GameObject obj)
     {
+        Over = false;
         TClass = obj.GetComponent<Status>();
         CalculationBuffNum();
         TClass.TakeDamageInfluences += buffPercentage;

@@ -36,9 +36,19 @@ public class SkillSlot : MonoBehaviour
 
     public void SkillInit(SkillBase _skill)
     {
-        CurrentSkill = _skill;
-        SkillIconImage.sprite = _skill.SkillIcon;
-        CDLeftTimeText.enabled = false;
+        if(_skill != null)
+        {
+            SkillIconImage.sprite = _skill.SkillIcon;
+            CDLeftTimeText.enabled = false;
+            CurrentSkill = _skill;
+        }
+        else
+        {
+            Debug.Log("Null");
+            SkillIconImage.sprite = null;
+            CurrentSkill = null;
+        }
+        
     }
 
     public void SkillOver()

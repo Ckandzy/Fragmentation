@@ -1,5 +1,159 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &30275445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 30275446}
+  - component: {fileID: 30275448}
+  - component: {fileID: 30275447}
+  m_Layer: 9
+  m_Name: LaunchSource
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &30275446
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30275445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8000429027334794464}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &30275448
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30275445}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 3
+  MaxDistance: 30
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.3
+      value: 1
+      inSlope: -3.3346713
+      outSlope: -3.3346713
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.48110354
+      value: 0.30244446
+      inSlope: -0.8336678
+      outSlope: -0.8336678
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.30011982
+      outSlope: -0.30011982
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+--- !u!114 &30275447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 30275445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6abcd50fdc97f3e409820b29f208d704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: 05f3e6d2e7883754eab65ddb8d202bc2, type: 3}
+  overrides: []
+  randomizePitch: 0
+  pitchRange: 0.2
 --- !u!1 &8000429025686467274
 GameObject:
   m_ObjectHideFlags: 0
@@ -160,6 +314,7 @@ GameObject:
   - component: {fileID: 8000429026056855838}
   - component: {fileID: 8000429026056855832}
   - component: {fileID: 8000429026056855833}
+  - component: {fileID: 724943745}
   m_Layer: 9
   m_Name: Boss
   m_TagString: Untagged
@@ -317,33 +472,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   spriteFaceLeft: 1
-  shootOriginLeft: 1
   speed: 1
   gravity: 10
   projectilePrefab:
   - {fileID: 3744283042342034914, guid: a367b5a7c13278d4198ee6e618a30b43, type: 3}
-  - {fileID: 3744283042342034914, guid: 020f078364896e44aa15b65e81ee56c0, type: 3}
+  - {fileID: 3744283042342034914, guid: 296d9c4512e464c44beeaf2aad3eef18, type: 3}
   viewDirection: 0
   viewFov: 360
   viewDistance: 15
-  RangeAttackOriginGroup: {fileID: 0}
+  RangeAttackOriginGroup: {fileID: 8000429026628126116}
   shootingOrigin: {fileID: 8000429027396690991}
-  launchOrigin: {fileID: 0}
+  launchOrigin: {fileID: 8000429026144470965}
   trackLayerMask:
     serializedVersion: 2
     m_Bits: 8192
-  launchSpeed: 20
-  destroyWhenOutOfView: 1
-  track: 0
+  launchSpeed: 10
+  destroyWhenOutOfView: 0
+  track: 1
   trackTime: 5
-  locate: 0
+  locate: 1
   trackSensitivity: 0.1
   shootAngle: 45
   shootRate: 5
   shootStrafe: 1
   shootStrafeDuration: 0.5
-  shootStrafeTimes: 10
-  launchStrafe: 1
+  shootStrafeTimes: 7
+  launchStrafe: 0
   launchStrafeDuration: 0
   launchStrafeTimes: 0
   meleeRange: 7
@@ -352,7 +506,7 @@ MonoBehaviour:
   attackDash: 0
   attackForce: {x: 0, y: 0}
   strafeAudio: {fileID: 8000429026888994851}
-  launchAudio: {fileID: 0}
+  launchAudio: {fileID: 30275447}
   dieAudio: {fileID: 0}
   footStepAudio: {fileID: 0}
   meleeAttackAudio: {fileID: 8000429026297523282}
@@ -363,6 +517,49 @@ MonoBehaviour:
   enableSwitch: 0
   m_FireTimer: 0
   m_SpriteForward: {x: 0, y: 0}
+--- !u!114 &724943745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8000429026056855827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6fb594d15067e4ebd9739c98563ac2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StatusType: 3
+  maxHp: 100
+  hp: 100
+  TakeDamagers:
+  - {fileID: 6012098619793413356, guid: 296d9c4512e464c44beeaf2aad3eef18, type: 3}
+  - {fileID: 6325277108484060893, guid: a367b5a7c13278d4198ee6e618a30b43, type: 3}
+  TakeDamageables: []
+  HurtInfluences: 1
+  SpikeRate: 0
+  AttackDamageNum: 1
+  TakeDamageInfluences: 1
+  Precision: 1
+  DodgeRate: 0
+  BloodsuckingRate: 0
+  OnStatusBuffAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnAttackCarryingBuffAdd:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnStatusBuffRemove:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  buffAttributes: []
+  isStoic: 0
 --- !u!1 &8000429026144470954
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,6 +1254,7 @@ Transform:
   - {fileID: 8000429026426736083}
   - {fileID: 8000429027141558168}
   - {fileID: 8000429026297523283}
+  - {fileID: 30275446}
   m_Father: {fileID: 8000429026056855826}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

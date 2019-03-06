@@ -204,7 +204,19 @@ public class Status : MonoBehaviour {
             OnStatusBuffAdd.Invoke(buff);
         }
     }
-       
+
+    public void RemoveStatuBuff(List<IBuff> _buff)
+    {
+        if (_buff == null) return;
+        //m_StatusBuffs.AddRange(_buff);
+        foreach (IBuff buff in _buff)
+        {
+            buff.Over = true;
+            buff.BuffOver();
+            m_StatusBuffs.Remove(buff);
+            OnStatusBuffRemove.Invoke(buff);
+        }
+    }
 
     public void RemoveStatuBuff(IBuff _buff)
     {

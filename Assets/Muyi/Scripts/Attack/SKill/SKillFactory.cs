@@ -10,6 +10,7 @@ public class SKillFactory : MonoBehaviour
         {
             case 1: return new UnlawlessSkill();
             case 2: return new IronFistPowerSKill();
+            case 3: return new WindHelpFire();
         }
         throw new System.Exception("no skill but try get it");
     }
