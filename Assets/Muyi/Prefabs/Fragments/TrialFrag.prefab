@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5439161507238162377}
   - component: {fileID: 5439161507238162376}
   m_Layer: 11
-  m_Name: ArrogantFrag
+  m_Name: TrialFrag
   m_TagString: Fragment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 312b01fb0dc019e4b91850f348291940, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 42275e868bb2d6c42a056c36adcf08b6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,7 +98,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.53333336, y: 0.53333336}
     newSize: {x: 3.4, y: 2.9}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -119,6 +119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a173996550fb69b42bf4a9b14e8a32b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FragName: 5
+  FragName: 1
   sprite: {fileID: 0}
   Lv: 1

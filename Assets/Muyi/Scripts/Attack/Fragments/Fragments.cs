@@ -68,8 +68,8 @@ public class TrialFrag : IGuardFrag
     public TrialFrag()
     {
         ID = 3;
-        buffs.Add(BuffFactory.GetBuff((int)BuffType.DamageReduction, LV, true));
-        buffs.Add(BuffFactory.GetBuff((int)BuffType.AtttakMakeCatapult, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.AttackNumUp, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpikeRate, LV, true));
     }
 
     public override string Des()
@@ -146,5 +146,51 @@ public class RiotFrag : IDemonFrag
     public override FragmentName GetFragName()
     {
         return FragmentName.Riot;
+    }
+}
+
+/// <summary>
+/// 风  移动速度增加，  控制时间减半, 提高闪避率， 获得二段跳， 血量上限降低
+/// </summary>
+public class WindFrag : INaturalFrag
+{
+    public WindFrag()
+    {
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpeed, 2, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpikeRate, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.GetTwoSegmentJump, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.HPDown, 2, true)); // 50%
+    }
+    public override string Des()
+    {
+        return "元碎片，风，移动速度增加，  控制时间减半, 提高闪避率， 获得二段跳， 血量上限降低 ";
+    }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.WindFrag;
+    }
+}
+
+/// <summary>
+/// 火， 攻击具有灼烧效果
+/// </summary>
+public class FireFrag: INaturalFrag
+{
+    public FireFrag()
+    {
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpeed, 2, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpikeRate, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.GetTwoSegmentJump, LV, true));
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.HPDown, 2, true)); // 50%
+    }
+    public override string Des()
+    {
+        return "元碎片，风，移动速度增加，  控制时间减半, 提高闪避率， 获得二段跳， 血量上限降低 ";
+    }
+
+    public override FragmentName GetFragName()
+    {
+        return FragmentName.WindFrag;
     }
 }

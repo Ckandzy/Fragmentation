@@ -49,7 +49,7 @@ public class DamageReductionBuff : GainBuff<Status>
     public override void CalculationBuffNum()
     {
         nowTime = 0;
-        buffPercentage = -0.1f * LV;
+        buffPercentage = -0.25f * LV;
         liveTime = 5 * LV;
     }
 }
@@ -544,5 +544,135 @@ public class AttackNumUp : GainBuff<Status>
     public override BuffType getBuffType()
     {
         return BuffType.AttackNumUp;
+    }
+}
+
+/// <summary>
+/// 提高闪避率
+/// </summary>
+public class UpDodgeRate : GainBuff<Status>
+{
+    public UpDodgeRate() { buffID = 1; }
+    public UpDodgeRate(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
+    public override void BuffOnEnter(GameObject obj)
+    {
+        Over = false;
+        TClass = obj.GetComponent<Status>();
+        CalculationBuffNum();
+        TClass.DodgeRate += buffPercentage;
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        TClass.DodgeRate -= buffPercentage;
+    }
+
+    public override void CalculationBuffNum()
+    {
+        nowTime = 0;
+        liveTime = 4 * LV;
+        buffPercentage = 0.1f * LV;
+    }
+
+    public override string Des()
+    {
+        return "提高闪避率";
+    }
+
+    public override BuffType getBuffType()
+    {
+        throw new System.NotImplementedException();
+    }
+}
+
+/// <summary>
+/// 灼烧
+/// </summary>
+public class Burning : NegativeBuff<Status>
+{
+    public Burning() { buffID = 1; }
+    public Burning(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
+    public override void BuffOnEnter(GameObject obj)
+    {
+        Over = false;
+        TClass = obj.GetComponent<Status>();
+        CalculationBuffNum();
+    }
+
+    public override void BuffUpdate()
+    {
+        base.BuffUpdate();
+        TClass.HP *= (1 - buffPercentage) * Time.deltaTime;
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        //TClass.HP *= (1 - buffPercentage);
+    }
+
+    public override void CalculationBuffNum()
+    {
+        nowTime = 0;
+        liveTime = 5;
+        switch (TClass.StatusType)
+        {
+            // 一共15%， 共5s
+            case CharacterType.Boss: buffPercentage = TClass.AttackDamageNum * 0.15f / 5; break;
+            case CharacterType.EliteEnemy:
+            case CharacterType.Player:
+            case CharacterType.LowLevelEnemy: buffPercentage = TClass.AttackDamageNum * 0.1f / 5; break;
+            
+        }
+    }
+
+    public override string Des()
+    {
+        return "每秒灼烧血量";
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.Burning;
+    }
+}
+
+/// <summary>
+/// 攻击具有灼烧效果
+/// </summary>
+public class AttackMakeBurning : AttackTakeBuff<Status>
+{
+    public AttackMakeBurning() { buffID = 1; }
+    public AttackMakeBurning(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
+    IBuff takeBuff;
+    public override void BuffOnEnter(GameObject obj)
+    {
+        takeBuff = new Burning(LV, true);
+        Over = false;
+        CalculationBuffNum();
+        TClass.AddAttackCarryingBuff(takeBuff);
+    }
+
+    public override void BuffOver()
+    {
+        Over = true;
+        TClass.RemoveAttackCarryingBuff(takeBuff);
+    }
+
+    public override void CalculationBuffNum()
+    {
+        liveTime = 10 + LV * 2;
+        nowTime = 0;
+    }
+
+    public override string Des()
+    {
+        return "攻击具有灼烧效果";
+    }
+
+    public override BuffType getBuffType()
+    {
+        return BuffType.AttackMakeBurning;
     }
 }

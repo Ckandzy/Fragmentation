@@ -14,6 +14,8 @@ public static class FragmentFactory {
             case FragmentName.Arrogant: return new ArrogantFrag();
             case FragmentName.Disorder: return new DisorderFrag();
             case FragmentName.Riot: return new RiotFrag();
+            case FragmentName.WindFrag: return new WindFrag();
+            case FragmentName.FireFrag: return new FireFrag();
         }
         throw new System.Exception("no but try get it");
     }

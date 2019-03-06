@@ -46,6 +46,15 @@ public class FragmenMgr : MonoBehaviour {
         m_WeaponTaker.SetSkill(_skill);
     }
 
+    public void SlotCanInteraciveNotify(bool _isReady)
+    {
+        foreach (MSlot slot in EquipSlot)
+        {
+            slot.CanInteractive = _isReady;
+        }
+        ExtraSlot.CanInteractive = _isReady;
+    }
+
     // 添加碎片
     public void AddFragmentItem(FragmentName _name, Sprite _sprite)
     {
@@ -56,7 +65,7 @@ public class FragmenMgr : MonoBehaviour {
             {
                 mSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
                 hasEmpty = true;
-                Frags.FlushFrag(EquipSlot);
+                FlushSkill();
                 break;
             }
         }
@@ -66,6 +75,17 @@ public class FragmenMgr : MonoBehaviour {
         }
     }
     
+    public void FlushSkill()
+    {
+        Frags.FlushFrag(EquipSlot);
+        skill = GetSkill();
+        if (skill != null)
+        {
+            skill.OnSkillCDOver = SlotCanInteraciveNotify;
+            NotifyWeaponTaker(skill);
+        }
+    }
+
     /// <summary>
     /// using event bind in onClick slot
     /// </summary>
@@ -84,10 +104,7 @@ public class FragmenMgr : MonoBehaviour {
         {
             m_PlayerStatus.RemoveStatuBuff(buff);
         }
-        Frags.FlushFrag(EquipSlot);
-        skill = GetSkill();
-        if (skill != null)
-            NotifyWeaponTaker(skill);
+        FlushSkill();
     }
 
     public void AddFragment(MSlot slot, MItem item)
@@ -96,10 +113,7 @@ public class FragmenMgr : MonoBehaviour {
         {
             m_PlayerStatus.AddStatusBuff(buff);
         }
-        Frags.FlushFrag(EquipSlot);
-        skill = GetSkill();
-        if (skill != null)
-            NotifyWeaponTaker(skill);
+        FlushSkill();
     }
     #endregion
 
@@ -132,25 +146,22 @@ public class FragmenMgr : MonoBehaviour {
 
         public SkillBase GetSkill()
         {
-            Debug.Log("进入");
             for(int i = 0; i < names.Count; i++)
             {
                 if (names[i] == FragmentName.Null) return null;
-                Debug.Log("Enter   " + i);
             }
-            Debug.Log("进入检查");
             for(int i = 0; i < fragmentsList.Count; i++)
             {
                 if (isMatchSkill(fragmentsList[i]))
                 {
-                    if (i == 0) Debug.Log("获得技能");
+                    //if (i == 0) Debug.Log("获得技能");
                     switch (i)
-                    {
-                        case 0: return SKillFactory.GetSkill(1);
+                    { 
+                        case 0: return SKillFactory.GetSkill(1); // 无法无天
+                        case 1: return SKillFactory.GetSkill(2); // 铁腕强权
                     }
                 }
             }
-            Debug.Log("结束");
             return null;
         }
         public List<SkillFragAttr> fragmentsList = new List<SkillFragAttr>();
@@ -158,6 +169,7 @@ public class FragmenMgr : MonoBehaviour {
         public void Init()
         {
             fragmentsList.Add(new SkillFragAttr(FragmentName.Disorder, FragmentName.Riot)); // 无法无天
+            fragmentsList.Add(new SkillFragAttr(FragmentName.CriterionFrag, FragmentName.TrialFrag));
         }
 
 

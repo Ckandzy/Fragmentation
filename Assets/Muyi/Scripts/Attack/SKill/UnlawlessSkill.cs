@@ -36,7 +36,10 @@ public class UnlawlessSkill : SkillBase
         {
             m_WaitTime += Time.deltaTime;
             if (m_WaitTime >= CD)
+            {
                 MSkillStatus = SkillStatusEnum.Ready;
+                if (OnSkillCDOver != null) OnSkillCDOver(true);
+            }
         }
         else if (MSkillStatus == SkillStatusEnum.Continued)
         {

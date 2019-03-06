@@ -9,6 +9,7 @@ public class SKillFactory : MonoBehaviour
         switch (id)
         {
             case 1: return new UnlawlessSkill();
+            case 2: return new IronFistPowerSKill();
         }
         throw new System.Exception("no skill but try get it");
     }

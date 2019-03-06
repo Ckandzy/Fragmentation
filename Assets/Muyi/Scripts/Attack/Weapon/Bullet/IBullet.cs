@@ -8,7 +8,7 @@ public class IBullet : MonoBehaviour {
     public Vector2 DirVec;
     public bool NotInVisibleDestroy = false;
     public APoolBullet bulletPoolObject;
-
+    public float AddSpeed = 30;
     public float timer = 0;
     private void Update()
     {
@@ -17,7 +17,7 @@ public class IBullet : MonoBehaviour {
         // 毁灭
         if (!IsVisible() || timer >= LiveTime) StartCoroutine(DestroyDelay(0));
         // 移动
-        transform.position += (Vector3)DirVec * (Speed + 30 * timer * Time.deltaTime * 30) * Time.deltaTime;
+        transform.position += (Vector3)DirVec.normalized * (Speed + AddSpeed * timer * Time.deltaTime * AddSpeed) * Time.deltaTime;
     }
 
     protected void LookAt(Transform enemy)
@@ -33,7 +33,8 @@ public class IBullet : MonoBehaviour {
         Speed = speed;
         DirVec = dir;
         //GetComponent<SpriteRenderer>().flipX = (dir.x == -1);
-        transform.localScale = new Vector2(dir.x, transform.localScale.y);
+        if (dir.x != 0)
+            transform.localScale = new Vector2(dir.x / Mathf.Abs(dir.x), transform.localScale.y);
         timer = 0;
     }
 

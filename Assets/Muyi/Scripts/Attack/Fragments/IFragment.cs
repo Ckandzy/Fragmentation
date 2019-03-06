@@ -93,6 +93,14 @@ public enum FragmentName
     /// 暴乱
     /// </summary>
     Riot,
+    /// <summary>
+    /// 风
+    /// </summary>
+    WindFrag,
+    /// <summary>
+    /// 火
+    /// </summary>
+    FireFrag,
     Null
 
 }

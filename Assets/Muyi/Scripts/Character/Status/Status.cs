@@ -13,11 +13,22 @@ public class Status : MonoBehaviour {
 
     [System.Serializable]
     public class BuffEvent : UnityEvent<IBuff> { }
-
+    public CharacterType StatusType;
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float hp = 100;
     public float MaxHP { get { return maxHp; } set { maxHp = value; if (HP > maxHp) { HP = maxHp; } } }// 最大生命值
-    public float HP { get { return hp; } set { hp = value; if (hp > maxHp) hp = maxHp; }  }
+    public float HP {
+        get { return hp; }
+        set {
+            hp = value;
+            if (hp > maxHp) hp = maxHp;
+            if (hp <= 0) 
+                for(int i = 0; i < TakeDamageables.Count; i++)
+                {
+                    TakeDamageables[i].OnDie.Invoke(null, null);
+                }
+            }
+    }
     
     // all TakeDamagers such bullet, and melee take, you can add to this list
     public List<TakeDamager> TakeDamagers;
@@ -45,7 +56,6 @@ public class Status : MonoBehaviour {
 
     public List<IBuff> StatusBuffs { get { return m_StatusBuffs; } }
     public List<IBuff> AttackCarryingBuffs { get { return m_AttackCarryingBuffs; } }
-
     
     public bool isStoic = false;
 
@@ -215,4 +225,24 @@ public class Status : MonoBehaviour {
     #endregion
 
 
+}
+
+public enum CharacterType
+{
+    /// <summary>
+    /// 玩家
+    /// </summary>
+    Player,
+    /// <summary>
+    /// 杂兵
+    /// </summary>
+    LowLevelEnemy,
+    /// <summary>
+    /// 精英
+    /// </summary>
+    EliteEnemy,
+    /// <summary>
+    /// boss
+    /// </summary>
+    Boss
 }

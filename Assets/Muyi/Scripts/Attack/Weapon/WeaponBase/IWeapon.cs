@@ -29,6 +29,10 @@ public enum WeaponName
     /// 冲锋枪
     /// </summary>
     SubmachineGun,
+    /// <summary>
+    /// 散弹枪
+    /// </summary>
+    Shotgun,
     Sword
 }
 

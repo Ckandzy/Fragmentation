@@ -91,7 +91,15 @@ public enum BuffType
     /// <summary>
     /// 提高攻击力
     /// </summary>
-    AttackNumUp = 14
+    AttackNumUp = 14,
+    /// <summary>
+    /// 灼烧
+    /// </summary>
+    Burning = 15,
+    /// <summary>
+    /// 攻击具有灼烧效果
+    /// </summary>
+    AttackMakeBurning
 }
 
 public enum BuffEffectType

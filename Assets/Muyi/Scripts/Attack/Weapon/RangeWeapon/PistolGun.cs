@@ -82,17 +82,17 @@ public class SniperGun : RangedWeapon
     {
         if (nowWaitTime >= mustWaitTime)
         {
-            Vector2 start = _transform.position;
-            Vector2 end = (Vector2)_transform.position + new Vector2(30 * _transform.lossyScale.x, 0);
-            VFXControllerM.Instance.MakeLaser(start, end, 0.2f);
+            //Vector2 start = _transform.position;
+            //Vector2 end = (Vector2)_transform.position + new Vector2(30 * _transform.lossyScale.x, 0);
+            //VFXControllerM.Instance.MakeLaser(start, end, 0.2f);
             nowWaitTime = 0;
-            //GameObject bullet1 = _bullet;
-            //bullet1.transform.position = _transform.position;
-            //bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
-            //foreach (IBuff buff in _buff)
-            //{
-             //   if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
-            //}
+            GameObject bullet1 = _bullet;
+            bullet1.transform.position = _transform.position;
+            bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+            foreach (IBuff buff in _buff)
+            {
+                if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+            }
         }
     }
 
@@ -104,7 +104,7 @@ public class SniperGun : RangedWeapon
     public override void Init()
     {
         sprite = Resources.Load<Sprite>("GunSprite/Gun1");
-        bullet = Resources.Load<GameObject>("Bullet/FortBullet");//PistolGunBullet");
+        bullet = Resources.Load<GameObject>("Bullet/ShotGunBullet");//PistolGunBullet");
         this.Frequency = 4;
         mustWaitTime = 1 / 4.00f;
         OffsetPoint = new Vector2(1.76f, 0.19f);
@@ -184,6 +184,86 @@ public class SubmachineGun : RangedWeapon
                 if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
             }
             yield return new WaitForSeconds(0.05f);
+            }
+    }
+}
+
+public class Shotgun : RangedWeapon
+{
+    public override void Init()
+    {
+        bullet = Resources.Load<GameObject>("Bullet/ShotGunBullet");
+        sprite = Resources.Load<Sprite>("GunSprite/shotgun");
+        Debug.Log(bullet + "-----------------");
+        this.Frequency = 4;
+        mustWaitTime = 1 / 3.00f; // 一秒1次 
+        OffsetPoint = new Vector2(0.813f, 0.188f);
+        AttackNum = 10;
+    }
+
+    /// <summary>
+    /// 攻击 
+    /// </summary>
+    /// <param name="_transform">生成的位置</param>
+    /// <param name="vec">方向</param>
+    /// <param name="_buff">携带的buff</param>
+    public override void Attack(Transform _transform, Vector2 vec, List<IBuff> _buff = null)
+    {
+        //if (bullet == null) Start();
+        if (nowWaitTime >= mustWaitTime)
+        {
+            nowWaitTime = 0;
+            GameObject bullet1 = MonoBehaviour.Instantiate(bullet);
+            bullet1.transform.position = _transform.position;
+            bullet1.GetComponent<IBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+            foreach (IBuff buff in _buff)
+            {
+                if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+            }
+        }
+
+    }
+
+    public override void Attack(GameObject _bullet, Transform _transform, Vector2 vec, List<IBuff> _buff = null)
+    {
+        if (nowWaitTime >= mustWaitTime)
+        {
+            nowWaitTime = 0;
+            GameObject bullet1 = _bullet;
+            bullet1.transform.position = _transform.position;
+            bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+            foreach (IBuff buff in _buff)
+            {
+                if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+            }
+        }
+    }
+
+    public override WeaponName GetWeaponName()
+    {
+        return WeaponName.Shotgun;
+    }
+
+    public IEnumerator Shoot(Status status, ABulletsPool _bullet, Transform _transform, Vector2 vec, List<IBuff> _buff = null)
+    {
+        float num = 6;
+        float angle = 70;
+        if (nowWaitTime >= mustWaitTime)
+            for (int i = 0; i < num; i++)
+            {
+                nowWaitTime = 0;
+                GameObject bullet1 = _bullet.Pop().transform.gameObject;
+                status.RegisteredTakeDamger(bullet1.GetComponent<TakeDamager>());
+                bullet1.transform.position = _transform.position;
+                bullet1.transform.eulerAngles = new Vector3(0, 0, angle * num - num / 2 * angle);
+                float y = Mathf.Deg2Rad * Mathf.Atan(1.0f / (i - num / 2.0f) * angle) * 10;
+                vec = new Vector2(1, y);// y/x = angle
+                bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+                foreach (IBuff buff in _buff)
+                {
+                    if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
+                }
+                yield return new WaitForSeconds(0);
             }
     }
 }

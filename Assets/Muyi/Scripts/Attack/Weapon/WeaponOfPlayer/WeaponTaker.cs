@@ -38,7 +38,7 @@ public class WeaponTaker : MonoBehaviour
 
     private bool m_InBattle = false;
     private float battleTimer = 0f;
-    private float m_OutBattleTime = 5f;
+    private float m_OutBattleTime = 1.5f;
 
     private void Awake()
     {
@@ -64,6 +64,7 @@ public class WeaponTaker : MonoBehaviour
         CheckWeaponCanTake();
 
         if (CurrentSkill != null) CurrentSkill.SkillUpdate();
+
         if (m_InBattle && CurrentTakeWeapons[CurrentIndex] != null && CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
         {
             InBattle();
@@ -97,6 +98,7 @@ public class WeaponTaker : MonoBehaviour
         if (CurrentSkill != null)
         {
             CurrentSkill.UseSkill(CenterPoint);
+            FragmenMgr.Instance.SlotCanInteraciveNotify(false);
         }
     }
 
@@ -128,16 +130,16 @@ public class WeaponTaker : MonoBehaviour
     // 远程释放子弹，近战调整碰撞框
     public void WeaponAttackEnter()
     {
-        if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType)
+        if(CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.RangeType )
         {
-            // 两个特殊情况
-            if (CurrentTakeWeapons[CurrentIndex].GetWeaponName() == WeaponName.SubmachineGun)
+            // 特殊情况---改   乱得一匹
+            if (CurrentTakeWeapons[CurrentIndex].GetWeaponName() == WeaponName.SubmachineGun )
             {
                 StartCoroutine(((SubmachineGun)CurrentTakeWeapons[CurrentIndex]).Shoot(m_Status, BulletsPool, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { }));
-            }
-            else if(CurrentTakeWeapons[CurrentIndex].GetWeaponName() == WeaponName.SniperGun)
+            } 
+            else if (CurrentTakeWeapons[CurrentIndex].GetWeaponName() == WeaponName.Shotgun)
             {
-                ((RangedWeapon)CurrentTakeWeapons[CurrentIndex]).Attack(null, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { });
+                StartCoroutine(((Shotgun)CurrentTakeWeapons[CurrentIndex]).Shoot(m_Status, BulletsPool, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { }));
             }
             else
             {

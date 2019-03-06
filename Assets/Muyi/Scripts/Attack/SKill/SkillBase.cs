@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 public abstract class SkillBase
 {
+    public System.Action<bool> OnSkillCDOver;
+
     public float LeftTime { get { return CD - m_WaitTime; } }
     public List<IBuff> buffs = new List<IBuff>();
     public float CD = 30;

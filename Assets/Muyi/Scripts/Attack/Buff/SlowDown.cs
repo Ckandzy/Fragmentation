@@ -40,7 +40,7 @@ public class SlowDown : NegativeBuff<PlayerCharacter>
     {
         nowTime = 0;
         liveTime = LV * 2f;
-        buffPercentage = -0.4f * LV;
+        buffPercentage = -0.3f * LV;
        
         initalSpeed = TClass.maxSpeed;
     }
