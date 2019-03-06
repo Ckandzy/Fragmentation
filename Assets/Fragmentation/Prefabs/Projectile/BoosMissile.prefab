@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 3744283042342034915}
   - component: {fileID: 3744283042342034914}
   - component: {fileID: 1283812669}
-  - component: {fileID: 6325277108484060893}
+  - component: {fileID: 6012098619793413356}
   m_Layer: 19
-  m_Name: BossBullet
+  m_Name: BoosMissile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,10 +70,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 213851289
-  m_SortingLayer: 4
+  m_SortingLayerID: 1203658377
+  m_SortingLayer: 8
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: 5e8ba9ae018480e4ba973d542ba93bf6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2a1d67a4ee217f747a55ca7e96f0cfd9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,18 +97,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00077056885, y: -0.008015633}
+  m_Offset: {x: 0.4, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.95, y: 0.9}
+    oldSize: {x: 1.8, y: 0.8}
     newSize: {x: 1.55, y: 0.45}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.038559, y: 0.9893255}
+  m_Size: {x: 0.75, y: 0.3}
   m_EdgeRadius: 0
 --- !u!50 &3744283042342034915
 Rigidbody2D:
@@ -165,7 +165,7 @@ Animator:
   m_GameObject: {fileID: 3744283042342034919}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 23a2d86a10a0b7d468fc2ed81f229767, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9ab0bf1a9607b174aac8da614a9819e6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -174,7 +174,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6325277108484060893
+--- !u!114 &6012098619793413356
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,8 +187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   status: {fileID: 0}
-  offset: {x: -0.0048924685, y: -0.0018953085}
-  size: {x: 1.0399358, y: 1.001261}
+  offset: {x: 0.3972147, y: -0.006550908}
+  size: {x: 0.7603699, y: 0.31303668}
   RefreshDamageTime: 0.5
   offsetBasedOnSpriteFacing: 1
   spriteRenderer: {fileID: 0}
