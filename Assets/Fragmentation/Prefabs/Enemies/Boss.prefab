@@ -315,7 +315,7 @@ GameObject:
   - component: {fileID: 8000429026056855832}
   - component: {fileID: 8000429026056855833}
   - component: {fileID: 724943745}
-  - component: {fileID: 1925253074}
+  - component: {fileID: 1165804742}
   m_Layer: 9
   m_Name: Boss
   m_TagString: Enemy
@@ -508,7 +508,7 @@ MonoBehaviour:
   attackForce: {x: 0, y: 0}
   strafeAudio: {fileID: 8000429026888994851}
   launchAudio: {fileID: 30275447}
-  dieAudio: {fileID: 0}
+  dieAudio: {fileID: 8000429025686467284}
   footStepAudio: {fileID: 0}
   meleeAttackAudio: {fileID: 8000429026297523282}
   flickeringDuration: 0
@@ -516,6 +516,10 @@ MonoBehaviour:
   stage2MeleeTimes: 2
   strafeInterval: 1
   enableSwitch: 0
+  plots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_FireTimer: 0
   m_SpriteForward: {x: 0, y: 0}
 --- !u!114 &724943745
@@ -537,7 +541,7 @@ MonoBehaviour:
   - {fileID: 6012098619793413356, guid: 296d9c4512e464c44beeaf2aad3eef18, type: 3}
   - {fileID: 6325277108484060893, guid: a367b5a7c13278d4198ee6e618a30b43, type: 3}
   TakeDamageables:
-  - {fileID: 1925253074}
+  - {fileID: 1165804742}
   HurtInfluences: 1
   SpikeRate: 0
   AttackDamageNum: 1
@@ -565,7 +569,7 @@ MonoBehaviour:
   dataSettings:
     dataTag: 083201b7-a4eb-47ef-bf09-69786bd31b3b
     persistenceType: 0
---- !u!114 &1925253074
+--- !u!114 &1165804742
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -577,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85ea7a666795a6c44a15cd4a2838c79c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  status: {fileID: 0}
+  status: {fileID: 724943745}
   invulnerableAfterDamage: 1
   invulnerabilityDuration: 3
   disableOnDeath: 0
@@ -594,7 +598,18 @@ MonoBehaviour:
       PublicKeyToken=null
   OnDie:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8000429026056855833}
+        m_MethodName: Die
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamageable+DamageEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnGainHealth:

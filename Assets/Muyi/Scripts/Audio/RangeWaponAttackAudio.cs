@@ -36,7 +36,6 @@ public class RangeWaponAttackAudio : RandomAudioPlayer
             if (randomizePitch)
                 m_Source.pitch = Random.Range(1.0f - pitchRange, 1.0f + pitchRange);
             m_Source.PlayOneShot(source);
-            Debug.Log("播放" + weaponName);
         }
     }
 }
