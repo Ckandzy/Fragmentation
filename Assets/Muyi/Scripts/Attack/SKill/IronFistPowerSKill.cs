@@ -53,16 +53,18 @@ public class IronFistPowerSKill : SkillBase
     public override void OnSkillOver()
     {
         SkillKill();
+        //wepaontaker.SkillOver();
         VFXControllerM.Instance.OverFlicker();
     }
 
+    WeaponTaker wepaontaker;
     public override void UseSkill(Transform _trans)
     {
         if (MSkillStatus == SkillStatusEnum.Ready)
         {
             MSkillStatus = SkillStatusEnum.Continued;
             m_WaitTime = 0;
-
+            wepaontaker = _trans.parent.GetComponent<WeaponTaker>();
             VFXControllerM.Instance.ScreenFlicker(DurationTime);
             //SkillKill();
         }

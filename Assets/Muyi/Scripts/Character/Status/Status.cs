@@ -177,12 +177,14 @@ public class Status : MonoBehaviour, IDataPersister
 
     public void RemoveAttackCarryingBuff(IBuff _buff)
     {
-        foreach(IBuff buff in m_AttackCarryingBuffs)
+        for(int i =0; i < m_AttackCarryingBuffs.Count; i++)
+        //foreach(IBuff buff in m_AttackCarryingBuffs)
         {
-            if(buff == _buff)
+            if(m_AttackCarryingBuffs[i] == _buff)
             {
-                buff.BuffOver();
-                m_AttackCarryingBuffs.Remove(buff);
+                m_AttackCarryingBuffs[i].BuffOver();
+                m_AttackCarryingBuffs.Remove(m_AttackCarryingBuffs[i]);
+                break;
             }
         }
     }

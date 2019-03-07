@@ -502,8 +502,7 @@ public class BossBehaviour : MonoBehaviour
 
     public void Die(TakeDamager damager, TakeDamageable damageable)
     {
-        Debug.Log(gameObject + "boss die");
-        //m_Animator.SetTrigger(m_HashDeathPara);
+        m_Animator.SetTrigger(m_HashDeathPara);
         dieAudio.PlayRandomSound();
 
         m_Dead = true;

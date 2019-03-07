@@ -56,6 +56,7 @@ public class WindHelpFire : SkillBase
     Status status;
     public override void OnSkillOver()
     {
+        status.GetComponent<WeaponTaker>().SkillOver();
         status.RemoveStatuBuff(buffs);
     }
 
