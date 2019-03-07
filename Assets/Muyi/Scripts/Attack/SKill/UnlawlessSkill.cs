@@ -20,7 +20,7 @@ public class UnlawlessSkill : SkillBase
     {
         MSkillStatus = SkillStatusEnum.Ready;
         buffs = new List<IBuff>();
-        CD = 30;
+        CD = 10;
         DurationTime = 5;
         SkillIcon = Resources.Load<Sprite>("SkillIcon/UnlawlessSkill");
     }
@@ -73,5 +73,10 @@ public class UnlawlessSkill : SkillBase
             _trans.parent.GetComponent<Status>().AddStatusBuff(buffs);
             _trans.parent.GetComponent<Status>().RegisteredTakeDamger(VFXControllerM.Instance.ForceField.GetComponent<TakeDamager>());
         }
+    }
+
+    public override string Des()
+    {
+        return "无法无天： 获得霸体，身边生成力场对靠近的敌人持续造成伤害（X点每秒），同时回复生命（5点每秒），持续6秒";
     }
 }

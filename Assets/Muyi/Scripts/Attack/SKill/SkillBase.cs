@@ -21,6 +21,7 @@ public abstract class SkillBase
 
     public abstract void UseSkill(Transform _trans);
     public abstract SkillNameEnum SkillName();
+    public abstract string Des();
 }
 
 public enum SkillNameEnum

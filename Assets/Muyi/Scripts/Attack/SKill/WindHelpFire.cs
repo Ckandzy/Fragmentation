@@ -69,4 +69,9 @@ public class WindHelpFire : SkillBase
             status.AddStatusBuff(buffs);
         }
     }
+
+    public override string Des()
+    {
+        return "风助火威： 玩家闪避成功的几率提升至90%，攻击力增加至150%，持续5秒";
+    }
 }

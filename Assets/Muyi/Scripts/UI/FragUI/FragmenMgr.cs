@@ -65,6 +65,7 @@ public class FragmenMgr : MonoBehaviour {
             {
                 mSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
                 hasEmpty = true;
+                FlushSkill();
                 break;
             }
         }
@@ -72,7 +73,6 @@ public class FragmenMgr : MonoBehaviour {
         {
             ExtraSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
         }
-        FlushSkill();
     }
     
     public void FlushSkill()
@@ -147,10 +147,11 @@ public class StatisticsFrag
 
     public SkillBase GetSkill()
     {
+        /*
         for (int i = 0; i < names.Count; i++)
         {
             if (names[i] == FragmentName.Null) return null;
-        }
+        }*/
         for (int i = 0; i < fragmentsList.Count; i++)
         {
             if (isMatchSkill(fragmentsList[i]))

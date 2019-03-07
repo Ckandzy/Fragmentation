@@ -194,7 +194,6 @@ public class Shotgun : RangedWeapon
     {
         bullet = Resources.Load<GameObject>("Bullet/ShotGunBullet");
         sprite = Resources.Load<Sprite>("GunSprite/shotgun");
-        Debug.Log(bullet + "-----------------");
         this.Frequency = 4;
         mustWaitTime = 1 / 3.00f; // 一秒1次 
         OffsetPoint = new Vector2(0.813f, 0.188f);

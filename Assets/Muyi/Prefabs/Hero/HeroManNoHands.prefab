@@ -434,13 +434,13 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: -0.22720003, y: -1.0517188, z: 0.43755397}
-  - {x: -0.73766506, y: -1.5998318, z: 0.51104194}
-  - {x: -0.051400006, y: -1.8873628, z: 0.3184223}
-  - {x: -0.0076048374, y: -1.6666422, z: -0.8022231}
-  - {x: -0.5636575, y: -1.1988037, z: -0.96240497}
-  - {x: -0.5148905, y: -0.3163662, z: -0.37220293}
-  - {x: -0.5566275, y: -0.54387975, z: 0.012691766}
+  - {x: -0.8368937, y: -0.07086474, z: 0.14775088}
+  - {x: -0.72453743, y: 0.1184209, z: 0.0177266}
+  - {x: -0.5606108, y: 0.6423345, z: -0.7619264}
+  - {x: -0.26545072, y: 1.1946859, z: -0.64334}
+  - {x: -0.31656465, y: 1.492013, z: -0.17508307}
+  - {x: 0.18321586, y: 0.88998497, z: 0.17586058}
+  - {x: 0.013270557, y: 0.0548442, z: -0.39452806}
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -1012,6 +1012,7 @@ MonoBehaviour:
   VFXLighting: {fileID: 1473919621}
   XLine: {fileID: 2024136648}
   ForceField: {fileID: 4707737030489994778}
+  Fire: {fileID: 1466245976982911561, guid: c4a9c13b34bd3f346acdd0f163f9bdc9, type: 3}
 --- !u!1 &6337330975339544870
 GameObject:
   m_ObjectHideFlags: 0
@@ -2179,7 +2180,7 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 58d1b4498a3a2274daf874e3023ecc3e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9811321, g: 0.9811321, b: 0.9811321, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2327,18 +2328,7 @@ MonoBehaviour:
   BloodsuckingRate: 0
   OnStatusBuffAdd:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: AddBuff
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnAttackCarryingBuffAdd:
@@ -2702,6 +2692,11 @@ PrefabInstance:
       propertyPath: status
       value: 
       objectReference: {fileID: 6337330976892148344}
+    - target: {fileID: 2793277341093035734, guid: 01d43fa01398e5e409d78bb17fb90ed6,
+        type: 3}
+      propertyPath: RefreshDamageTime
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01d43fa01398e5e409d78bb17fb90ed6, type: 3}
 --- !u!1 &4707737030489994778 stripped

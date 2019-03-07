@@ -184,7 +184,7 @@ public class Status : MonoBehaviour, IDataPersister
         if (!AttackCarryingBuffs.Contains(_buff))
         {
             m_AttackCarryingBuffs.Add(_buff);
-            _buff.BuffOnEnter(gameObject);
+            //_buff.BuffOnEnter(gameObject);
             OnAttackCarryingBuffAdd.Invoke(_buff);
         }
         
@@ -263,7 +263,15 @@ public class Status : MonoBehaviour, IDataPersister
 
     public Data SaveData()
     {
-        return new IData(StatusType, maxHp, hp, m_StatusBuffs, isStoic, FragmenMgr.Instance.Frags);
+        int index = 0;
+        IWeapon[] weapons = new IWeapon[4];
+        if(StatusType == CharacterType.Player)
+        {
+            index = GetComponent<WeaponTaker>().CurrentIndex;
+            weapons = GetComponent<WeaponTaker>().CurrentTakeWeapons;
+        }
+        
+        return new IData(StatusType, maxHp, hp, m_StatusBuffs, isStoic, FragmenMgr.Instance.Frags, index, weapons);
     }
 
     public void LoadData(Data data)
@@ -280,6 +288,8 @@ public class Status : MonoBehaviour, IDataPersister
             {
                 taker.AddFragment(((IData)data).frags.names[i]);
             }
+            taker.CurrentTakeWeapons = ((IData)data).weapons;
+            taker.CutoverWeapon(((IData)data).WeaponIndex);
         }
 
     }

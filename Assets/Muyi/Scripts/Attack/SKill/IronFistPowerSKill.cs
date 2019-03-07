@@ -18,7 +18,7 @@ public class IronFistPowerSKill : SkillBase
     public override void SkillEnter()
     {
         MSkillStatus = SkillStatusEnum.Ready;
-        CD = 40;
+        CD = 15;
         DurationTime = 3;
         SkillIcon = Resources.Load<Sprite>("SkillIcon/IronFistPowerSKill");
     }
@@ -53,6 +53,7 @@ public class IronFistPowerSKill : SkillBase
     public override void OnSkillOver()
     {
         SkillKill();
+        VFXControllerM.Instance.OverFlicker();
     }
 
     public override void UseSkill(Transform _trans)
@@ -61,6 +62,8 @@ public class IronFistPowerSKill : SkillBase
         {
             MSkillStatus = SkillStatusEnum.Continued;
             m_WaitTime = 0;
+
+            VFXControllerM.Instance.ScreenFlicker(DurationTime);
             //SkillKill();
         }
     }
@@ -84,5 +87,10 @@ public class IronFistPowerSKill : SkillBase
     public override SkillNameEnum SkillName()
     {
         return SkillNameEnum.IronFistPowerSKill;
+    }
+
+    public override string Des()
+    {
+        return "铁腕强权： 秒杀全场杂兵，对精英敌人造成最高不超过其总血量20%的伤害，对boss造成最高不超过其总血量3%的伤害";
     }
 }

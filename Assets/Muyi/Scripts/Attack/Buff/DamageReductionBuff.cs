@@ -596,10 +596,10 @@ public class UpDodgeRate : GainBuff<Status>
 public class Burning : NegativeBuff<Status>
 {
     public Burning() { buffID = 1; }
-    public Burning(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = _permanent; }
+    public Burning(int lv, bool _permanent = false) : base(lv) { buffID = 1; permanent = false; }
     public override void BuffOnEnter(GameObject obj)
     {
-        Debug.Log("mmmmmmmmmmmmmm");
+        //Debug.Log("mmmmmmmmmmmmmm");
         Over = false;
         TClass = obj.GetComponent<Status>();
         CalculationBuffNum();
@@ -609,7 +609,7 @@ public class Burning : NegativeBuff<Status>
     public override void BuffUpdate()
     {
         base.BuffUpdate();
-        TClass.HP *= (1 - buffPercentage) * Time.deltaTime;
+        TClass.HP -= (1 - buffPercentage) * Time.deltaTime;
     }
 
     public override void BuffOver()
@@ -658,9 +658,8 @@ public class AttackMakeBurning : AttackTakeBuff<Status>
     IBuff takeBuff;
     public override void BuffOnEnter(GameObject obj)
     {
-        Debug.Log("nnnnnnnnnnnnnnnnnnn");
         TClass = obj.GetComponent<Status>();
-        takeBuff = new Burning(LV, false);
+        takeBuff = new Burning(LV, true);
         Over = false;
         CalculationBuffNum();
         TClass.AddAttackCarryingBuff(takeBuff);

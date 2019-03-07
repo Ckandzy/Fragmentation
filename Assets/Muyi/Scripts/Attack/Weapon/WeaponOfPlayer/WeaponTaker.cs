@@ -54,7 +54,7 @@ public class WeaponTaker : MonoBehaviour
 
     private void Start()
     {
-        TakeUpWeapon(WeaponType.RangeType, 1);
+        TakeUpWeapon(WeaponType.RangeType, 4);
     }
 
     private void Update()

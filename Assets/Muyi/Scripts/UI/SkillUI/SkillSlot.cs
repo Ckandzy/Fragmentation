@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class SkillSlot : MonoBehaviour
+using UnityEditor.Events;
+using UnityEngine.EventSystems;
+public class SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private static SkillSlot _instance;
     public static SkillSlot Instance
@@ -15,8 +16,10 @@ public class SkillSlot : MonoBehaviour
     public Image CDMaskImage;
     public Text CDLeftTimeText;
     public SkillBase CurrentSkill;
+    public GameObject DesPanel;
 
     WeaponTaker weaponTaker;
+    bool mouseEnter = false;
 
     private void Awake()
     {
@@ -27,11 +30,16 @@ public class SkillSlot : MonoBehaviour
         CurrentSkill = weaponTaker.CurrentSkill;
         m_MaskTrans = CDMaskImage.GetComponent<RectTransform>();
         m_InitHight = m_MaskTrans.sizeDelta.y;
+        DesPanel.SetActive(false);
     }
 
     public void Update()
     {
         ShowSkillLeftTime();
+        if (mouseEnter)
+        {
+            FlushPotition();
+        }
     }
 
     public void SkillInit(SkillBase _skill)
@@ -85,5 +93,25 @@ public class SkillSlot : MonoBehaviour
             CDLeftTimeText.enabled = true;
             CDLeftTimeText.text = "持续中";
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(CurrentSkill != null)
+        {
+            DesPanel.SetActive(true);
+            DesPanel.GetComponentInChildren<Text>().text = CurrentSkill.Des();
+            mouseEnter = true;
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        mouseEnter = false;
+        DesPanel.SetActive(false);
+    }
+    private void FlushPotition()
+    {
+        DesPanel.transform.position = Input.mousePosition;
     }
 }

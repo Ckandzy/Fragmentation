@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gamekit2D;
+using UnityEngine.UI;
 public class VFXControllerM : MonoBehaviour
 {
     private static VFXControllerM _instance;
@@ -17,6 +18,7 @@ public class VFXControllerM : MonoBehaviour
     public GameObject XLine; // 激光
     public GameObject ForceField; // 力场
     public GameObject Fire;
+    public Image ScreenImage;
 
     private IEnumerator ShutDown(float time, System.Action call)
     {
@@ -24,16 +26,55 @@ public class VFXControllerM : MonoBehaviour
         call ();
     }
 
+    private void Awake()
+    {
+        ScreenImage = GameObject.Find("UICanvas").transform.Find("ScreenImage").GetComponent<Image>();
+    }
+
     private void Start()
     {
         m_FirePool = FireVFXPool.GetObjectPool(Fire);
     }
+
+    #region 铁腕强权的秒杀效果
+    public void ScreenFlicker(float duraingTime)
+    {
+        StartCoroutine(Flicker(duraingTime));
+    }
+
+    public void OverFlicker()
+    {
+        StopCoroutine("Flicker");
+        StartCoroutine(Over(1));
+    }
+    private IEnumerator Flicker(float duraingTime)
+    {
+        float timer = 0;
+        while (timer <= duraingTime)
+        {
+            timer += 0.1f;
+            ScreenImage.color = new Color(0.77f, 0.17f, 0.09f, 0.7f * (timer / duraingTime));
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private IEnumerator Over(float duraingTime)
+    {
+        float timer = 0;
+        while (timer <= duraingTime)
+        {
+            timer += 0.1f;
+            ScreenImage.color = new Color(0.77f, 0.17f, 0.09f, 0.8f * (1 - timer / duraingTime));
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+    #endregion
+
     #region 火焰
     private FireVFXPool m_FirePool;
     public void MakeFire(Transform _start, float _time)
     {
         FireVFXObject obj = m_FirePool.Pop();
-        Debug.Log(obj.instance + "hhhhhhhhhhhhhhh");
         obj.instance.transform.SetParent(_start);
         obj.instance.transform.localPosition = Vector2.zero;
         StartCoroutine(ShutDown(_time,

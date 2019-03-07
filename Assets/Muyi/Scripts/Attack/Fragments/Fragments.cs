@@ -26,7 +26,7 @@ public class CriterionFrag : IGuardFrag
 
     public override string Des()
     {
-        return "守护者碎片，准绳， 降低25%所受伤害，移速下降30 %";
+        return "守护者碎片，准绳， 降低25%所受伤害，移速下降30 % （+ 审判 获得技能 铁腕强权）";
     }
 
     public override FragmentName GetFragName()
@@ -74,7 +74,7 @@ public class TrialFrag : IGuardFrag
 
     public override string Des()
     {
-        return "守护者碎片，准绳， 降低25%所受伤害，移速下降30 %";
+        return "守护者碎片，准绳， 降低25%所受伤害，移速下降30 % （+ 准绳 获得技能 铁腕强权）";
     }
 
     public override FragmentName GetFragName()
@@ -117,7 +117,7 @@ public class DisorderFrag : IDemonFrag
     }
     public override string Des()
     {
-        return "攻击会弹射到另一名敌人身上";
+        return "恶魔碎片，无序，攻击会形成一道雷电，随机弹射到距离范围内的敌人身上 （+ 狂暴 获得技能 无法无天）";
     }
 
     public override FragmentName GetFragName()
@@ -140,7 +140,7 @@ public class RiotFrag : IDemonFrag
     }
     public override string Des()
     {
-        return "吸血";
+        return "恶魔碎片，攻击力提升， 获取吸血效果， 但最大生命值下降， 受到的伤害提高 （+ 无序 获得技能 无法无天）";
     }
 
     public override FragmentName GetFragName()
@@ -163,7 +163,7 @@ public class WindFrag : INaturalFrag
     }
     public override string Des()
     {
-        return "元碎片，风，移动速度增加，  控制时间减半, 提高闪避率， 获得二段跳， 血量上限降低 ";
+        return "元碎片，风，移动速度增加，  控制时间减半, 提高闪避率， 获得二段跳， 血量上限降低 （+ 火 获得技能 风助火威）";
     }
 
     public override FragmentName GetFragName()
@@ -183,7 +183,7 @@ public class FireFrag: INaturalFrag
     }
     public override string Des()
     {
-        return "元碎片，火，攻击带有灼烧效果 ";
+        return "元碎片，火，攻击带有灼烧效果 (+  元碎片 风 获得技能 风助火威)";
     }
 
     public override FragmentName GetFragName()
