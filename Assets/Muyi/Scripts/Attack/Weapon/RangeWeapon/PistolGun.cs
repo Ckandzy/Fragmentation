@@ -263,7 +263,6 @@ public class Shotgun : RangedWeapon
                 //vec = new Vector2(1, y);// y/x = angle
                 float m_angle = angle / -2 + (70 / num) * (i + 1);
                 vtest = Quaternion.Euler(new Vector3(0, 0, m_angle)) * new Vector2(vec.x, 0);
-                Debug.Log("hhhhhhhhhh" + vec);
                 bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vtest, null);
                 foreach (IBuff buff in _buff)
                 {
@@ -288,8 +287,8 @@ public class Sword : MeleeWeapon
     public override void Init()
     {
         sprite = Resources.Load<Sprite>("GunSprite/Gun3");
-        offset = new Vector2(1.09f, 1.3f);
-        size = new Vector2(1.24f, 2.83f);
+        offset = new Vector2(1.27f, 1.3f);
+        size = new Vector2(1.6f, 2.83f);
         AttackNum = 1;
         HitPoint = new Vector2(1.32f, 0.01f);
     }

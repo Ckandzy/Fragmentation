@@ -503,13 +503,13 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: -0.14810655, y: 0.09544429, z: -0.48293543}
-  - {x: 0.12402654, y: -0.6366096, z: 0.010047913}
-  - {x: -1.083957, y: -0.303178, z: 0.3717314}
-  - {x: -1.6950512, y: -0.43741202, z: -0.20551944}
-  - {x: -1.8431596, y: -0.42118043, z: -0.023883015}
-  - {x: -1.3141494, y: -1.0936662, z: 0.48390543}
-  - {x: -0.22866714, y: -0.21420604, z: 0.3074857}
+  - {x: 0.17399296, y: 0.08898184, z: -0.11519045}
+  - {x: 0.5073026, y: 0.42076284, z: -0.17876172}
+  - {x: 1.5189136, y: -0.16136798, z: -0.6792402}
+  - {x: 1.9392323, y: -1.061695, z: -1.687449}
+  - {x: 1.4932275, y: -0.7007215, z: -1.2809913}
+  - {x: 1.1389672, y: -1.108158, z: -0.68090236}
+  - {x: 0.9680417, y: -0.054755867, z: -0.34556437}
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -1093,7 +1093,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6337330975339544865}
   - component: {fileID: 6337330975339544867}
-  - component: {fileID: 6337330975339544864}
+  - component: {fileID: 6337330976952850071}
   m_Layer: 13
   m_Name: RangedAttackSource
   m_TagString: Untagged
@@ -1211,7 +1211,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &6337330975339544864
+--- !u!114 &6337330976952850071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1220,15 +1220,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6337330975339544870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6abcd50fdc97f3e409820b29f208d704, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ca1a1bca38dc8439482e73c7fce4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clips:
-  - {fileID: 8300000, guid: 328365d0fef474487b0826fc1049de57, type: 3}
-  - {fileID: 8300000, guid: 81448fec9f15a4b5c87004cff6ad1d44, type: 3}
+  clips: []
   overrides: []
-  randomizePitch: 1
+  randomizePitch: 0
   pitchRange: 0.2
+  WeaponClips:
+  - weaponName: 0
+    clips: {fileID: 8300000, guid: 2f22eb9947a94f447baf26d14be5136f, type: 3}
+  - weaponName: 2
+    clips: {fileID: 8300000, guid: f97ba2be92f9d284b901a99a71bef141, type: 3}
+  - weaponName: 3
+    clips: {fileID: 8300000, guid: d13bba326ee19d24fb5e4e71f32bee31, type: 3}
 --- !u!1 &6337330975547262467
 GameObject:
   m_ObjectHideFlags: 0
@@ -1601,12 +1606,34 @@ MonoBehaviour:
     m_Bits: 512
   OnDamageableHit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6337330976892148346}
+        m_MethodName: HitEnemy
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnNonDamageableHit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6337330976892148346}
+        m_MethodName: HitAir
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnHitMissing:
@@ -1626,7 +1653,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6337330976189077369}
   - component: {fileID: 6337330976189077371}
-  - component: {fileID: 6337330976189077368}
+  - component: {fileID: 499752767}
   m_Layer: 13
   m_Name: MeleeAttackSource
   m_TagString: Untagged
@@ -1744,7 +1771,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &6337330976189077368
+--- !u!114 &499752767
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1753,16 +1780,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 6337330976189077374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6abcd50fdc97f3e409820b29f208d704, type: 3}
+  m_Script: {fileID: 11500000, guid: d1844b48ac2fc754a81b1e2ea14506b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clips:
-  - {fileID: 8300000, guid: 794ba4ea53ad9c34ba72e97fa76b793f, type: 3}
-  - {fileID: 8300000, guid: 6b428d6a2a5cddd4cb167561aca4ffe7, type: 3}
-  - {fileID: 8300000, guid: 1b46739dd2e72b043937117be94011c8, type: 3}
+  clips: []
   overrides: []
-  randomizePitch: 1
+  randomizePitch: 0
   pitchRange: 0.2
+  WeaponClips:
+  - weaponName: 0
+    clips: {fileID: 8300000, guid: f49657a3a5c27a84b9c7ea0b9764366c, type: 3}
+  - weaponName: 1
+    clips: {fileID: 8300000, guid: ad3293d4824c2104387c6735c477159f, type: 3}
 --- !u!1 &6337330976421460721
 GameObject:
   m_ObjectHideFlags: 0
@@ -2371,6 +2400,8 @@ MonoBehaviour:
       PublicKeyToken=null
   PickUpWeaponAudio: {fileID: 508988391}
   SkillSource: {fileID: 1957874661}
+  RangeWeaponAttaAudio: {fileID: 6337330976952850071}
+  MeleeAcAudio: {fileID: 499752767}
 --- !u!114 &6337330976892148344
 MonoBehaviour:
   m_ObjectHideFlags: 0
