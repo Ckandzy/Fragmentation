@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 6755628379451507288}
   m_Layer: 9
   m_Name: DetectBot
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,7 +103,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.3}
+  m_Offset: {x: 0, y: 0.07654548}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -114,7 +114,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 1.2}
+  m_Size: {x: 2, y: 1.9530911}
   m_EdgeRadius: 0
 --- !u!50 &5938965686905170291
 Rigidbody2D:
@@ -207,8 +207,8 @@ MonoBehaviour:
   shootAngle: 45
   shootRate: 2
   shootingAudio: {fileID: 5938965687311158715}
-  dieAudio: {fileID: 0}
-  footStepAudio: {fileID: 0}
+  dieAudio: {fileID: 5938965687311158715}
+  footStepAudio: {fileID: 5938965687311158715}
   engineAudio: {fileID: 8391074352178575143}
   moveAudio: {fileID: 8391074351252431700}
   flickeringDuration: 0
@@ -242,8 +242,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StatusType: 2
-  maxHp: 100
-  hp: 100
+  maxHp: 350
+  hp: 350
   TakeDamagers:
   - {fileID: 2661467009479189034, guid: 9d6547da185c6d94cbe647b11066e215, type: 3}
   - {fileID: 1124554351043337525}
@@ -251,7 +251,7 @@ MonoBehaviour:
   - {fileID: 6755628379451507288}
   HurtInfluences: 1
   SpikeRate: 0
-  AttackDamageNum: 1
+  AttackDamageNum: 30
   TakeDamageInfluences: 1
   Precision: 1
   DodgeRate: 0
@@ -300,12 +300,34 @@ MonoBehaviour:
       PublicKeyToken=null
   OnTakeDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5938965686905170296}
+        m_MethodName: Hit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamageable+DamageEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnDie:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5938965686905170296}
+        m_MethodName: Die
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamageable+DamageEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnGainHealth:
@@ -588,7 +610,7 @@ MonoBehaviour:
   size: {x: 2.0241718, y: 1.2112074}
   RefreshDamageTime: 0.5
   offsetBasedOnSpriteFacing: 1
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 5938965686905170301}
   canHitTriggers: 0
   disableDamageAfterHit: 0
   forceRespawn: 0

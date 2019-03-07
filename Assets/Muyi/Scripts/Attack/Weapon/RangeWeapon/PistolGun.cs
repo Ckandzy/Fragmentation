@@ -15,7 +15,7 @@ public class PistolGun : RangedWeapon
         this.Frequency = 4;
         mustWaitTime = 1 / 4.00f;
         OffsetPoint = new Vector2(0.32f, 0.19f);
-        AttackNum = 10;
+        AttackNum = 25;
     }
 
     /// <summary>
@@ -200,7 +200,7 @@ public class Shotgun : RangedWeapon
         this.Frequency = 4;
         mustWaitTime = 1 / 3.00f; // 一秒1次 
         OffsetPoint = new Vector2(0.813f, 0.188f);
-        AttackNum = 10;
+        AttackNum = 15;
     }
 
     /// <summary>
@@ -289,7 +289,7 @@ public class Sword : MeleeWeapon
         sprite = Resources.Load<Sprite>("GunSprite/Gun3");
         offset = new Vector2(1.27f, 1.3f);
         size = new Vector2(1.6f, 2.83f);
-        AttackNum = 1;
+        AttackNum = 30;
         HitPoint = new Vector2(1.32f, 0.01f);
     }
 }

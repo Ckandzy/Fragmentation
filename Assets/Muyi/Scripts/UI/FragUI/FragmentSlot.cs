@@ -27,6 +27,7 @@ public class FragmentSlot : MSlot, IPointerClickHandler {
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log("点击");
         if (ItemChild == null) OnSlotClick.Invoke(null);
         else OnSlotClick.Invoke(ItemChild.GetComponent<FragmentItem>());
     }

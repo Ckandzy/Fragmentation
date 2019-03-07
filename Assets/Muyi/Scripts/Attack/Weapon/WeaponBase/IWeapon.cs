@@ -7,6 +7,7 @@ public abstract class IWeapon
     public int ID;
     public IBuff buff;
     public Sprite sprite;
+    public float AttackNum = 15;
     public abstract void Init();
     public abstract void Attack(Transform transform, Vector2 vec, List<IBuff> _buff = null);
     public abstract void Update();

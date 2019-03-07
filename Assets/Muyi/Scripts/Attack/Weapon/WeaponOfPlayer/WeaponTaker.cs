@@ -56,7 +56,7 @@ public class WeaponTaker : MonoBehaviour
 
     private void Start()
     {
-        TakeUpWeapon(WeaponType.RangeType, 4);
+        TakeUpWeapon(WeaponType.MeleeType, 1);
     }
 
     private void Update()
@@ -227,6 +227,7 @@ public class WeaponTaker : MonoBehaviour
             }
             CurrentTakeWeaponSprite.GetComponent<SpriteRenderer>().sprite = CurrentTakeWeapons[index].sprite;
             AdjustCurrentWeapon(CurrentTakeWeapons[index].getWeaponType(), index);
+            GetComponent<Status>().AttackDamageNum = CurrentTakeWeapons[index].AttackNum;
         }
     }
 
@@ -312,6 +313,10 @@ public class WeaponTaker : MonoBehaviour
                 AddFragment(frag.FragName, frag.sprite);
                 Destroy(collider.gameObject);
                 break;
+            case "BossArea":
+                int k = FragmenMgr.Instance.GetEnd();
+                GameObject.FindGameObjectWithTag("Boss").GetComponent<BossBehaviour>().SetEnd(k);
+                break;
         }
     }
 
@@ -323,8 +328,8 @@ public class WeaponTaker : MonoBehaviour
     public void AddFragment(FragmentName _name, Sprite _sprite = null)
     {
         // UI上显示
-        //FragmenMgr.Instance.AddFragmentItem(_name, _sprite);
-        OnFragAdd.Invoke(_name, _sprite);
+        FragmenMgr.Instance.AddFragmentItem(_name, _sprite);
+        //OnFragAdd.Invoke(_name, _sprite);
     }
 }
 

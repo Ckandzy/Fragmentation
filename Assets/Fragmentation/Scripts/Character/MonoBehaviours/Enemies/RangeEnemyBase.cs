@@ -421,7 +421,7 @@ public class RangeEnemyBase : MonoBehaviour
         CameraShaker.Shake(0.15f, 0.3f);
     }
 
-    public void Hit(Damager damager, Damageable damageable)
+    public void Hit(TakeDamager damager, TakeDamageable damageable)
     {
         if (damageable.CurrentHealth <= 0)
             return;
@@ -445,7 +445,7 @@ public class RangeEnemyBase : MonoBehaviour
     }
     #endregion
 
-    protected IEnumerator Flicker(Damageable damageable)
+    protected IEnumerator Flicker(TakeDamageable damageable)
     {
         float timer = 0f;
         float sinceLastChange = 0.0f;

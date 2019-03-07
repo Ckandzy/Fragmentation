@@ -287,6 +287,7 @@ public class AtttakMakeCatapult : GainBuff<Status>
    
     public override void BuffOnEnter(GameObject obj)
     {
+        Debug.Log(obj + " 获得攻击弹射");
         Over = false;
         TClass = obj.GetComponent<Status>();
         CalculationBuffNum();
@@ -333,7 +334,7 @@ public class AtttakMakeCatapult : GainBuff<Status>
         foreach (GameObject obj in gameObjects)
         {
             if (obj == _start.gameObject) continue;
-            if((obj.transform.position - _start.position).sqrMagnitude <= 49)
+            if((obj.transform.position - _start.position).sqrMagnitude <= 100)
             {
                 return obj;
             }
@@ -417,7 +418,7 @@ public class UpSpeed : GainBuff<PlayerCharacter>
 
     public override void CalculationBuffNum()
     {
-        buffPercentage = 0.3f;
+        buffPercentage = 0.2f;
         nowTime = 0;
         liveTime = 10 * LV;
     }

@@ -24,6 +24,12 @@ public class SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         weaponTaker = GameObject.FindGameObjectWithTag("Player").GetComponent<WeaponTaker>();
     }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        weaponTaker = GameObject.FindGameObjectWithTag("Player").GetComponent<WeaponTaker>();
+    }
+
     private void Start()
     {
         CurrentSkill = weaponTaker.CurrentSkill;

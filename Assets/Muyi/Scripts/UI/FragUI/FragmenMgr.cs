@@ -13,6 +13,14 @@ public class FragmenMgr : MonoBehaviour {
             return _instance;
         }
     }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        m_PlayerStatus = player.GetComponent<Status>();
+        m_WeaponTaker = player.GetComponent<WeaponTaker>();
+    }
+
     // 拖拽
     public FragmentSlot[] EquipSlot;
     public ExtraSlot ExtraSlot;
@@ -41,8 +49,30 @@ public class FragmenMgr : MonoBehaviour {
         }
     }
 
+    public int GetEnd()
+    {
+        int[] ends = new int[3];
+        ends[0] = ends[1] = ends[2];
+        for (int i = 0; i < EquipSlot.Length; i++)
+        {
+            if (EquipSlot[i].ItemChild != null && EquipSlot[i].ItemChild.GetComponent<FragmentItem>())
+            {
+                switch (EquipSlot[i].ItemChild.GetComponent<FragmentItem>().GetFragmentType())
+                {
+                    case FragmentType.Demon: ends[0] += 1;break;
+                    case FragmentType.Guard: ends[1] += 1;break;
+                    case FragmentType.Natural: ends[2] += 1;break;
+                }
+            }
+        }
+        if (ends[1] > ends[2]) ends[2] = ends[1];
+        if (ends[2] > ends[3]) return ends[2];
+        else return ends[3];
+    }
+
     public void NotifyWeaponTaker(SkillBase _skill)
     {
+        Debug.Log(_skill);
         m_WeaponTaker.SetSkill(_skill);
     }
 
@@ -74,7 +104,7 @@ public class FragmenMgr : MonoBehaviour {
             ExtraSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
         }
     }
-    
+
     public void FlushSkill()
     {
         Frags.FlushFrag(EquipSlot);
@@ -129,7 +159,7 @@ public class StatisticsFrag
     public StatisticsFrag() { Init(); }
 
     public List<FragmentName> names = new List<FragmentName>(3) { FragmentName.Null, FragmentName.Null, FragmentName.Null };
-
+   
     public void FlushFrag(FragmentSlot[] fragmentSlot)
     {
         for (int i = 0; i < fragmentSlot.Length; i++)

@@ -37,7 +37,7 @@ public class TakeDamageable : MonoBehaviour
     [Tooltip("当收到伤害时无敌")]
     public bool invulnerableAfterDamage = true;
     [Tooltip("无敌效果持续时间")]
-    public float invulnerabilityDuration = 3f;
+    public float invulnerabilityDuration = 2f;
     public bool disableOnDeath = false;
     [Tooltip("An offset from the object position used to set from where the distance to the damager is computed")]
     public Vector2 centreOffset = new Vector2(0f, 1f);
@@ -140,7 +140,7 @@ public class TakeDamageable : MonoBehaviour
                     if(buff != null)
                     {
                         status.AddStatusBuff(buff);
-                        buff.BuffOnEnter(gameObject);
+                        //buff.BuffOnEnter(gameObject);
                     }
                     /* 需求变为可以有相同 buff 
                     if (buff != null)

@@ -162,7 +162,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6009411212737648300
 Transform:
   m_ObjectHideFlags: 0
@@ -190,11 +190,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   status: {fileID: 0}
-  offset: {x: -0.5263965, y: 0.5717406}
-  size: {x: 1.037652, y: 2.2325506}
+  offset: {x: -0.81192505, y: 0.5717406}
+  size: {x: 3.5362628, y: 2.2325506}
   RefreshDamageTime: 0.5
   offsetBasedOnSpriteFacing: 1
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 5874127568659170456}
   canHitTriggers: 0
   disableDamageAfterHit: 0
   forceRespawn: 0
@@ -384,7 +384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6015484293859354000}
-  - component: {fileID: 5975346109490998196}
+  - component: {fileID: 7752251457447562644}
   m_Layer: 0
   m_Name: DamagerContact
   m_TagString: Untagged
@@ -406,7 +406,7 @@ Transform:
   m_Father: {fileID: 6008999205367835864}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5975346109490998196
+--- !u!114 &7752251457447562644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -415,14 +415,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6012794633836685116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1506f7b67235554cb42519c257da979, type: 3}
+  m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  offset: {x: 0, y: 0.5}
-  size: {x: 1.4, y: 1}
-  offsetBasedOnSpriteFacing: 0
-  spriteRenderer: {fileID: 0}
+  status: {fileID: 0}
+  offset: {x: 0.06580424, y: 1.1204617}
+  size: {x: 1.9160256, y: 2.2367435}
+  RefreshDamageTime: 0.5
+  offsetBasedOnSpriteFacing: 1
+  spriteRenderer: {fileID: 5874127568659170456}
   canHitTriggers: 0
   disableDamageAfterHit: 0
   forceRespawn: 0
@@ -433,13 +434,20 @@ MonoBehaviour:
   OnDamageableHit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Gamekit2D.Damager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   OnNonDamageableHit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Gamekit2D.Damager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnHitMissing:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+OnHitMissingEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  HitMaxNum: 10
+  hitPoint: {x: 0, y: 0}
 --- !u!1 &6012808049517894684
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,7 +613,7 @@ GameObject:
   - component: {fileID: 699212351580059769}
   m_Layer: 9
   m_Name: MonsterMelee
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -667,7 +675,7 @@ SpriteRenderer:
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 7fe2c0cd1f50771428ceec025b145650, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -784,7 +792,7 @@ MonoBehaviour:
   timeBeforeTargetLost: 3
   meleeRange: 3
   meleeDamager: {fileID: 0}
-  contactDamager: {fileID: 5975346109490998196}
+  contactDamager: {fileID: 0}
   attackDash: 0
   attackForce: {x: 0, y: 0}
   meleeAttackAudio: {fileID: 5975293456233758274}
@@ -819,15 +827,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StatusType: 1
-  maxHp: 100
-  hp: 100
+  maxHp: 80
+  hp: 80
   TakeDamagers:
   - {fileID: 3260650551068043207}
+  - {fileID: 7752251457447562644}
   TakeDamageables:
   - {fileID: 699212351580059769}
   HurtInfluences: 1
   SpikeRate: 0
-  AttackDamageNum: 1
+  AttackDamageNum: 20
   TakeDamageInfluences: 1
   Precision: 1
   DodgeRate: 0
@@ -876,12 +885,34 @@ MonoBehaviour:
       PublicKeyToken=null
   OnTakeDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6012957720360462113}
+        m_MethodName: Hit
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamageable+DamageEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnDie:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6012957720360462113}
+        m_MethodName: Die
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: TakeDamageable+DamageEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnGainHealth:

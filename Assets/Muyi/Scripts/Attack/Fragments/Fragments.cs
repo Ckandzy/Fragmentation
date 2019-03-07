@@ -74,7 +74,7 @@ public class TrialFrag : IGuardFrag
 
     public override string Des()
     {
-        return "守护者碎片，准绳， 降低25%所受伤害，移速下降30 % （+ 准绳 获得技能 铁腕强权）";
+        return "守护者碎片，审判，提高攻击力，并获得10%的秒杀几率（+ 准绳 获得技能 铁腕强权）";
     }
 
     public override FragmentName GetFragName()
