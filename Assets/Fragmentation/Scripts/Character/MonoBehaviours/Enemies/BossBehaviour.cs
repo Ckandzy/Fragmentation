@@ -84,7 +84,9 @@ public class BossBehaviour : MonoBehaviour
     public RandomAudioPlayer launchAudio;
     public RandomAudioPlayer dieAudio;
     public RandomAudioPlayer footStepAudio;
-    public RandomAudioPlayer meleeAttackAudio;
+    public RandomAudioPlayer meleeAttack1Audio;
+    public RandomAudioPlayer meleeAttack2_1Audio;
+    public RandomAudioPlayer meleeAttack2_2Audio;
 
     [Header("Misc")]
     [Tooltip("Time in seconds during which the enemy flicker after being hit")]
@@ -98,7 +100,8 @@ public class BossBehaviour : MonoBehaviour
 
     [Header("Debug")]
     public bool enableSwitch = false;
-    public PlotController[] plots; 
+    public PlotController[] plots;
+    protected int end;
 
     protected SpriteRenderer m_SpriteRenderer;
     protected CharacterController2D m_CharacterController2D;
@@ -132,6 +135,7 @@ public class BossBehaviour : MonoBehaviour
 
     protected bool m_Dead = false;
     protected bool m_Switch = false;
+    protected bool m_Active = false;
    
     protected readonly int m_HashHitPara = Animator.StringToHash("Hit");
     protected readonly int m_HashDeathPara = Animator.StringToHash("Death");
@@ -500,6 +504,11 @@ public class BossBehaviour : MonoBehaviour
         } 
     }
 
+    public void SetEnd(int i = 0)
+    {
+        end = i;
+    }
+
     public void Die(TakeDamager damager, TakeDamageable damageable)
     {
         m_Animator.SetTrigger(m_HashDeathPara);
@@ -510,7 +519,7 @@ public class BossBehaviour : MonoBehaviour
         //m_Collider.enabled = false;
         //gameObject.layer = 20;
         //CameraShaker.Shake(0.15f, 0.3f);
-        plots[0].gameObject.SetActive(true);
+        plots[end].gameObject.SetActive(true);
     }
 
     public void Hit(Damager damager, Damageable damageable)
@@ -687,7 +696,19 @@ public class BossBehaviour : MonoBehaviour
     #region Audio
     public void PlayMeleeSound()
     {
-        meleeAttackAudio.PlayRandomSound();
+        meleeAttack1Audio.PlayRandomSound();
+    }
+    public void PlayMelee2_1Sound()
+    {
+        meleeAttack2_1Audio.PlayRandomSound();
+    }
+    public void PlayMelee2_2Sound()
+    {
+        meleeAttack2_2Audio.PlayRandomSound();
+    }
+    public void PlayFootStepSound()
+    {
+        footStepAudio.PlayRandomSound();
     }
     #endregion
 #if UNITY_EDITOR

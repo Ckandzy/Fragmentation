@@ -78,7 +78,7 @@ MonoBehaviour:
   size: {x: 1.9497795, y: 2.7219753}
   RefreshDamageTime: 0.5
   offsetBasedOnSpriteFacing: 1
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 5163628030388153339}
   canHitTriggers: 0
   disableDamageAfterHit: 0
   forceRespawn: 0

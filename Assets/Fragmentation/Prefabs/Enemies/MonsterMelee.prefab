@@ -162,7 +162,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6009411212737648300
 Transform:
   m_ObjectHideFlags: 0
@@ -190,11 +190,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   status: {fileID: 0}
-  offset: {x: -0.5263965, y: 0.5717406}
-  size: {x: 1.037652, y: 2.2325506}
+  offset: {x: 0.5765711, y: 0.5717406}
+  size: {x: 1.2361853, y: 2.2325506}
   RefreshDamageTime: 0.5
   offsetBasedOnSpriteFacing: 1
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 5874127568659170456}
   canHitTriggers: 0
   disableDamageAfterHit: 0
   forceRespawn: 0
@@ -384,7 +384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6015484293859354000}
-  - component: {fileID: 5975346109490998196}
+  - component: {fileID: 7752251457447562644}
   m_Layer: 0
   m_Name: DamagerContact
   m_TagString: Untagged
@@ -406,7 +406,7 @@ Transform:
   m_Father: {fileID: 6008999205367835864}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5975346109490998196
+--- !u!114 &7752251457447562644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -415,14 +415,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6012794633836685116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1506f7b67235554cb42519c257da979, type: 3}
+  m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
-  offset: {x: 0, y: 0.5}
-  size: {x: 1.4, y: 1}
-  offsetBasedOnSpriteFacing: 0
-  spriteRenderer: {fileID: 0}
+  status: {fileID: 0}
+  offset: {x: 0.25418, y: 1.1204617}
+  size: {x: 1.0565449, y: 2.2367435}
+  RefreshDamageTime: 0.5
+  offsetBasedOnSpriteFacing: 1
+  spriteRenderer: {fileID: 5874127568659170456}
   canHitTriggers: 0
   disableDamageAfterHit: 0
   forceRespawn: 0
@@ -433,13 +434,20 @@ MonoBehaviour:
   OnDamageableHit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Gamekit2D.Damager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: TakeDamager+DamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   OnNonDamageableHit:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: Gamekit2D.Damager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+    m_TypeName: TakeDamager+NonDamagableEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnHitMissing:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: TakeDamager+OnHitMissingEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  HitMaxNum: 10
+  hitPoint: {x: 0, y: 0}
 --- !u!1 &6012808049517894684
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,7 +792,7 @@ MonoBehaviour:
   timeBeforeTargetLost: 3
   meleeRange: 3
   meleeDamager: {fileID: 0}
-  contactDamager: {fileID: 5975346109490998196}
+  contactDamager: {fileID: 0}
   attackDash: 0
   attackForce: {x: 0, y: 0}
   meleeAttackAudio: {fileID: 5975293456233758274}
