@@ -1,9 +1,7 @@
 fileFormatVersion: 2
-guid: 1213e0305c2493c4dbe6c183134fe183
+guid: e9e9d02fdd9f1234496e2b1cf319d175
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: storagecard_0
-    21300002: storagecard_1
+  fileIDToRecycleName: {}
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -42,11 +40,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 6
-  spritePivot: {x: 0, y: 0}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -84,51 +82,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: storagecard_0
-      rect:
-        serializedVersion: 2
-        x: 75
-        y: 25
-        width: 40
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d95b60ce577b8ea47bfc8fe750a18a92
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: storagecard_1
-      rect:
-        serializedVersion: 2
-        x: 215
-        y: 25
-        width: 40
-        height: 55
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1fdb7b0a020d51240aae0bd1de5f41f9
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: c52c4aecb50681344a0a956066e34c10
+    spriteID: bb33736492f712e43a3cc1e7ec36068a
     vertices: []
     indices: 
     edges: []
