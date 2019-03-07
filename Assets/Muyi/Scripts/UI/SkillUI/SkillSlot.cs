@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.Events;
 using UnityEngine.EventSystems;
 public class SkillSlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {

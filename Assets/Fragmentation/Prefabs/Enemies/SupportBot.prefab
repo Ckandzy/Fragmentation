@@ -267,7 +267,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ADamageType: 0
   status: {fileID: 0}
   offset: {x: 1.5, y: 1}
   size: {x: 2.5, y: 1}
@@ -453,7 +452,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &6364925281971268526
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -575,8 +574,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6fb594d15067e4ebd9739c98563ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHP: 400
-  HP: 35
+  StatusType: 0
+  maxHp: 100
+  hp: 100
   TakeDamagers:
   - {fileID: 8097645013203326362}
   - {fileID: 6012098619793413356, guid: 020f078364896e44aa15b65e81ee56c0, type: 3}
@@ -588,6 +588,7 @@ MonoBehaviour:
   TakeDamageInfluences: 1
   Precision: 1
   DodgeRate: 0
+  BloodsuckingRate: 0
   OnStatusBuffAdd:
     m_PersistentCalls:
       m_Calls: []
@@ -605,3 +606,6 @@ MonoBehaviour:
       PublicKeyToken=null
   buffAttributes: []
   isStoic: 0
+  dataSettings:
+    dataTag: db000da5-2b53-48e9-82f9-fc8d2cf2ec72
+    persistenceType: 3

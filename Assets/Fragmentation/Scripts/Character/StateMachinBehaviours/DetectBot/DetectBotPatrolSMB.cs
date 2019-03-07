@@ -7,7 +7,7 @@ public class DetectBotPatrolSMB : SceneLinkedSMB<RangeEnemyBase>
 {
     public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        m_MonoBehaviour.moveAudio.PlayRandomSound();
+        //m_MonoBehaviour.moveAudio.PlayRandomSound();
     }
 
     public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -28,6 +28,6 @@ public class DetectBotPatrolSMB : SceneLinkedSMB<RangeEnemyBase>
     public override void OnSLStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_MonoBehaviour.SetMoveVector(Vector2.zero);
-        m_MonoBehaviour.moveAudio.Stop();
+        //m_MonoBehaviour.moveAudio.Stop();
     }
 }
