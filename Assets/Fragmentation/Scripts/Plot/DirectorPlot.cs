@@ -15,7 +15,6 @@ public class DirectorPlot : MonoBehaviour/*, IDataPersister*/, IPlot
     {
         HasDone = false;
         director = GetComponent<PlayableDirector>();
-        director.playableAsset = playableAsset;
     }
 
     public IEnumerator DoPlot()
@@ -31,6 +30,7 @@ public class DirectorPlot : MonoBehaviour/*, IDataPersister*/, IPlot
 
     public void TriggerDirecotr()
     {
+        director.playableAsset = playableAsset;
         director.Play();
         Invoke("FinishInvoke", (float)director.duration);
     }
