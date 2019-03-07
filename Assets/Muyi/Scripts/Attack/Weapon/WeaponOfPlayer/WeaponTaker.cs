@@ -108,6 +108,11 @@ public class WeaponTaker : MonoBehaviour
         }
     }
 
+    public void SkillOver()
+    {
+        SkillSource.Stop();
+    }
+
     public void SetSkill(SkillBase skill)
     {
         CurrentSkill = skill;

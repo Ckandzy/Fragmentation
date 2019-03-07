@@ -20,6 +20,7 @@ public class Status : MonoBehaviour, IDataPersister
     [SerializeField] private float maxHp = 100;
     [SerializeField] private float hp = 100;
     public float MaxHP { get { return maxHp; } set { maxHp = value; if (HP > maxHp) { HP = maxHp; } } }// 最大生命值
+    bool isViolent = false;
     public float HP {
         get { return hp; }
         set {
@@ -32,6 +33,11 @@ public class Status : MonoBehaviour, IDataPersister
             //        TakeDamageables[i].OnDie.Invoke(null, null);
             //       return;
             //    }
+            if(StatusType == CharacterType.Boss && hp <= MaxHP / 2 && !isViolent)
+            {
+                isViolent = true;
+                GetComponent<BossBehaviour>().StartSwitch();
+            }
             }
     }
     

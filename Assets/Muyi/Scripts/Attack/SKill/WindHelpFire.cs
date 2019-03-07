@@ -14,7 +14,7 @@ public class WindHelpFire : SkillBase
     public override void SkillEnter()
     {
         MSkillStatus = SkillStatusEnum.Ready;
-        CD = 40;
+        CD = 15;
         DurationTime = 5;
         SkillIcon = Resources.Load<Sprite>("SkillIcon/WindHelpFire");
         buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpikeRate, 9, true));
@@ -67,6 +67,8 @@ public class WindHelpFire : SkillBase
             m_WaitTime = 0;
             status = _trans.parent.GetComponent<Status>();
             status.AddStatusBuff(buffs);
+
+            VFXControllerM.Instance.GetWindHelpFire(_trans, DurationTime);
         }
     }
 

@@ -18,7 +18,8 @@ public class VFXControllerM : MonoBehaviour
     public GameObject XLine; // 激光
     public GameObject ForceField; // 力场
     public GameObject Fire;
-    public Image ScreenImage;
+    public GameObject WindHelpFire;
+    [HideInInspector] public Image ScreenImage;
 
     private IEnumerator ShutDown(float time, System.Action call)
     {
@@ -35,6 +36,19 @@ public class VFXControllerM : MonoBehaviour
     {
         m_FirePool = FireVFXPool.GetObjectPool(Fire);
     }
+
+    #region 风助火威特效
+    public void GetWindHelpFire(Transform _start, float _time)
+    {
+        WindHelpFire.SetActive(true);
+        WindHelpFire.transform.SetParent(_start);
+        WindHelpFire.transform.localPosition = new Vector2(0, 0);
+        StartCoroutine(ShutDown(_time,
+            () => {
+                WindHelpFire.SetActive(false); WindHelpFire.transform.SetParent(transform);
+            }));
+    }
+    #endregion
 
     #region 铁腕强权的秒杀效果
     public void ScreenFlicker(float duraingTime)
