@@ -500,11 +500,6 @@ public class BossBehaviour : MonoBehaviour
 
     public void Die(TakeDamager damager, TakeDamageable damageable)
     {
-        //Vector2 throwVector = new Vector2(0, 2.0f);
-        //Vector2 damagerToThis = damager.transform.position - transform.position;
-
-        //throwVector.x = Mathf.Sign(damagerToThis.x) * -4.0f;
-        //SetMoveVector(throwVector);
 
         m_Animator.SetTrigger(m_HashDeathPara);
 
