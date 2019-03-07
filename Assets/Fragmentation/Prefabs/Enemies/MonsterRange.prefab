@@ -373,11 +373,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6fb594d15067e4ebd9739c98563ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StatusType: 0
+  StatusType: 2
   maxHp: 100
   hp: 100
   TakeDamagers:
   - {fileID: 960932688148896829}
+  - {fileID: 5798710858859179962, guid: 793e89cfa5afd7e43b600be4fe56210f, type: 3}
   TakeDamageables:
   - {fileID: 9201352812034309514}
   HurtInfluences: 1

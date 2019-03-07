@@ -186,8 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf1258ef1b387f40a668ce286b9a53c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ADamageType: 0
-  status: {fileID: 0}
+  status: {fileID: 2033614827894895805, guid: f77d9820ed7a90344a405bbb9f66ed6f, type: 3}
   offset: {x: -0.00066775084, y: -0.0012732744}
   size: {x: 1.4962429, y: 0.6571324}
   RefreshDamageTime: 0.5

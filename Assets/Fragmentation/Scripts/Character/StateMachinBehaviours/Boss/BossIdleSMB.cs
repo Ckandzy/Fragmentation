@@ -8,7 +8,8 @@ namespace Gamekit2D
     {
         public override void OnSLStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            m_MonoBehaviour.SetMoveVector(Vector2.zero);
+            if(m_MonoBehaviour)
+                m_MonoBehaviour.SetMoveVector(Vector2.zero);
         }
 
         public override void OnSLStateNoTransitionUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

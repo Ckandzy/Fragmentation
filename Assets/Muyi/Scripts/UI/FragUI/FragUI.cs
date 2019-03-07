@@ -12,6 +12,12 @@ public class FragUI : MonoBehaviour {
         // 实例化
         //SingleTon<PageManager<FragUIMgr>>.Instance.Push(FragmentPanel);
         //SingleTon<PageManager<FragUIMgr>>.Instance.Pop();
+        DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void OnEnable()
+    {
+        
     }
 
     public void Update()

@@ -560,6 +560,9 @@ MonoBehaviour:
       PublicKeyToken=null
   buffAttributes: []
   isStoic: 0
+  dataSettings:
+    dataTag: 083201b7-a4eb-47ef-bf09-69786bd31b3b
+    persistenceType: 0
 --- !u!1 &8000429026144470954
 GameObject:
   m_ObjectHideFlags: 0

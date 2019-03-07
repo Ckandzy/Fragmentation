@@ -241,11 +241,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6fb594d15067e4ebd9739c98563ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StatusType: 0
+  StatusType: 2
   maxHp: 100
   hp: 100
   TakeDamagers:
   - {fileID: 2661467009479189034, guid: 9d6547da185c6d94cbe647b11066e215, type: 3}
+  - {fileID: 1124554351043337525}
   TakeDamageables:
   - {fileID: 6755628379451507288}
   HurtInfluences: 1
@@ -274,7 +275,7 @@ MonoBehaviour:
   isStoic: 0
   dataSettings:
     dataTag: 56469914-9ce2-45b9-b8df-b523bad81c00
-    persistenceType: 3
+    persistenceType: 0
 --- !u!114 &6755628379451507288
 MonoBehaviour:
   m_ObjectHideFlags: 0
