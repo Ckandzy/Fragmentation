@@ -35,6 +35,8 @@ public class WeaponTaker : MonoBehaviour
 
     public Audio PickUpWeaponAudio;
     public Audio SkillSource;
+    public RangeWaponAttackAudio RangeWeaponAttaAudio;
+    public MeleeAttakAudio MeleeAcAudio;
 
     private Animator m_Animator;
     private Status m_Status;
@@ -118,6 +120,19 @@ public class WeaponTaker : MonoBehaviour
     }
     #endregion
 
+    #region 近战音效
+    public void HitAir(TakeDamager take)
+    {
+        MeleeAcAudio.PlayRandomSound(HitObject.Air);
+    }
+
+    public void HitEnemy(TakeDamager take, TakeDamageable takeDamageable)
+    {
+        MeleeAcAudio.Stop();
+        MeleeAcAudio.PlayRandomSound(HitObject.Enemy);
+    }
+    #endregion
+
     #region 攻击
     // 进入动画，
     public void Attack()
@@ -155,11 +170,12 @@ public class WeaponTaker : MonoBehaviour
                 m_Status.RegisteredTakeDamger(bullet.GetComponent<TakeDamager>());
                 ((RangedWeapon)CurrentTakeWeapons[CurrentIndex]).Attack(bullet, BulletPoint, new Vector2(transform.localScale.x, 0), new List<IBuff> { });
             }
-                
+            RangeWeaponAttaAudio.PlayRandomSound(CurrentTakeWeapons[CurrentIndex].GetWeaponName()); 
         }
         else if (CurrentTakeWeapons[CurrentIndex].getWeaponType() == WeaponType.MeleeType)
         {
             MeleeAttackDamager.SetActive(true);
+            HitAir(null);
         }
     }
 

@@ -2,41 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gamekit2D;
-
-public class RangeWaponAttackAudio : RandomAudioPlayer
+public class MeleeAttakAudio : RandomAudioPlayer
 {
     [System.Serializable]
     public struct WeaponClip
     {
-        public WeaponName weaponName;
+        public HitObject weaponName;
         public AudioClip clips;
-
     }
 
     public WeaponClip[] WeaponClips;
-    Dictionary<WeaponName, AudioClip> WeaponClipDic;
+    Dictionary<HitObject, AudioClip> WeaponClipDic;
 
     private void Awake()
     {
         m_Source = GetComponent<AudioSource>();
-        WeaponClipDic = new Dictionary<WeaponName, AudioClip>();
+        WeaponClipDic = new Dictionary<HitObject, AudioClip>();
 
         for (int i = 0; i < WeaponClips.Length; i++)
         {
-            if(!WeaponClipDic.ContainsKey(WeaponClips[i].weaponName))
+            if (!WeaponClipDic.ContainsKey(WeaponClips[i].weaponName))
                 WeaponClipDic.Add(WeaponClips[i].weaponName, WeaponClips[i].clips);
         }
     }
 
-    public void PlayRandomSound(WeaponName weaponName)
+    public void PlayRandomSound(HitObject hitobje)
     {
         AudioClip source = null;
-        if(WeaponClipDic.TryGetValue(weaponName, out source))
+        if (WeaponClipDic.TryGetValue(hitobje, out source))
         {
             if (randomizePitch)
                 m_Source.pitch = Random.Range(1.0f - pitchRange, 1.0f + pitchRange);
             m_Source.PlayOneShot(source);
-            Debug.Log("播放" + weaponName);
         }
     }
+}
+
+public enum HitObject
+{
+    Air,
+    Enemy
 }
