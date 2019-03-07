@@ -16,7 +16,7 @@ public class TrackBullet : MonoBehaviour {
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag(FindGameObjTag).transform;
-        Debug.Log(target);
+        //Debug.Log(target);
         MoveSpeed = Quaternion.Euler(new Vector3(0, 0, Angle)) * Vector2.right * StartSpeed;
     }
 

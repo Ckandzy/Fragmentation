@@ -188,6 +188,9 @@ public class SubmachineGun : RangedWeapon
     }
 }
 
+/// <summary>
+/// 散弹枪
+/// </summary>
 public class Shotgun : RangedWeapon
 {
     public override void Init()
@@ -245,8 +248,10 @@ public class Shotgun : RangedWeapon
 
     public IEnumerator Shoot(Status status, ABulletsPool _bullet, Transform _transform, Vector2 vec, List<IBuff> _buff = null)
     {
+        yield return new WaitForSeconds(0);
         float num = 6;
         float angle = 70;
+        Vector2 vtest = vec;
         if (nowWaitTime >= mustWaitTime)
             for (int i = 0; i < num; i++)
             {
@@ -254,15 +259,16 @@ public class Shotgun : RangedWeapon
                 GameObject bullet1 = _bullet.Pop().transform.gameObject;
                 status.RegisteredTakeDamger(bullet1.GetComponent<TakeDamager>());
                 bullet1.transform.position = _transform.position;
-                bullet1.transform.eulerAngles = new Vector3(0, 0, angle * num - num / 2 * angle);
-                float y = Mathf.Deg2Rad * Mathf.Atan(1.0f / (i - num / 2.0f) * angle) * 10;
-                vec = new Vector2(1, y);// y/x = angle
-                bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vec, null);
+                //float y = Mathf.Deg2Rad * Mathf.Atan(1.0f / (i - num / 2.0f) * angle) * 10;
+                //vec = new Vector2(1, y);// y/x = angle
+                float m_angle = angle / -2 + (70 / num) * (i + 1);
+                vtest = Quaternion.Euler(new Vector3(0, 0, m_angle)) * new Vector2(vec.x, 0);
+                Debug.Log("hhhhhhhhhh" + vec);
+                bullet1.GetComponent<RangeWeaponBullet>().Set(bulletLiveTime, bulletSpeed, vtest, null);
                 foreach (IBuff buff in _buff)
                 {
                     if (buff != null) bullet1.GetComponent<TakeDamager>().TakeAttackBuffs.Add(buff);
                 }
-                yield return new WaitForSeconds(0);
             }
     }
 }

@@ -17,16 +17,17 @@ public class IBullet : MonoBehaviour {
         // 毁灭
         if (!IsVisible() || timer >= LiveTime) StartCoroutine(DestroyDelay(0));
         // 移动
-        transform.position += (Vector3)DirVec.normalized * (Speed + AddSpeed * timer * Time.deltaTime * AddSpeed) * Time.deltaTime;
+        transform.position += (Vector3)DirVec * (Speed + AddSpeed * timer * Time.deltaTime * AddSpeed) * Time.deltaTime;
+        //transform.Translate((Vector3)DirVec.normalized * (Speed + AddSpeed * timer * Time.deltaTime * AddSpeed) * Time.deltaTime);
     }
-
+    /*
     protected void LookAt(Transform enemy)
     {
         Vector3 dir = enemy.position - transform.position;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
-
+    */
     public void Set(float livetime, float speed, Vector2 dir, List<IBuff> buff = null)
     {
         LiveTime = livetime;

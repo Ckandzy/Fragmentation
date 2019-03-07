@@ -719,7 +719,7 @@ namespace Gamekit2D
                 m_Animator.SetTrigger(m_HashForcedRespawnPara);
 
             m_Animator.SetBool(m_HashGroundedPara, false);
-            //hurtAudioPlayer.PlayRandomSound();
+            hurtAudioPlayer.PlayRandomSound();
 
             //if the health is < 0, mean die callback will take care of respawn
             if(damager.forceRespawn && damageable.CurrentHealth > 0)
@@ -727,28 +727,11 @@ namespace Gamekit2D
                 //StartCoroutine(DieRespawnCoroutine(false, true));
             }
         }
-        /*
-        public void OnDie()
-        {
-            m_Animator.SetTrigger(m_HashDeadPara);
 
-            StartCoroutine(DieRespawnCoroutine(true, false));
-        }
-        */
-        /*
-        IEnumerator DieRespawnCoroutine(bool resetHealth, bool useCheckPoint)
-        {
-            PlayerInput.Instance.ReleaseControl(true);
-            yield return new WaitForSeconds(1.0f); //wait one second before respawing
-            yield return StartCoroutine(ScreenFader.FadeSceneOut(useCheckPoint ? ScreenFader.FadeType.Black : ScreenFader.FadeType.GameOver));
-            if(!useCheckPoint)
-                yield return new WaitForSeconds (2f);
-            Respawn(resetHealth, useCheckPoint);
-            yield return new WaitForEndOfFrame();
-            yield return StartCoroutine(ScreenFader.FadeSceneIn());
-            PlayerInput.Instance.GainControl();
-        }
-        */
+        
+        
+        
+        
         public void StartFlickering()
         {
             m_FlickerCoroutine = StartCoroutine(Flicker());
@@ -806,6 +789,7 @@ namespace Gamekit2D
             }
         }
         #endregion
+
         public void PlayFootstep()
         {
             footstepAudioPlayer.PlayRandomSound(m_CurrentSurface);
@@ -813,11 +797,39 @@ namespace Gamekit2D
             footstepPosition.z -= 1;
             VFXController.Instance.Trigger("DustPuff", footstepPosition, 0, false, null, m_CurrentSurface);
         }
-        /*
+
+        public void OnDie(TakeDamager damager, TakeDamageable able)
+        {
+            m_Animator.SetTrigger(m_HashDeadPara);
+
+            StartCoroutine(DieRespawnCoroutine(true, false));
+        }
+
+
+        IEnumerator DieRespawnCoroutine(bool resetHealth, bool useCheckPoint)
+        {
+            PlayerInput.Instance.ReleaseControl(true);
+            yield return new WaitForSeconds(1.0f); //wait one second before respawing
+            yield return StartCoroutine(ScreenFader.FadeSceneOut(useCheckPoint ? ScreenFader.FadeType.Black : ScreenFader.FadeType.GameOver));
+            if (!useCheckPoint)
+                yield return new WaitForSeconds(2f);
+            Respawn(resetHealth, useCheckPoint);
+            yield return new WaitForEndOfFrame();
+            yield return StartCoroutine(ScreenFader.FadeSceneIn());
+            PlayerInput.Instance.GainControl();
+        }
+
         public void Respawn(bool resetHealth, bool useCheckpoint)
         {
+            Status status = GetComponent<Status>();
             if (resetHealth)
-                damageable.SetHealth(damageable.startingHealth);
+            {
+                //PersistentDataManager.LoadAllData();
+                //status.LoadData();
+                //GetComponent<Status>().SetHealth(damageable.startingHealth);
+                status.HP = status.MaxHP;
+            }
+
 
             //we reset the hurt trigger, as we don't want the player to go back to hurt animation once respawned
             m_Animator.ResetTrigger(m_HashHurtPara);
@@ -839,7 +851,7 @@ namespace Gamekit2D
                 GameObjectTeleporter.Teleport(gameObject, m_StartingPosition);
             }
         }
-        */
+        
         public void SetChekpoint(Checkpoint checkpoint)
         {
             m_LastCheckpoint = checkpoint;
