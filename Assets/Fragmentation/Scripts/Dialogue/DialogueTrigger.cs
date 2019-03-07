@@ -11,16 +11,18 @@ public class DialogueTrigger : MonoBehaviour, IDataPersister
 
     public bool triggerOnce = false;
 
-    protected bool hasTriggered = false;
+    protected bool hasTriggered;
     protected bool Triggering;
     protected bool m_CanExecuteButtons;
-    protected DialogueManager dialogueManager;
+    //protected DialogueManager dialogueManager;
 
     public DataSettings dataSettings;
 
     private void Start()
     {
-        dialogueManager = FindObjectOfType<DialogueManager>();
+        //dialogueManager = FindObjectOfType<DialogueManager>();
+        Triggering = false;
+        hasTriggered = false;
         //PersistentDataManager.LoadAllData();
     }
 
@@ -36,7 +38,6 @@ public class DialogueTrigger : MonoBehaviour, IDataPersister
     void OnTriggerEnter2D(Collider2D other)
     {
         m_CanExecuteButtons = true;
-        Triggering = true;
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -44,7 +45,7 @@ public class DialogueTrigger : MonoBehaviour, IDataPersister
         m_CanExecuteButtons = false;
         if (Triggering)
         {
-            dialogueManager.EndDialogue();
+            DialogueManager.Instance.EndDialogue();
             if (triggerOnce)
             {
                 hasTriggered = true;
@@ -58,14 +59,14 @@ public class DialogueTrigger : MonoBehaviour, IDataPersister
     {
         if (m_CanExecuteButtons && PlayerInput.Instance.Interact.Down)
         {
-            if (Triggering)
+            if (!Triggering)
             {
-                Triggering = false;
-                dialogueManager.StartDialogue(dialogue);
+                Triggering = true;
+                DialogueManager.Instance.StartDialogue(dialogue);
             }
             else
             {
-                if (dialogueManager.DisplayNextSentence())
+                if (DialogueManager.Instance.DisplayNextSentence())
                 {
                     if (triggerOnce)
                     {
@@ -73,7 +74,7 @@ public class DialogueTrigger : MonoBehaviour, IDataPersister
                         gameObject.SetActive(false);
                         Save();
                     }
-                    Triggering = true;
+                    Triggering = false;
                 }
             }
         }
