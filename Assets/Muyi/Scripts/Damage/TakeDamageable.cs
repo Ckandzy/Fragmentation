@@ -171,7 +171,7 @@ public class TakeDamageable : MonoBehaviour
 
         if (status.HP <= 0)
         {
-            OnDie.Invoke(damager, this);
+            //OnDie.Invoke(damager, this);
             //m_ResetHealthOnSceneReload = true;
             EnableInvulnerability();
             if (disableOnDeath) gameObject.SetActive(false);
