@@ -158,7 +158,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5163628030388153336
 Transform:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &5163628030388153332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,11 +373,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6fb594d15067e4ebd9739c98563ac2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StatusType: 0
+  StatusType: 2
   maxHp: 100
   hp: 100
   TakeDamagers:
   - {fileID: 960932688148896829}
+  - {fileID: 5798710858859179962, guid: 793e89cfa5afd7e43b600be4fe56210f, type: 3}
   TakeDamageables:
   - {fileID: 9201352812034309514}
   HurtInfluences: 1
@@ -404,6 +405,9 @@ MonoBehaviour:
       PublicKeyToken=null
   buffAttributes: []
   isStoic: 0
+  dataSettings:
+    dataTag: 3074c628-3be2-43be-b4fc-011ec64bce09
+    persistenceType: 3
 --- !u!114 &9201352812034309514
 MonoBehaviour:
   m_ObjectHideFlags: 0
