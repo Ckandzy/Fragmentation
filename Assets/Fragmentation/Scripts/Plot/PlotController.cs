@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Gamekit2D;
+using UnityEngine.Playables;
 
 public class PlotController : MonoBehaviour
 {
     static PlotController s_Instance;
+
+    //public PlayableDirector playableDirector;
+
     public static PlotController Instance
     {
         get

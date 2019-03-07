@@ -98,6 +98,8 @@ public class BossBehaviour : MonoBehaviour
 
     [Header("Debug")]
     public bool enableSwitch = false;
+    public PlotController[] plots; 
+
     protected SpriteRenderer m_SpriteRenderer;
     protected CharacterController2D m_CharacterController2D;
     protected Collider2D m_Collider;
@@ -223,7 +225,7 @@ public class BossBehaviour : MonoBehaviour
             StartSwitch();
             m_Switch = true;
         }
-        if(tick)
+        if(tick && !m_Dead)
             m_Ai.Tick();
     }
 
@@ -500,21 +502,16 @@ public class BossBehaviour : MonoBehaviour
 
     public void Die(TakeDamager damager, TakeDamageable damageable)
     {
-        //Vector2 throwVector = new Vector2(0, 2.0f);
-        //Vector2 damagerToThis = damager.transform.position - transform.position;
-
-        //throwVector.x = Mathf.Sign(damagerToThis.x) * -4.0f;
-        //SetMoveVector(throwVector);
-
-        m_Animator.SetTrigger(m_HashDeathPara);
-
+        Debug.Log(gameObject + "boss die");
+        //m_Animator.SetTrigger(m_HashDeathPara);
         dieAudio.PlayRandomSound();
 
         m_Dead = true;
         //Debug.Log(moveVector);
         //m_Collider.enabled = false;
-        gameObject.layer = 20;
-        CameraShaker.Shake(0.15f, 0.3f);
+        //gameObject.layer = 20;
+        //CameraShaker.Shake(0.15f, 0.3f);
+        plots[0].gameObject.SetActive(true);
     }
 
     public void Hit(Damager damager, Damageable damageable)

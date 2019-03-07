@@ -6,13 +6,16 @@ using UnityEngine.Playables;
 
 public class DirectorPlot : MonoBehaviour/*, IDataPersister*/, IPlot
 {
-    public PlayableDirector director;
+    public PlayableAsset playableAsset;
+    protected PlayableDirector director;
 
     public bool HasDone { get; set; }
 
     private void Awake()
     {
         HasDone = false;
+        director = GetComponent<PlayableDirector>();
+        director.playableAsset = playableAsset;
     }
 
     public IEnumerator DoPlot()

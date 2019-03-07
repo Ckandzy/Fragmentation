@@ -25,11 +25,13 @@ public class Status : MonoBehaviour, IDataPersister
         set {
             hp = value;
             if (hp > maxHp) hp = maxHp;
-            if (hp <= 0) 
-                for(int i = 0; i < TakeDamageables.Count; i++)
-                {
-                    TakeDamageables[i].OnDie.Invoke(null, null);
-                }
+            //if (hp <= 0) 
+            //    for(int i = 0; i < TakeDamageables.Count; i++)
+            //    {
+            //        Debug.Log(gameObject + " on die  hhhh");
+            //        TakeDamageables[i].OnDie.Invoke(null, null);
+            //       return;
+            //    }
             }
     }
     
