@@ -4,6 +4,30 @@ using UnityEngine;
 using Gamekit2D;
 public class DialogueManager : MonoBehaviour
 {
+    public static DialogueManager Instance
+    {
+        get
+        {
+            if (instance != null)
+                return instance;
+
+            instance = FindObjectOfType<DialogueManager>();
+
+            if (instance != null)
+                return instance;
+
+            return CreateDefault();
+        }
+    }
+    protected static DialogueManager instance;
+
+    public static DialogueManager CreateDefault()
+    {
+        GameObject sceneCDialogueManager = new GameObject("DialogueManager");
+        instance = sceneCDialogueManager.AddComponent<DialogueManager>();
+        return instance;
+    }
+
     public Queue<string> sentences = new Queue<string>();
 
     public DialogueCanvasController dialogueCanvasController;
