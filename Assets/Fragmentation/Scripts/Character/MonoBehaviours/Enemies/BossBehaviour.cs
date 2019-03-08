@@ -524,7 +524,7 @@ public class BossBehaviour : MonoBehaviour
         //m_Collider.enabled = false;
         //gameObject.layer = 20;
         //CameraShaker.Shake(0.15f, 0.3f);
-        plots[end].gameObject.SetActive(true);
+        plots[end - 1].gameObject.SetActive(true);
     }
 
     public void Hit(Damager damager, Damageable damageable)

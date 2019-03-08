@@ -12,13 +12,13 @@ public class BossAudio : MonoBehaviour
     {
         if (stage == 1)
         {
-            audioSource.clip = boss_1[i];
+            audioSource.clip = boss_1[i - 1];
             audioSource.loop = true;
             audioSource.Play();
         }
         else
         {
-            audioSource.clip = boss_2[i];
+            audioSource.clip = boss_2[i - 1];
             audioSource.loop = true;
             audioSource.Play();
         }

@@ -14,6 +14,7 @@ public class BossArea : MonoBehaviour
         {
             Boss.SetActive(true);
             hasActive = true;
+            Boss.GetComponent<BossBehaviour>().SetEnd(FragmenMgr.Instance.GetEnd());
         }
     }
 }
