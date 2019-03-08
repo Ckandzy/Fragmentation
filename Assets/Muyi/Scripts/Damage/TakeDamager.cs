@@ -18,7 +18,7 @@ public class TakeDamager : MonoBehaviour {
 
     public Status status;  // 面板拖拽 or use Status' RegisteredTakeDamger(this) way
     public List<IBuff> TakeAttackBuffs { get { if (status == null) return null; return status.AttackCarryingBuffs; } }
-    public float CurrentDamagNum { get { return status.AttackDamageNum * status.TakeDamageInfluences; } }
+    public float CurrentDamagNum { get { if (status == null) return 20; return status.AttackDamageNum * status.TakeDamageInfluences; } }
     public float SpikeRate { get { if (status == null) return 0; return status.SpikeRate; } }
     //call that from inside the onDamageableHIt or OnNonDamageableHit to get what was hit.
     public Collider2D LastHit { get { return m_LastHit; } }

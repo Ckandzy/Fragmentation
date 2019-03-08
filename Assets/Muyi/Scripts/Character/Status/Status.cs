@@ -294,13 +294,14 @@ public class Status : MonoBehaviour, IDataPersister
         if(StatusType == CharacterType.Player)
         {
             WeaponTaker taker = GetComponent<WeaponTaker>();
-            if (((IData)data).frags.names != null)
-                for (int i = 0; i < ((IData)data).frags.names.Count; i++)
-                {
-                
-                    if(((IData)data).frags.names[i] != FragmentName.Null)
-                        taker.AddFragment(((IData)data).frags.names[i]);
-                }
+            //FragmenMgr.Instance.Clear();
+            //if (((IData)data).frags.names != null)
+            //    for (int i = 0; i < ((IData)data).frags.names.Count; i++)
+            //    {
+            //        if(((IData)data).frags.names[i] != FragmentName.Null)
+            //            taker.AddFragment(((IData)data).frags.names[i]);
+            //    }
+            FragmenMgr.Instance.FlushBuffs();
             taker.CurrentTakeWeapons = ((IData)data).weapons;
             taker.CutoverWeapon(((IData)data).WeaponIndex);
         }

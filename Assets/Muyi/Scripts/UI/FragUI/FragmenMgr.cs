@@ -76,6 +76,8 @@ public class FragmenMgr : MonoBehaviour {
         m_WeaponTaker.SetSkill(_skill);
     }
 
+    
+
     public void SlotCanInteraciveNotify(bool _isReady)
     {
         foreach (MSlot slot in EquipSlot)
@@ -102,6 +104,17 @@ public class FragmenMgr : MonoBehaviour {
         if (!hasEmpty)
         {
             ExtraSlot.AddFragmentItem(_name, ItemPrefab, _sprite);
+        }
+    }
+
+    public void FlushBuffs()
+    {
+        for(int i = 0; i < EquipSlot.Length; i++)
+        {
+            if(EquipSlot[i].ItemChild != null && EquipSlot[i].ItemChild.GetComponent<FragmentItem>())
+            {
+                m_PlayerStatus.AddStatusBuff(EquipSlot[i].ItemChild.GetComponent<FragmentItem>().ItemFragment.buffs);
+            }
         }
     }
 
@@ -136,7 +149,16 @@ public class FragmenMgr : MonoBehaviour {
         }
         FlushSkill();
     }
-
+    public void Clear()
+    {
+        foreach (MSlot slot in EquipSlot)
+        {
+            if(slot.ItemChild != null)
+            {
+                Destroy(slot.ItemChild.gameObject);
+            }
+        }
+    }
     public void AddFragment(MSlot slot, MItem item)
     {
         foreach (IBuff buff in ((FragmentItem)item).ItemFragment.buffs)

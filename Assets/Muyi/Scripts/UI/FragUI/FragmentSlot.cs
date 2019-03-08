@@ -17,6 +17,7 @@ public class FragmentSlot : MSlot, IPointerClickHandler {
 
     public void AddFragmentItem(FragmentName _name, GameObject ItemPrefab, Sprite _sprite)
     {
+        if (_name == FragmentName.Null) return;
         ItemChild = Instantiate(ItemPrefab, transform).transform;
         ItemChild.GetComponent<Image>().sprite = _sprite;
         ItemChild.GetComponent<FragmentItem>().ItemFragment = FragmentFactory.GetFragment(_name);
