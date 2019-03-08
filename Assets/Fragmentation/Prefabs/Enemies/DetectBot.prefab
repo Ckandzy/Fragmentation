@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: e088266f863539c4283b1ea2c6ef216e, type: 3}
+  - {fileID: 8300000, guid: 3ddd211ad17a18648b33f6e778137f07, type: 3}
   overrides: []
   randomizePitch: 0
   pitchRange: 0.2
@@ -578,7 +578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5938965688364534719
 Transform:
   m_ObjectHideFlags: 0

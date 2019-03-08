@@ -503,13 +503,13 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0.08919531, y: 0.57557595, z: -0.2537255}
-  - {x: -0.1164906, y: 0.8565589, z: 0.35448748}
-  - {x: 0.3209019, y: 0.8228718, z: 1.0821829}
-  - {x: 1.2319789, y: 1.7430267, z: 1.211381}
-  - {x: 1.2131982, y: 1.5493932, z: 0.5154416}
-  - {x: 1.0961219, y: 0.5187698, z: 0.46778882}
-  - {x: 0.34968063, y: 0.0254578, z: 0.601692}
+  - {x: 1.212614, y: -0.3704052, z: -0.1592519}
+  - {x: 1.9351642, y: -1.0612241, z: 0.018383026}
+  - {x: 2.3914187, y: -0.65953135, z: -0.033801287}
+  - {x: 1.8777452, y: -0.23094201, z: 0.37066483}
+  - {x: 0.66973853, y: 0.1147258, z: -0.3636605}
+  - {x: -0.021203995, y: -0.4820662, z: -0.46631396}
+  - {x: -0.32010028, y: -0.040798277, z: -0.3111843}
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -2565,7 +2565,7 @@ MonoBehaviour:
   maxJumpTimes: 2
   remainingJumpTimes: 0
   hurtJumpAngle: 40
-  hurtJumpSpeed: 2
+  hurtJumpSpeed: 0
   flickeringDuration: 0.1
   meleeAttackDashSpeed: 5
   dashWhileAirborne: 0
@@ -2845,16 +2845,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2083158243}
     m_Modifications:
-    - target: {fileID: 7034761302268603498, guid: b47d29b59a97c974e97e17789f5165c8,
-        type: 3}
-      propertyPath: m_Name
-      value: WindHelpFire
-      objectReference: {fileID: 0}
-    - target: {fileID: 7034761302268603498, guid: b47d29b59a97c974e97e17789f5165c8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4841711556338210148, guid: b47d29b59a97c974e97e17789f5165c8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2908,6 +2898,16 @@ PrefabInstance:
     - target: {fileID: 4841711556338210148, guid: b47d29b59a97c974e97e17789f5165c8,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034761302268603498, guid: b47d29b59a97c974e97e17789f5165c8,
+        type: 3}
+      propertyPath: m_Name
+      value: WindHelpFire
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034761302268603498, guid: b47d29b59a97c974e97e17789f5165c8,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7981068745376617267, guid: b47d29b59a97c974e97e17789f5165c8,

@@ -369,9 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: c5b0c76e1664a8b4ab228f31c8caddef, type: 3}
-  - {fileID: 8300000, guid: e298ed73017db8c4fa4255c45e5a9f0a, type: 3}
-  - {fileID: 8300000, guid: b843fce942ecaf5408ed50f4d6129f2a, type: 3}
+  - {fileID: 8300000, guid: a6f4d49af6f94c8469d0acdeb47dfc6c, type: 3}
   overrides: []
   randomizePitch: 0
   pitchRange: 0.2
@@ -391,7 +389,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6015484293859354000
 Transform:
   m_ObjectHideFlags: 0
@@ -589,7 +587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 516604db9dbf00141b71b702c4fd79c4, type: 3}
+  - {fileID: 8300000, guid: a6b9a5293e023d34d8af8d225380966b, type: 3}
   overrides: []
   randomizePitch: 0
   pitchRange: 0.2

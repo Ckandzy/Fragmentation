@@ -102,6 +102,7 @@ public class BossBehaviour : MonoBehaviour
     public bool enableSwitch = false;
     public PlotController[] plots;
     protected int end;
+    public BossAudio bossAudio;
 
     protected SpriteRenderer m_SpriteRenderer;
     protected CharacterController2D m_CharacterController2D;
@@ -179,6 +180,8 @@ public class BossBehaviour : MonoBehaviour
         m_Dead = false;
         m_Collider.enabled = true;
 
+        bossAudio.PlayAudio(end, 1);
+
         m_Ai.OpenBranch(
             BT.RandomSequence(new int[] { 2, 6, 1 }).OpenBranch(
                 BT.Root().OpenBranch(
@@ -224,11 +227,11 @@ public class BossBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (!m_Switch && PlayerInput.Instance.Exit.Down)
-        {
-            StartSwitch();
-            m_Switch = true;
-        }
+        //if (!m_Switch && PlayerInput.Instance.Exit.Down)
+        //{
+        //    StartSwitch();
+        //    m_Switch = true;
+        //}
         if(tick && !m_Dead)
             m_Ai.Tick();
     }
@@ -414,8 +417,10 @@ public class BossBehaviour : MonoBehaviour
             gravity = Vector2.zero,
             shootOrigin = shootingOrigin.position,
             shootSpeed = launchSpeed,
-            destroyWhenOutOfView = destroyWhenOutOfView
-        };
+            destroyWhenOutOfView = destroyWhenOutOfView,
+            //----------//
+            timeBeforeAutodestruct = 4f
+    };
         //if (track)
         //{
         //    projectData.Track = true;
@@ -643,6 +648,7 @@ public class BossBehaviour : MonoBehaviour
     public IEnumerator Switch()
     {
         tick = false;
+        bossAudio.PlayAudio(end, 2);
         m_Animator.ResetTrigger(m_HashMeleeAttack1Para);
         m_Animator.ResetTrigger(m_HashRangeAttack1Para);
         m_Animator.ResetTrigger(m_HashWalk1Para);

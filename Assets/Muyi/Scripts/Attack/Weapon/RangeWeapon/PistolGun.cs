@@ -123,7 +123,7 @@ public class SubmachineGun : RangedWeapon
         this.Frequency = 4;
         mustWaitTime = 1 / 4.00f;
         OffsetPoint = new Vector2(0.37f, 0.216f);
-        AttackNum = 10;
+        AttackNum = /*10*/1;
     }
 
     /// <summary>

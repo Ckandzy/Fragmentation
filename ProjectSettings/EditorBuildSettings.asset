@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Fragmentation/Scenes/Level 5.unity
     guid: 4df4c88dd2dd7ac49b0323bb42f1b9fb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Muyi/Sence/Dungeon 1.unity
     guid: 2c62cd6add3f08c4e8d828e453356920
   m_configObjects: {}
