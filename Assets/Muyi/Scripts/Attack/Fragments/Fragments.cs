@@ -159,7 +159,7 @@ public class WindFrag : INaturalFrag
         buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpeed, 2, true));
         buffs.Add(BuffFactory.GetBuff((int)BuffType.UpSpikeRate, LV, true));
         buffs.Add(BuffFactory.GetBuff((int)BuffType.GetTwoSegmentJump, LV, true));
-        buffs.Add(BuffFactory.GetBuff((int)BuffType.HPDown, 2, true)); // 50%
+        buffs.Add(BuffFactory.GetBuff((int)BuffType.HPDown, 1, true)); // 50%
     }
     public override string Des()
     {

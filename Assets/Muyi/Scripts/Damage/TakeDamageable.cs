@@ -157,8 +157,8 @@ public class TakeDamageable : MonoBehaviour
                         }
                     }*/
                 }
-            // 秒杀
-            if (damager.IsSpike()) status.HP -= float.MaxValue;
+           
+            if (damager.IsSpike() && status.StatusType != CharacterType.Boss) status.HP -= float.MaxValue;
             else status.HP -= damager.CurrentDamagNum * status.HurtInfluences;
 
             //Debug.Log( status.HP);

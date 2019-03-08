@@ -912,10 +912,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: Status+BuffEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  buffAttributes:
-  - BuffId: 2
-    Lv: 1
-    Forever: 0
+  buffAttributes: []
   isStoic: 0
   dataSettings:
     dataTag: 03c51a52-be64-4df1-ad98-cc1bc447c45a

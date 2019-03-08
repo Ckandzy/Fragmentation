@@ -16,7 +16,7 @@ public class SlowDown : NegativeBuff<PlayerCharacter>
         Over = false;
         TClass = t.GetComponent<PlayerCharacter>();
         CalculationBuffNum();
-
+        Debug.Log(t);
         if (buffPercentage != 0) { TClass.maxSpeed *= (1 + buffPercentage); }
         else if (buffNum != 0) { TClass.maxSpeed += buffNum; }
     }
@@ -42,8 +42,8 @@ public class SlowDown : NegativeBuff<PlayerCharacter>
         nowTime = 0;
         liveTime = LV * 2f;
         buffPercentage = -0.3f * LV;
-       
-        initalSpeed = TClass.maxSpeed;
+        if(TClass != null)
+            initalSpeed = TClass.maxSpeed;
     }
 
     public override BuffEffectType getBuffEffectType()

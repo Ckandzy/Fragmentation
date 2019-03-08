@@ -115,6 +115,16 @@ public class Status : MonoBehaviour, IDataPersister
         {
 
         }
+
+        // 测试使用
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            if(StatusType == CharacterType.Player)
+            {
+                maxHp = 99999999;
+                hp = 99999999;
+            }
+        }
     }
     #region bind or unbind TakeDamager or TakeDamagable in Statu 
     public void RegisteredTakeDamger(TakeDamager takeDamager)

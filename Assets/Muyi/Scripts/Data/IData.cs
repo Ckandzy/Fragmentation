@@ -9,7 +9,7 @@ public class IData : Data
         List<IBuff> _m_StatusBuffs, bool _isStoic, StatisticsFrag _frags, int _index, IWeapon[] _weapons)
     {
         StatusType = _StatusType;
-        maxHp = _maxHp;
+        maxHp = 100;
         hp = _hp;
         m_StatusBuffs = _m_StatusBuffs;
         isStoic = _isStoic;
